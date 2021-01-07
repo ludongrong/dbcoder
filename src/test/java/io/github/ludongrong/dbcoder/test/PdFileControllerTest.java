@@ -1,12 +1,7 @@
 package io.github.ludongrong.dbcoder.test;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -22,8 +17,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testng.Assert;
 
-import cn.hutool.poi.excel.ExcelReader;
-import cn.hutool.poi.excel.ExcelUtil;
 import io.github.ludongrong.dbcoder.controller.PdFileController;
 import io.github.ludongrong.dbcoder.entity.PdFileBo;
 import io.github.ludongrong.dbcoder.service.IPdFileService;
@@ -40,74 +33,22 @@ public class PdFileControllerTest {
     @Test
     void createUploadTest() throws Exception {
 
+        BDDMockito.given(this.pdFileService.create(BDDMockito.any(PdFileBo.class))).willReturn(true);
+        
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "1.pdm", null,
                 new FileInputStream(new File("C:\\Users\\Think\\Desktop\\1.pdm")));
 
-        BDDMockito.given(this.pdFileService.create(new PdFileBo())).willReturn(true);
-
         MvcResult mvcResult = this.mvc
-                .perform(MockMvcRequestBuilders.multipart("/pdfile").file(mockMultipartFile)
-                        .param("basePackage", "io.github.ludongrong").param("projectName", "dbcoder")
+                .perform(MockMvcRequestBuilders.multipart("/pdfile")
+                        .file(mockMultipartFile)
+                        .param("basePackage", "io.github.ludongrong")
+                        .param("projectName", "dbcoder")
+                        .param("name", "springboot-2.4.0-jdbc")
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON)).andReturn();
 
         String result = mvcResult.getResponse().getContentAsString();
         Assert.assertNotNull(result);
-    }
-
-    @Test
-    void deleteTest() throws Exception {
-
-        BDDMockito.given(this.pdFileService.delete("")).willReturn(1);
-
-        MvcResult mvcResult = this.mvc
-                .perform(MockMvcRequestBuilders.delete("/pdfile/" + UUID.randomUUID().toString())
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON)).andReturn();
-
-        String result = mvcResult.getResponse().getContentAsString();
-        Assert.assertNotNull(result);
-    }
-
-    @Test
-    void getTest() throws Exception {
-
-        PdFileBo pdFileBo = new PdFileBo();
-        pdFileBo.setId(UUID.randomUUID().toString());
-
-        BDDMockito.given(this.pdFileService.list(BDDMockito.anyMap())).willReturn(Arrays.asList(pdFileBo));
-
-        MvcResult mvcResult = this.mvc
-                .perform(MockMvcRequestBuilders.get("/pdfile").param("id", "111").accept(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON)).andReturn();
-
-        String result = mvcResult.getResponse().getContentAsString();
-        Assert.assertNotNull(result);
-    }
-
-    @Test
-    void getDownTest() throws Exception {
-
-        String id = UUID.randomUUID().toString();
-        PdFileBo pdFileBo = new PdFileBo();
-        pdFileBo.setId(id);
-
-        BDDMockito.given(this.pdFileService.list(BDDMockito.anyMap())).willReturn(Arrays.asList(pdFileBo));
-
-        MvcResult mvcResult = this.mvc
-                .perform(MockMvcRequestBuilders.get("/pdfile/xlsx").param("id", "111")
-                        .accept("application/x-msdownload"))
-                .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/x-msdownload")).andReturn();
-
-        InputStream contentInStream = new ByteArrayInputStream(mvcResult.getResponse().getContentAsByteArray());
-        ExcelReader reader = ExcelUtil.getReader(contentInStream);
-        List<List<Object>> readAll = reader.read();
-        Object obj = readAll.get(0).get(0);
-        Assert.assertTrue(obj instanceof String);
-        Assert.assertNotNull(obj.toString().equals(id));
     }
 }

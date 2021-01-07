@@ -26,7 +26,8 @@ import org.testng.Assert;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import io.github.ludongrong.dbcoder.controller.${className}Controller;
-import io.github.ludongrong.dbcoder.entity.${className}Bo;
+import io.github.ludongrong.dbcoder.entity.$
+import io.github.ludongrong.dbcoder.entity.PdFileBo;
 import io.github.ludongrong.dbcoder.service.I${className}Service;
 
 @WebMvcTest(${className}Controller.class)
@@ -41,14 +42,16 @@ public class ${className}ControllerTest {
     @Test
     void createTest() throws Exception {
 
-        BDDMockito.given(this.${classNameVariable}Service.create(new ${className}Bo())).willReturn(true);
+        BDDMockito.given(this.${classNameVariable}Service.create(BDDMockito.any(${className}Bo.class))).willReturn(true);
 
         JSONObject json = new JSONObject();
-        json.put("basePackage", "io.github.ludongrong");
-        json.put("projectName", "dbcoder");
+    <#list columns as column>
+        json.put("${column.javaNameVariable}", "${column.javaNameVariable}");
+    </#list>
 
         MvcResult mvcResult = this.mvc
-                .perform(MockMvcRequestBuilders.post("/pdfile").content(json.toString())
+                .perform(MockMvcRequestBuilders.post("/${classNameVariable?lower_case}")
+                        .content(json.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON)).andReturn();
@@ -63,11 +66,14 @@ public class ${className}ControllerTest {
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "1.pdm", null,
                 new FileInputStream(new File("C:\\Users\\Think\\Desktop\\1.pdm")));
 
-        BDDMockito.given(this.${classNameVariable}Service.create(new ${className}Bo())).willReturn(true);
+        BDDMockito.given(this.${classNameVariable}Service.create(BDDMockito.any(${className}Bo.class))).willReturn(true);
 
         MvcResult mvcResult = this.mvc
-                .perform(MockMvcRequestBuilders.multipart("/pdfile").file(mockMultipartFile)
-                        .param("basePackage", "io.github.ludongrong").param("projectName", "dbcoder")
+                .perform(MockMvcRequestBuilders.multipart("/${classNameVariable?lower_case}")
+                        .file(mockMultipartFile)
+                    <#list columns as column>
+                        .param("${column.javaNameVariable}", "${column.javaNameVariable}")
+                    </#list>
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON)).andReturn();
@@ -79,10 +85,10 @@ public class ${className}ControllerTest {
     @Test
     void deleteTest() throws Exception {
 
-        BDDMockito.given(this.pdFileService.delete("")).willReturn(1);
+        BDDMockito.given(this.pdFileService.delete(BDDMockito.anyString())).willReturn(1);
 
         MvcResult mvcResult = this.mvc
-                .perform(MockMvcRequestBuilders.delete("/pdfile/" + UUID.randomUUID().toString())
+                .perform(MockMvcRequestBuilders.delete("/${classNameVariable?lower_case}/" + UUID.randomUUID().toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON)).andReturn();
@@ -100,7 +106,9 @@ public class ${className}ControllerTest {
         BDDMockito.given(this.${classNameVariable}Service.list(BDDMockito.anyMap())).willReturn(Arrays.asList(${classNameVariable}Bo));
 
         MvcResult mvcResult = this.mvc
-                .perform(MockMvcRequestBuilders.get("/pdfile").param("id", "111").accept(MediaType.APPLICATION_JSON))
+                .perform(MockMvcRequestBuilders.get("/${classNameVariable?lower_case}")
+                        .param("id", "id")
+                        .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON)).andReturn();
 
@@ -118,7 +126,8 @@ public class ${className}ControllerTest {
         BDDMockito.given(this.${classNameVariable}Service.list(BDDMockito.anyMap())).willReturn(Arrays.asList(${classNameVariable}Bo));
 
         MvcResult mvcResult = this.mvc
-                .perform(MockMvcRequestBuilders.get("/pdfile/xlsx").param("id", "111")
+                .perform(MockMvcRequestBuilders.get("/${classNameVariable?lower_case}/xlsx")
+                        .param("id", "111")
                         .accept("application/x-msdownload"))
                 .andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/x-msdownload")).andReturn();
