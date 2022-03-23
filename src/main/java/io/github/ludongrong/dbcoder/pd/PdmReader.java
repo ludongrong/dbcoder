@@ -1,6 +1,7 @@
 package io.github.ludongrong.dbcoder.pd;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,17 +35,23 @@ public class PdmReader {
 
         DbmsHandler dbmsHandler = new DbmsHandler();
         TablesHandler tablesHandler = new TablesHandler(project);
+        ViewsHandler viewsHandler = new ViewsHandler(project);
         ReferenceHandler referenceHandler = new ReferenceHandler();
 
         // parse or create a document
         SAXReader reader = new SAXReader();
         reader.setDocumentFactory(factory);
         reader.addHandler("/Model/RootObject/Children/Model/Tables/Table", tablesHandler);
+        reader.addHandler("/Model/RootObject/Children/Model/Views/View", viewsHandler);
         reader.addHandler("/Model/RootObject/Children/Model/References/Reference", referenceHandler);
         reader.addHandler("/Model/RootObject/Children/Model/DBMS/Shortcut", dbmsHandler);
         reader.read(in);
 
-        project.setTables(tablesHandler.getTableList());
+        ArrayList<Table> tables = new ArrayList<>();
+        tables.addAll(tablesHandler.getTableList());
+        tables.addAll(viewsHandler.tableList);
+
+        project.setTables(tables);
         project.setDbType(dbmsHandler.getCode());
         if (project.getDbType() == null) {
             throw new IllegalStateException("support dbtype mysql oracle sqlserver");

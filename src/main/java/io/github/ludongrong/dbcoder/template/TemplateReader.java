@@ -8,12 +8,9 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Stack;
+import java.util.*;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;
 
 import cn.hutool.core.io.FileUtil;
@@ -49,6 +46,8 @@ public class TemplateReader {
             }
         }
     };
+
+    private HashSet<String> names = new HashSet<>();
 
     private ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -110,13 +109,23 @@ public class TemplateReader {
 
     private void writeDirectory(String local) throws IOException {
 
-        ZipEntry ze = new ZipEntry(local + "/");
+        String path = local + "/";
+
+        if (! names.add(path)) {
+            return;
+        }
+
+        ZipEntry ze = new ZipEntry(path);
         zipOutputStream.putNextEntry(ze);
         zipOutputStream.closeEntry();
     }
 
     private void processTemplate(String local, Map<String, Object> model, File templateFile, String macro)
             throws IORuntimeException, IOException, TemplateException {
+
+        if (! names.add(local)) {
+            return;
+        }
 
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 

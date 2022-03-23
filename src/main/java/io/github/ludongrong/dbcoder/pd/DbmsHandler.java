@@ -10,6 +10,27 @@ import com.alibaba.druid.util.JdbcUtils;
 
 import lombok.Getter;
 
+/** 
+* DbmsHandler
+*
+*<c:DBMS>
+<o:Shortcut Id="o6">
+<a:ObjectID>8EFCD1A1-B9BC-44ED-9B27-DECA3D292DF0</a:ObjectID>
+<a:Name>MySQL 5.0</a:Name>
+<a:Code>MYSQL50</a:Code>
+<a:CreationDate>1525679047</a:CreationDate>
+<a:Creator>Don.ron</a:Creator>
+<a:ModificationDate>1525679048</a:ModificationDate>
+<a:Modifier>Don.ron</a:Modifier>
+<a:TargetStereotype/>
+<a:TargetID>F4F16ECD-F2F1-4006-AF6F-638D5C65F35E</a:TargetID>
+<a:TargetClassID>4BA9F647-DAB1-11D1-9944-006097355D9B</a:TargetClassID>
+</o:Shortcut>
+</c:DBMS>
+*
+* @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
+* @since 2022-03-23
+*/
 public class DbmsHandler implements ElementHandler {
 
     @Getter
