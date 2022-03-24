@@ -70,7 +70,7 @@ public class TemplateReader {
 
         Iterator<Table> iterable = project.getTables().iterator();
         while (iterable.hasNext()) {
-            generate(Table.toTableModel(iterable.next()));
+            generate(Table.toModel(iterable.next()));
         }
 
         zipOutputStream.flush();

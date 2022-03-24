@@ -1,4 +1,4 @@
-package ${basepackage}.service.impl;
+package ${basePackage}.service.impl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -167,13 +167,13 @@ public class ${className}ServiceImpl implements I${className}Service {
         return null;
     }
     
-<#list childSelfReferences as reference>
+<#list childReferences as reference>
     @Override
-    public List<${reference.className}Bo> list${reference.className}Bo(<#list reference.columns as column>${column.javaType} ${column.javaNameVariable}<#if column_has_next>, </#if></#list>) {
+    public List<${reference.className}Bo> list${reference.className}Bo(<#list reference.columnMappings as columnMapping>${columnMapping.mapping.javaType} ${columnMapping.mapping.javaNameVariable}<#if columnMapping_has_next>, </#if></#list>) {
 
         Map<String, Object> param = new HashMap<String, Object>();
-    <#list reference.columns as column>
-        param.put("${column.javaNameVariable}", ${column.javaNameVariable});
+    <#list reference.columnMappings as columnMapping>
+        param.put("${columnMapping.mapping.javaNameVariable}", ${columnMapping.mapping.javaNameVariable});
     </#list>
     
         return ${classNameVariable}Dao.query(_DEFAULT_CONDITION, param);

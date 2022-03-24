@@ -11,7 +11,13 @@ import cn.hutool.core.util.StrUtil;
 import io.github.ludongrong.dbcoder.util.StringUtil;
 import oracle.jdbc.OracleType;
 
-public class JavaTypesUtils {
+/** 
+* JavaTypesUtils
+*
+* @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
+* @since 2022-03-24
+*/
+public class JavaTypes {
 
     final static private Map<Integer, String> _SQL_TYPE_2_JAVA_TYPE = new HashMap<Integer, String>();
 
@@ -86,26 +92,37 @@ public class JavaTypesUtils {
         _MSSQL_SQL_TYPE.put("VARBINARY", java.sql.Types.VARBINARY);
     }
 
+    /**
+     * 数据库字段类型 对应 Java数据类型
+     * @param dbType
+     * @param columnType
+     * @param size
+     * @param decimalDigits
+     * @return
+     */
     public static String getPreferredJavaType(String dbType, String columnType, int size, int decimalDigits) {
         Integer sqlType = 0;
 
         if (dbType.equals(JdbcUtils.ORACLE)) {
             sqlType = getOracleSqlTypeByName(columnType);
         } else if (dbType.equals(JdbcUtils.SQL_SERVER)) {
-            sqlType = _MSSQL_SQL_TYPE.get(columnType);
+            sqlType = getMssqlSqlTypeByName(columnType);
         } else if (dbType.equals(JdbcUtils.MYSQL)) {
             sqlType = getMysqlSqlTypeByName(columnType);
         } else {
             return "Object";
         }
 
-        if (sqlType == null) {
-            return "Object";
-        }
-
         return getPreferredJavaType(sqlType, size, decimalDigits);
     }
 
+    /**
+     * 数据库字段类型 对应 Java数据类型
+     * @param sqlType
+     * @param size
+     * @param decimalDigits
+     * @return
+     */
     public static String getPreferredJavaType(int sqlType, int size, int decimalDigits) {
         if ((sqlType == Types.DECIMAL || sqlType == Types.NUMERIC) && decimalDigits == 0) {
             if (size == 1) {
@@ -129,10 +146,36 @@ public class JavaTypesUtils {
         return result;
     }
     
+    /**
+     * MySql字段类型 对应 JdbcType
+     * @param fullTypeName
+     * @return
+     */
     public static int getMysqlSqlTypeByName(String fullTypeName) {
         return MysqlType.getByName(fullTypeName).getJdbcType();
     }
+    
+    /**
+     * MsSql字段类型 对应 JdbcType
+     * @param fullTypeName
+     * @return
+     */
+    public static int getMssqlSqlTypeByName(String fullTypeName) {
+    	String typeName = StringUtil.subStringBeforeParenthesis(fullTypeName);
+    	
+        Integer sqlType = _MSSQL_SQL_TYPE.get(typeName);
+        if (sqlType == null) {
+        	return Types.JAVA_OBJECT;
+		}
+    	
+    	return sqlType;
+    }
 
+    /**
+     * Oracle字段类型 对应 JdbcType
+     * @param fullTypeName
+     * @return
+     */
     public static int getOracleSqlTypeByName(String fullTypeName) {
 
         String typeName = StringUtil.subStringBeforeParenthesis(fullTypeName);

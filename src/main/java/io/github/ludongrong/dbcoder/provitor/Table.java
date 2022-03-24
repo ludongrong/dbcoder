@@ -11,22 +11,40 @@ import io.github.ludongrong.dbcoder.util.StringUtil;
 import lombok.Getter;
 import lombok.Setter;
 
+/** 
+* Table
+*
+* @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
+* @since 2022-03-24
+*/
 public class Table extends Element {
 
     private static final long serialVersionUID = 5683537028079665552L;
 
+    /**
+     * 列
+     */
     @Getter
     @Setter
     private List<Column> columns;
 
+    /**
+     * 本表关联的父表 尾巴朝向本表的其他表
+     */
     @Getter
     @Setter
     private List<Reference> parentReferences;
 
+    /**
+     * 本表关联的子表 箭头朝向本表的其他表
+     */
     @Getter
     @Setter
     private List<Reference> childReferences;
 
+    /**
+     * 工程
+     */
     @Getter
     @Setter
     private Project project;
@@ -91,7 +109,12 @@ public class Table extends Element {
         }, (oldValue, newValue) -> newValue));
     }
 
-	public static Map<String, Object> toTableModel(Table table) {
+	/**
+	 * 表 转 模板模型数据
+	 * @param table
+	 * @return
+	 */
+	public static Map<String, Object> toModel(Table table) {
 	
 	    Map<String, Object> model = new HashMap<String, Object>();
 	
@@ -101,12 +124,14 @@ public class Table extends Element {
 	    List<Map<String, Object>> primaryColumns = Column.toModel(table.getColumns().stream().filter(t -> {
 	        return t.isPrimaryKey();
 	    }).collect(Collectors.toList()));
-	
+
+	    // 模型的列表不能是NULL值
 	    List<Map<String, Object>> parentReferences = Reference.toModel(
 	            Optional.ofNullable(table.getParentReferences())
 	                    .orElse(new ArrayList<Reference>())
 	    );
-	
+
+        // 模型的列表不能是NULL值
 	    List<Map<String, Object>> childReferences = Reference.toModel(
 	            Optional.ofNullable(table.getChildReferences())
 	                    .orElse(new ArrayList<Reference>())

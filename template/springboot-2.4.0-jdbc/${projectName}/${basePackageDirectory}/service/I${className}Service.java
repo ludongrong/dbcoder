@@ -1,4 +1,4 @@
-package ${basepackage}.service;
+package ${basePackage}.service;
 
 import java.util.List;
 import java.util.Map;
@@ -36,8 +36,8 @@ public interface I${className}Service {
 	
 	${className}Bo get(<#list primaryColumns as column>${column.javaType} ${column.javaName}<#if column_has_next>, </#if></#list>);
     
-<#list childSelfReferences as reference>
-    List<${reference.className}Bo> list${reference.className}Bo(<#list reference.columns as column>${column.javaType} ${column.javaName}<#if column_has_next>, </#if></#list>);
+<#list childReferences as reference>
+    List<${reference.className}Bo> list${reference.className}Bo(<#list reference.columnMappings as columnMapping>${columnMapping.mapping.javaType} ${columnMapping.mapping.javaName}<#if columnMapping_has_next>, </#if></#list>);
 
 </#list>
 }

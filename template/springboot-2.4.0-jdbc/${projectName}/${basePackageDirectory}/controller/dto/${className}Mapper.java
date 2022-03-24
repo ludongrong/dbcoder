@@ -1,4 +1,4 @@
-package ${basepackage}.controller.dto;
+package ${basePackage}.controller.dto;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

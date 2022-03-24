@@ -1,4 +1,4 @@
-package ${basepackage}.test;
+package ${basePackage}.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

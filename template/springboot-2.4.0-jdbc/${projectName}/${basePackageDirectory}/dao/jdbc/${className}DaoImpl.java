@@ -1,4 +1,4 @@
-package ${basepackage}.dao.jdbc;
+package ${basePackage}.dao.jdbc;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

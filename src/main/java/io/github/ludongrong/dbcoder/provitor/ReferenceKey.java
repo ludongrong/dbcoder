@@ -7,16 +7,31 @@ import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
 
+/** 
+* ReferenceKey
+*
+* @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
+* @since 2022-03-24
+*/
 public class ReferenceKey {
 
+    /**
+     * 关联关系 箭头方向的表
+     */
     @Getter
     @Setter
     private String parentTableKeyId;
 
+    /**
+     * 关联关系 尾巴方向的表
+     */
     @Getter
     @Setter
     private String childTableKeyId;
 
+    /**
+     * 箭头方向的表 与 尾巴方向的表 的关联字段
+     */
     @Getter
     @Setter
     private List<String[]> join;
@@ -55,7 +70,7 @@ public class ReferenceKey {
 		    	columnMapping.setMapping(columnMap2.get(joins[1]));
 		    } else {
 		    	columnMapping.setSelf(columnMap1.get(joins[1]));
-		    	columnMapping.setMapping(column);
+		    	columnMapping.setMapping(columnMap2.get(joins[0]));
 		    }
         	
             return columnMapping;

@@ -1,4 +1,4 @@
-package ${basepackage}.controller.dto;
+package ${basePackage}.controller.dto;
 
 import java.io.Serializable;
 

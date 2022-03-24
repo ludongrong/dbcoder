@@ -1,8 +1,8 @@
 <!-- ${classNameVariable} -->
-<bean id="${projectName}${className}Dao" class="${basepackage}.dao.jdbc.${className}DaoImpl"
+<bean id="${projectName}${className}Dao" class="${basePackage}.dao.jdbc.${className}DaoImpl"
 	parent="nameParamDaoSupport"
 />
-<bean id="${projectName}${className}Svc" class="${basepackage}.svc.impl.${className}SvcImpl" 
+<bean id="${projectName}${className}Svc" class="${basePackage}.svc.impl.${className}SvcImpl" 
 	p:${classNameVariable}Dao-ref="${projectName}${className}Dao"
 />
 

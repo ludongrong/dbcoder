@@ -9,6 +9,12 @@ import io.github.ludongrong.dbcoder.util.StringUtil;
 import lombok.Getter;
 import lombok.Setter;
 
+/** 
+* Reference
+*
+* @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
+* @since 2022-03-24
+*/
 public class Reference {
 
     /**
@@ -30,6 +36,11 @@ public class Reference {
     @Setter
     private List<ColumnMapping> columnMappingList;
 
+	/**
+	 * 表的关联 转 模板模型数据
+	 * @param referenceList
+	 * @return
+	 */
 	public static List<Map<String, Object>> toModel(List<Reference> referenceList) {
 	
 	    return referenceList.stream().collect(Collectors.mapping(t -> {
@@ -40,7 +51,7 @@ public class Reference {
 	        referenceModel.put("tableName", tableName);
 	        referenceModel.put("className", StringUtil.toJavaClassName(tableName));
 	        referenceModel.put("classNameVariable", StringUtil.toJavaVariableName(tableName));
-	        referenceModel.put("joinColumns", Column.toModelForJoin(t.getColumnMappingList()));
+	        referenceModel.put("columnMappings", Column.toModelForJoin(t.getColumnMappingList()));
 	        
 	        return referenceModel;
 	    }, Collectors.toList()));

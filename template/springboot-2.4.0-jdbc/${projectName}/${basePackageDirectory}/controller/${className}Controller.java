@@ -1,4 +1,4 @@
-package ${basepackage}.controller;
+package ${basePackage}.controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
