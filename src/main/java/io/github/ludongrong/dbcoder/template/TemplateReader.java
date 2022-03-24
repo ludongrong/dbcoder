@@ -19,7 +19,6 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import freemarker.template.TemplateException;
-import io.github.ludongrong.dbcoder.provitor.DataProvitor;
 import io.github.ludongrong.dbcoder.provitor.Project;
 import io.github.ludongrong.dbcoder.provitor.Table;
 import lombok.Getter;
@@ -71,7 +70,7 @@ public class TemplateReader {
 
         Iterator<Table> iterable = project.getTables().iterator();
         while (iterable.hasNext()) {
-            generate(DataProvitor.getModel(iterable.next()));
+            generate(Table.toTableModel(iterable.next()));
         }
 
         zipOutputStream.flush();

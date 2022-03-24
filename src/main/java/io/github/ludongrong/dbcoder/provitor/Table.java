@@ -1,11 +1,13 @@
 package io.github.ludongrong.dbcoder.provitor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import io.github.ludongrong.dbcoder.util.StringUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,15 +25,7 @@ public class Table extends Element {
 
     @Getter
     @Setter
-    private List<Reference> parentSelfReferences;
-
-    @Getter
-    @Setter
     private List<Reference> childReferences;
-
-    @Getter
-    @Setter
-    private List<Reference> childSelfReferences;
 
     @Getter
     @Setter
@@ -47,31 +41,88 @@ public class Table extends Element {
         parentReferences.add(reference);
     }
 
-    public void addChildSelfReference(Reference reference) {
-        childSelfReferences = Optional.ofNullable(childSelfReferences).orElse(new ArrayList<Reference>());
-        childSelfReferences.add(reference);
-    }
-
-    public void addParentSelfReference(Reference reference) {
-        parentSelfReferences = Optional.ofNullable(parentSelfReferences).orElse(new ArrayList<Reference>());
-        parentSelfReferences.add(reference);
-    }
-
+    /**
+     * 主键列 Column >转> Map<String, Column>
+     * 
+     * <pre>
+     *   key -> Column.id
+     *   key -> Column
+     * </pre>
+     * 
+     * @return
+     */
     public Map<String, Column> toPrimaryMap() {
-        return getColumns().stream().filter(t1 -> {
+         List<Column> primaryColumns = getColumns().stream().filter(t1 -> {
             return t1.isPrimaryKey();
-        }).collect(Collectors.toMap(val1 -> {
-            return val1.getId();
-        }, val2 -> {
-            return val2;
+        }).collect(Collectors.toList());
+        		
+         return Column.mapping(primaryColumns);
+    }
+
+    /**
+     * 普通列 Column >转> Map<String, Column>
+     * 
+     * <pre>
+     *   key -> Column.id
+     *   key -> Column
+     * </pre>
+     * 
+     * @return
+     */
+    public Map<String, Column> toColumnMap() {
+        return Column.mapping(getColumns());
+    }
+    
+    /**
+     * Table >转> Map<String, Column>
+     * 
+     * <pre>
+     *   key -> Table.id
+     *   key -> Table
+     * </pre>
+     * 
+     * @return
+     */
+    public static Map<String, Table> mapping(List<Table> tables) {
+        return tables.stream().collect(Collectors.toMap((val) -> {
+            return val.getId();
+        }, (val) -> {
+            return val;
         }, (oldValue, newValue) -> newValue));
     }
 
-    public Map<String, Column> toColumnMap() {
-        return getColumns().stream().collect(Collectors.toMap(val1 -> {
-            return val1.getId();
-        }, val2 -> {
-            return val2;
-        }, (oldValue, newValue) -> newValue));
-    }
+	public static Map<String, Object> toTableModel(Table table) {
+	
+	    Map<String, Object> model = new HashMap<String, Object>();
+	
+	    Project project = table.getProject();
+	    String basePackage = project.getBasePackage() + "." + project.getProjectName();
+	
+	    List<Map<String, Object>> primaryColumns = Column.toModel(table.getColumns().stream().filter(t -> {
+	        return t.isPrimaryKey();
+	    }).collect(Collectors.toList()));
+	
+	    List<Map<String, Object>> parentReferences = Reference.toModel(
+	            Optional.ofNullable(table.getParentReferences())
+	                    .orElse(new ArrayList<Reference>())
+	    );
+	
+	    List<Map<String, Object>> childReferences = Reference.toModel(
+	            Optional.ofNullable(table.getChildReferences())
+	                    .orElse(new ArrayList<Reference>())
+	    );
+	
+	    model.put("projectName", project.getProjectName());
+	    model.put("basePackage", basePackage);
+	    model.put("basePackageDirectory", basePackage.replaceAll("\\.", "/"));
+	    model.put("tableName", table.getName());
+	    model.put("className", StringUtil.toJavaClassName(table.getName()));
+	    model.put("classNameVariable", StringUtil.toJavaVariableName(table.getName()));
+	    model.put("columns", Column.toModel(table.getColumns()));
+	    model.put("primaryColumns", primaryColumns);
+	    model.put("parentReferences", parentReferences);
+	    model.put("childReferences", childReferences);
+	
+	    return model;
+	}
 }

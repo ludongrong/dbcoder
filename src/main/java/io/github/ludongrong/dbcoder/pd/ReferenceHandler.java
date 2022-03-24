@@ -71,6 +71,7 @@ public class ReferenceHandler implements ElementHandler {
         referenceKey.setParentTableKeyId(parentId);
         referenceKey.setChildTableKeyId(childId);
         referenceKey.setJoin(joinList);
+
         referenceList.add(referenceKey);
     }
 }

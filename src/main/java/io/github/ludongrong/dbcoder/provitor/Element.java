@@ -7,7 +7,12 @@ import lombok.Setter;
 
 public class Element implements Serializable {
 
-    @Getter
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -4708191193480564231L;
+
+	@Getter
     @Setter
     private String id;
 

@@ -94,4 +94,36 @@ public class StringUtil {
         }
         return result.toString();
     }
+
+	/**
+	 * 截取括号前字符
+	 * 
+	 * <pre>
+	 *   NULL对象 -> 空字符串
+	 *   空字符串 -> 空字符串
+	 *   VARCHAR -转换-> VARCHAR
+	 *   VARCHAR(20) -转换-> VARCHAR
+	 *   VARCHAR(20)(20) -转换-> VARCHAR
+	 * </pre>
+	 * 
+	 * @param str 字符串
+	 * @return
+	 */
+	public static String subStringBeforeParenthesis(String str) {
+		
+		String beforeParenthesisStr;
+
+        if (str == null) {
+            return "";
+        }
+		
+		int i = str.indexOf("(");
+		if (i > 0) {
+			beforeParenthesisStr = str.substring(0, i);
+		} else {
+			beforeParenthesisStr = str;
+		}
+		
+		return beforeParenthesisStr;
+	}
 }

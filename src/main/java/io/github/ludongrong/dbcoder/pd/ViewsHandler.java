@@ -2,13 +2,11 @@ package io.github.ludongrong.dbcoder.pd;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.dom4j.Element;
 import org.dom4j.ElementHandler;
 import org.dom4j.ElementPath;
 
-import io.github.ludongrong.dbcoder.provitor.Column;
 import io.github.ludongrong.dbcoder.provitor.Project;
 import io.github.ludongrong.dbcoder.provitor.Table;
 import lombok.Getter;

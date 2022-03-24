@@ -3,13 +3,13 @@ package io.github.ludongrong.dbcoder.provitor;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Key {
+public class ColumnMapping {
 
     @Getter
     @Setter
-    private Column parentKey;
+    private Column self;
 
     @Getter
     @Setter
-    private Column childKey;
+    private Column mapping;
 }

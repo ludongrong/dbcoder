@@ -1,8 +1,8 @@
 package io.github.ludongrong.dbcoder.provitor;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,11 +25,12 @@ public class Project {
     @Setter
     private String dbType;
 
-    public Map<String, Table> toTableMap() {
-        return getTables().stream().collect(Collectors.toMap((val) -> {
-            return val.getId();
-        }, (val) -> {
-            return val;
-        }, (oldValue, newValue) -> newValue));
-    }
+	public static Map<String, Object> toTestModel() {
+	    Map<String, Object> model = new HashMap<String, Object>();
+	    model.put("basePackageDirectory", "testDirectory");
+	    model.put("projectName", "dFD1");
+	    model.put("className", "dFD");
+	    model.put("basePackage", "aaa");
+	    return model;
+	}
 }

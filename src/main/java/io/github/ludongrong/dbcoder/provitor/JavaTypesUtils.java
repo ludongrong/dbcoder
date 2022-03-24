@@ -8,6 +8,7 @@ import com.alibaba.druid.util.JdbcUtils;
 import com.mysql.cj.MysqlType;
 
 import cn.hutool.core.util.StrUtil;
+import io.github.ludongrong.dbcoder.util.StringUtil;
 import oracle.jdbc.OracleType;
 
 public class JavaTypesUtils {
@@ -134,14 +135,8 @@ public class JavaTypesUtils {
 
     public static int getOracleSqlTypeByName(String fullTypeName) {
 
-        String typeName = "";
-
-        if (fullTypeName.indexOf("(") != -1) {
-            typeName = fullTypeName.substring(0, fullTypeName.indexOf("(")).trim();
-        } else {
-            typeName = fullTypeName;
-        }
-
+        String typeName = StringUtil.subStringBeforeParenthesis(fullTypeName);
+        
         if (StrUtil.indexOfIgnoreCase(typeName, OracleType.ANYDATA.getName()) != -1) {
             return OracleType.ANYDATA.getVendorTypeNumber();
         } else if (StrUtil.indexOfIgnoreCase(typeName, OracleType.ANYDATASET.getName()) != -1) {

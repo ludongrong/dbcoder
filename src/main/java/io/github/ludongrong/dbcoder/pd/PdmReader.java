@@ -3,7 +3,6 @@ package io.github.ludongrong.dbcoder.pd;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.dom4j.DocumentException;
@@ -57,52 +56,56 @@ public class PdmReader {
             throw new IllegalStateException("support dbtype mysql oracle sqlserver");
         }
 
-        Map<String, Table> tableMap = project.toTableMap();
-
-        referenceHandler.getReferenceList().stream().forEach(t -> {
-
-            Table parantTable = tableMap.get(t.getParentTableKeyId());
-            Table childTable = tableMap.get(t.getChildTableKeyId());
-
-            Map<String, Column> primaryMap = parantTable.toPrimaryMap();
-            if (primaryMap.isEmpty()) {
-                return;
-            }
-
-            Map<String, Column> childMap = childTable.toColumnMap();
-            if (childMap.isEmpty()) {
-                return;
-            }
-
-            List<Column> childReferenceColumnList = t.mappingColumn(primaryMap, childMap);
-            if (childReferenceColumnList.size() != primaryMap.size()) {
-                return;
-            }
-
-            Column[] parentJoinColumns = primaryMap.values().toArray(new Column[primaryMap.values().size()]);
-            Column[] childJoinColumns = childReferenceColumnList.toArray(new Column[childReferenceColumnList.size()]);
-
-            Reference reference = new Reference();
-            reference.setReferenceTable(parantTable);
-            reference.setJoinColumns(parentJoinColumns);
-            childTable.addParentReference(reference);
-
-            reference = new Reference();
-            reference.setReferenceTable(childTable);
-            reference.setJoinColumns(childJoinColumns);
-            childTable.addChildSelfReference(reference);
-
-            reference = new Reference();
-            reference.setReferenceTable(childTable);
-            reference.setJoinColumns(childJoinColumns);
-            parantTable.addChildReference(reference);
-
-            reference = new Reference();
-            reference.setReferenceTable(parantTable);
-            reference.setJoinColumns(parentJoinColumns);
-            parantTable.addParentSelfReference(reference);
-        });
+        // 关联字段 绑定到 表
+        referenceBingTable(project, referenceHandler);
 
         return project;
     }
+
+	private static void referenceBingTable(Project project, ReferenceHandler referenceHandler) {
+		
+		Map<String, Table> tableMap = Table.mapping(project.getTables());
+
+        referenceHandler.getReferenceList().stream().forEach(t -> {
+
+        	// 相当于关联的箭头
+            Table parentTable = tableMap.get(t.getParentTableKeyId());
+            // 相当于关联的末尾
+            Table childTable = tableMap.get(t.getChildTableKeyId());
+
+			Map<String, Column> primaryMap = parentTable.toPrimaryMap();
+			if (primaryMap.isEmpty()) {
+				return;
+			}
+
+			Map<String, Column> childMap = childTable.toColumnMap();
+			if (childMap.isEmpty()) {
+				return;
+			}
+            
+            // 父表的主键个数
+            int primaryColumnSize = primaryMap.size();
+
+            // 子表外键
+            // 父表的主键 对应 子表的外键
+            // 跳过 > 主键与外键不一致的案例
+            if (t.getJoin().size() != primaryColumnSize) {
+                return;
+            }
+
+            // 子表 指向 父表 的关联
+            // 子表的外键字段 对应 父表的主键字段
+            Reference reference = new Reference();
+            reference.setReferenceTable(parentTable);
+            reference.setColumnMappingList(t.toColumnMapping(childMap, primaryMap));
+            childTable.addParentReference(reference);
+
+            // 父表 被 子表 指向 的关联
+            // 父表的主键字段 对应 子表的外键字段
+            reference = new Reference();
+            reference.setReferenceTable(childTable);
+            reference.setColumnMappingList(t.toColumnMapping(primaryMap, childMap));
+            parentTable.addChildReference(reference);
+        });
+	}
 }
