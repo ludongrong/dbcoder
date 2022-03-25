@@ -1,5 +1,8 @@
 package io.github.ludongrong.dbcoder.provitor;
 
+import java.math.BigDecimal;
+import java.sql.Array;
+import java.sql.Blob;
 import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,74 +25,166 @@ public class JavaTypes {
     final static private Map<Integer, String> _SQL_TYPE_2_JAVA_TYPE = new HashMap<Integer, String>();
 
     static {
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.TINYINT, "Byte");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.SMALLINT, "Short");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.INTEGER, "Integer");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.BIGINT, "Long");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.REAL, "Float");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.FLOAT, "Double");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.DOUBLE, "Double");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.DECIMAL, "BigDecimal");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.NUMERIC, "BigDecimal");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.BIT, "Boolean");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.BOOLEAN, "Boolean");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.CHAR, "String");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.VARCHAR, "String");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.LONGVARCHAR, "String");
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.TINYINT, Byte.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.SMALLINT, Short.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.INTEGER, Integer.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.BIGINT, Long.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.REAL, Float.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.FLOAT, Double.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.DOUBLE, Double.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.DECIMAL, BigDecimal.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.NUMERIC, BigDecimal.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.BIT, Boolean.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.BOOLEAN, Boolean.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.CHAR, String.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.VARCHAR, String.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.LONGVARCHAR, String.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.LONGNVARCHAR, String.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.NCHAR, String.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.NCLOB, java.sql.NClob.class.getName());
         _SQL_TYPE_2_JAVA_TYPE.put(Types.BINARY, "byte[]");
         _SQL_TYPE_2_JAVA_TYPE.put(Types.VARBINARY, "byte[]");
         _SQL_TYPE_2_JAVA_TYPE.put(Types.LONGVARBINARY, "byte[]");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.DATE, "Date");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.TIME, "Time");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.TIMESTAMP, "Timestamp");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.CLOB, "Clob");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.BLOB, "Blob");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.ARRAY, "Array");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.REF, "Ref");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.STRUCT, "Object");
-        _SQL_TYPE_2_JAVA_TYPE.put(Types.JAVA_OBJECT, "Object");
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.DATE, java.sql.Date.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.TIME, java.sql.Time.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.TIMESTAMP, java.sql.Timestamp.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.CLOB, java.sql.Clob.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.BLOB, Blob.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.ARRAY, Array.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.REF, Object.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.STRUCT, Object.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.JAVA_OBJECT, Object.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.DISTINCT, Object.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.NULL, Object.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.NVARCHAR, String.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.OTHER, Object.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.ROWID, Object.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.SQLXML, Object.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.TIME_WITH_TIMEZONE, java.time.OffsetTime.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.TIMESTAMP_WITH_TIMEZONE, java.time.OffsetDateTime.class.getName());
+
+        // microsoft-mssql-jdbc v4.4.0
+        _SQL_TYPE_2_JAVA_TYPE.put(999, Object.class.getName());
+        _SQL_TYPE_2_JAVA_TYPE.put(microsoft.sql.Types.DATETIMEOFFSET, microsoft.sql.DateTimeOffset.class.getName());
+
+        // microsoft-mssql-jdbc v10.2.0
+//        _SQL_TYPE_2_JAVA_TYPE.put(microsoft.sql.Types.MONEY, BigDecimal.class.getName());
+//        _SQL_TYPE_2_JAVA_TYPE.put(microsoft.sql.Types.SMALLMONEY, BigDecimal.class.getName());
+//        _SQL_TYPE_2_JAVA_TYPE.put(microsoft.sql.Types.STRUCTURED, Object.class.getName());
+//        _SQL_TYPE_2_JAVA_TYPE.put(microsoft.sql.Types.DATETIME, java.sql.Timestamp.class.getName());
+//        _SQL_TYPE_2_JAVA_TYPE.put(microsoft.sql.Types.SMALLDATETIME, java.sql.Timestamp.class.getName());
+//        _SQL_TYPE_2_JAVA_TYPE.put(microsoft.sql.Types.GUID, String.class.getName());
+//        _SQL_TYPE_2_JAVA_TYPE.put(microsoft.sql.Types.SQL_VARIANT, Object.class.getName());
+//        _SQL_TYPE_2_JAVA_TYPE.put(microsoft.sql.Types.GEOMETRY, Object.class.getName());
+//        _SQL_TYPE_2_JAVA_TYPE.put(microsoft.sql.Types.GEOGRAPHY, Object.class.getName());
+//        _SQL_TYPE_2_JAVA_TYPE.put(java.sql.Types.TIMESTAMP, LocalDateTime.class.getName());
+    }
+
+    final static private Map<Integer, String> _SQL_TYPE_CODE_2_NAME = new HashMap<Integer, String>();
+
+    static {
+        _SQL_TYPE_CODE_2_NAME.put(Types.TINYINT, "TINYINT");
+        _SQL_TYPE_CODE_2_NAME.put(Types.SMALLINT, "SMALLINT");
+        _SQL_TYPE_CODE_2_NAME.put(Types.INTEGER, "INTEGER");
+        _SQL_TYPE_CODE_2_NAME.put(Types.BIGINT, "BIGINT");
+        _SQL_TYPE_CODE_2_NAME.put(Types.REAL, "REAL");
+        _SQL_TYPE_CODE_2_NAME.put(Types.FLOAT, "FLOAT");
+        _SQL_TYPE_CODE_2_NAME.put(Types.DOUBLE, "DOUBLE");
+        _SQL_TYPE_CODE_2_NAME.put(Types.DECIMAL, "DECIMAL");
+        _SQL_TYPE_CODE_2_NAME.put(Types.NUMERIC, "NUMERIC");
+        _SQL_TYPE_CODE_2_NAME.put(Types.BIT, "BIT");
+        _SQL_TYPE_CODE_2_NAME.put(Types.BOOLEAN, "BOOLEAN");
+        _SQL_TYPE_CODE_2_NAME.put(Types.CHAR, "CHAR");
+        _SQL_TYPE_CODE_2_NAME.put(Types.VARCHAR, "VARCHAR");
+        _SQL_TYPE_CODE_2_NAME.put(Types.LONGVARCHAR, "LONGVARCHAR");
+        _SQL_TYPE_CODE_2_NAME.put(Types.LONGNVARCHAR, "LONGNVARCHAR");
+        _SQL_TYPE_CODE_2_NAME.put(Types.NCHAR, "NCHAR");
+        _SQL_TYPE_CODE_2_NAME.put(Types.NCLOB, "NCLOB");
+        _SQL_TYPE_CODE_2_NAME.put(Types.BINARY, "BINARY");
+        _SQL_TYPE_CODE_2_NAME.put(Types.VARBINARY, "VARBINARY");
+        _SQL_TYPE_CODE_2_NAME.put(Types.LONGVARBINARY, "LONGVARBINARY");
+        _SQL_TYPE_CODE_2_NAME.put(Types.DATE, "DATE");
+        _SQL_TYPE_CODE_2_NAME.put(Types.TIME, "TIME");
+        _SQL_TYPE_CODE_2_NAME.put(Types.TIMESTAMP, "TIMESTAMP");
+        _SQL_TYPE_CODE_2_NAME.put(Types.CLOB, "CLOB");
+        _SQL_TYPE_CODE_2_NAME.put(Types.BLOB, "BLOB");
+        _SQL_TYPE_CODE_2_NAME.put(Types.ARRAY, "ARRAY");
+        _SQL_TYPE_CODE_2_NAME.put(Types.REF, "REF");
+        _SQL_TYPE_CODE_2_NAME.put(Types.STRUCT, "STRUCT");
+        _SQL_TYPE_CODE_2_NAME.put(Types.JAVA_OBJECT, "JAVA_OBJECT");
+        _SQL_TYPE_CODE_2_NAME.put(Types.DISTINCT, "DISTINCT");
+        _SQL_TYPE_CODE_2_NAME.put(Types.NULL, "NULL");
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.NVARCHAR, "NVARCHAR");
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.OTHER, "OTHER");
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.ROWID, "ROWID");
+        _SQL_TYPE_2_JAVA_TYPE.put(Types.SQLXML, "SQLXML");
+
+        // microsoft-mssql-jdbc v4.4.0
+        _SQL_TYPE_CODE_2_NAME.put(microsoft.sql.Types.DATETIMEOFFSET, "DATETIMEOFFSET");
     }
 
     final static private Map<String, Integer> _MSSQL_SQL_TYPE = new HashMap<String, Integer>();
 
+    /**
+     * @see com.microsoft.sqlserver.jdbc.JDBCType
+     */
     static {
-        _MSSQL_SQL_TYPE.put("ARRAY", java.sql.Types.ARRAY);
-        _MSSQL_SQL_TYPE.put("BIGINT", java.sql.Types.BIGINT);
-        _MSSQL_SQL_TYPE.put("BINARY", java.sql.Types.BINARY);
-        _MSSQL_SQL_TYPE.put("BIT", java.sql.Types.BIT);
-        _MSSQL_SQL_TYPE.put("BLOB", java.sql.Types.BLOB);
-        _MSSQL_SQL_TYPE.put("BOOLEAN", java.sql.Types.BOOLEAN);
-        _MSSQL_SQL_TYPE.put("CHAR", java.sql.Types.CHAR);
-        _MSSQL_SQL_TYPE.put("CLOB", java.sql.Types.CLOB);
-        _MSSQL_SQL_TYPE.put("DATALINK", java.sql.Types.DATALINK);
-        _MSSQL_SQL_TYPE.put("DATE", java.sql.Types.DATE);
-        _MSSQL_SQL_TYPE.put("DECIMAL", java.sql.Types.DECIMAL);
-        _MSSQL_SQL_TYPE.put("DISTINCT", java.sql.Types.DISTINCT);
-        _MSSQL_SQL_TYPE.put("DOUBLE", java.sql.Types.DOUBLE);
-        _MSSQL_SQL_TYPE.put("FLOAT", java.sql.Types.FLOAT);
-        _MSSQL_SQL_TYPE.put("INTEGER", java.sql.Types.INTEGER);
-        _MSSQL_SQL_TYPE.put("JAVA_OBJECT", java.sql.Types.JAVA_OBJECT);
+        _MSSQL_SQL_TYPE.put("UNKNOWN", 999);
+        _MSSQL_SQL_TYPE.put("ARRAY", Types.ARRAY);
+        _MSSQL_SQL_TYPE.put("BIGINT", Types.BIGINT);
+        _MSSQL_SQL_TYPE.put("BINARY", Types.BINARY);
+        _MSSQL_SQL_TYPE.put("BIT", Types.BIT);
+        _MSSQL_SQL_TYPE.put("BLOB", Types.BLOB);
+        _MSSQL_SQL_TYPE.put("BOOLEAN", Types.BOOLEAN);
+        _MSSQL_SQL_TYPE.put("CHAR", Types.CHAR);
+        _MSSQL_SQL_TYPE.put("CLOB", Types.CLOB);
+        _MSSQL_SQL_TYPE.put("DATALINK", Types.DATALINK);
+        _MSSQL_SQL_TYPE.put("DATE", Types.DATE);
+        _MSSQL_SQL_TYPE.put("DATETIMEOFFSET", microsoft.sql.Types.DATETIMEOFFSET);
+
+        _MSSQL_SQL_TYPE.put("DECIMAL", Types.DECIMAL);
+        _MSSQL_SQL_TYPE.put("DISTINCT", Types.DISTINCT);
+        _MSSQL_SQL_TYPE.put("DOUBLE", Types.DOUBLE);
+        _MSSQL_SQL_TYPE.put("FLOAT", Types.FLOAT);
+        _MSSQL_SQL_TYPE.put("INTEGER", Types.INTEGER);
+        _MSSQL_SQL_TYPE.put("JAVA_OBJECT", Types.JAVA_OBJECT);
+
         _MSSQL_SQL_TYPE.put("LONGNVARCHAR", -16);
-        _MSSQL_SQL_TYPE.put("LONGVARBINARY", java.sql.Types.LONGVARBINARY);
-        _MSSQL_SQL_TYPE.put("LONGVARCHAR", java.sql.Types.LONGVARCHAR);
-        _MSSQL_SQL_TYPE.put("NCHAR", -15);
-        _MSSQL_SQL_TYPE.put("NCLOB", 2011);
-        _MSSQL_SQL_TYPE.put("NULL", java.sql.Types.NULL);
-        _MSSQL_SQL_TYPE.put("NUMERIC", java.sql.Types.NUMERIC);
-        _MSSQL_SQL_TYPE.put("NVARCHAR", -9);
-        _MSSQL_SQL_TYPE.put("OTHER", java.sql.Types.OTHER);
-        _MSSQL_SQL_TYPE.put("REAL", java.sql.Types.REAL);
-        _MSSQL_SQL_TYPE.put("REF", java.sql.Types.REF);
-        _MSSQL_SQL_TYPE.put("ROWID", -8);
-        _MSSQL_SQL_TYPE.put("SMALLINT", java.sql.Types.SMALLINT);
+        _MSSQL_SQL_TYPE.put("LONGVARBINARY", Types.LONGVARBINARY);
+        _MSSQL_SQL_TYPE.put("LONGVARCHAR", Types.LONGVARCHAR);
+        _MSSQL_SQL_TYPE.put("NCHAR", Types.NCHAR);
+        _MSSQL_SQL_TYPE.put("NCLOB", Types.NCLOB);
+
+        _MSSQL_SQL_TYPE.put("NULL", Types.NULL);
+        _MSSQL_SQL_TYPE.put("NUMERIC", Types.NUMERIC);
+        _MSSQL_SQL_TYPE.put("NVARCHAR", Types.NVARCHAR);
+        _MSSQL_SQL_TYPE.put("OTHER", Types.OTHER);
+        _MSSQL_SQL_TYPE.put("REAL", Types.REAL);
+        _MSSQL_SQL_TYPE.put("REF", Types.REF);
+
+        _MSSQL_SQL_TYPE.put("ROWID", Types.ROWID);
+        _MSSQL_SQL_TYPE.put("SMALLINT", Types.SMALLINT);
         _MSSQL_SQL_TYPE.put("SQLXML", 2009);
-        _MSSQL_SQL_TYPE.put("STRUCT", java.sql.Types.STRUCT);
-        _MSSQL_SQL_TYPE.put("TIME", java.sql.Types.TIME);
+        _MSSQL_SQL_TYPE.put("STRUCT", Types.STRUCT);
+        _MSSQL_SQL_TYPE.put("TIME", Types.TIME);
         _MSSQL_SQL_TYPE.put("TIME_WITH_TIMEZONE", 2013);
-        _MSSQL_SQL_TYPE.put("TIMESTAMP", java.sql.Types.TIMESTAMP);
+        _MSSQL_SQL_TYPE.put("TIMESTAMP", Types.TIMESTAMP);
         _MSSQL_SQL_TYPE.put("TIMESTAMP_WITH_TIMEZONE", 2014);
-        _MSSQL_SQL_TYPE.put("TINYINT", java.sql.Types.TINYINT);
-        _MSSQL_SQL_TYPE.put("VARBINARY", java.sql.Types.VARBINARY);
+        _MSSQL_SQL_TYPE.put("TINYINT", Types.TINYINT);
+        _MSSQL_SQL_TYPE.put("VARBINARY", Types.VARBINARY);
+        _MSSQL_SQL_TYPE.put("VARCHAR",java.sql.Types.VARCHAR);
+
+        // v10.2.0
+//        _MSSQL_SQL_TYPE.put("MONEY", microsoft.sql.Types.MONEY);
+//        _MSSQL_SQL_TYPE.put("SMALLMONEY", microsoft.sql.Types.SMALLMONEY);
+//        _MSSQL_SQL_TYPE.put("TVP", microsoft.sql.Types.STRUCTURED);
+//        _MSSQL_SQL_TYPE.put("DATETIME", microsoft.sql.Types.DATETIME);
+//        _MSSQL_SQL_TYPE.put("SMALLDATETIME", microsoft.sql.Types.SMALLDATETIME);
+//        _MSSQL_SQL_TYPE.put("GUID", microsoft.sql.Types.GUID);
+//        _MSSQL_SQL_TYPE.put("SQL_VARIANT", microsoft.sql.Types.SQL_VARIANT);
+//        _MSSQL_SQL_TYPE.put("GEOMETRY", microsoft.sql.Types.GEOMETRY);
+//        _MSSQL_SQL_TYPE.put("GEOGRAPHY", microsoft.sql.Types.GEOGRAPHY);
+//        _MSSQL_SQL_TYPE.put("LOCALDATETIME", java.sql.Types.TIMESTAMP);
     }
 
     /**
@@ -100,20 +195,10 @@ public class JavaTypes {
      * @param decimalDigits
      * @return
      */
-    public static String getPreferredJavaType(String dbType, String columnType, int size, int decimalDigits) {
-        Integer sqlType = 0;
+    public static String getJavaType(String dbType, String columnType, int size, int decimalDigits) {
+        int sqlType = getSqlType(dbType, columnType);
 
-        if (dbType.equals(JdbcUtils.ORACLE)) {
-            sqlType = getOracleSqlTypeByName(columnType);
-        } else if (dbType.equals(JdbcUtils.SQL_SERVER)) {
-            sqlType = getMssqlSqlTypeByName(columnType);
-        } else if (dbType.equals(JdbcUtils.MYSQL)) {
-            sqlType = getMysqlSqlTypeByName(columnType);
-        } else {
-            return "Object";
-        }
-
-        return getPreferredJavaType(sqlType, size, decimalDigits);
+        return getJavaType(sqlType, size, decimalDigits);
     }
 
     /**
@@ -123,27 +208,64 @@ public class JavaTypes {
      * @param decimalDigits
      * @return
      */
-    public static String getPreferredJavaType(int sqlType, int size, int decimalDigits) {
+    public static String getJavaType(int sqlType, int size, int decimalDigits) {
         if ((sqlType == Types.DECIMAL || sqlType == Types.NUMERIC) && decimalDigits == 0) {
             if (size == 1) {
-                return "Boolean";
+                sqlType = Types.BOOLEAN;
             } else if (size < 3) {
-                return "Byte";
+                sqlType = Types.TINYINT;
             } else if (size < 5) {
-                return "Short";
+                sqlType = Types.SMALLINT;
             } else if (size < 10) {
-                return "Integer";
+                sqlType = Types.INTEGER;
             } else if (size < 19) {
-                return "Long";
-            } else {
-                return "BigDecimal";
+                sqlType = Types.BIGINT;
             }
         }
+
         String result = _SQL_TYPE_2_JAVA_TYPE.get(sqlType);
         if (result == null) {
-            result = "Object";
+            result = _SQL_TYPE_2_JAVA_TYPE.get(Types.OTHER);;
         }
         return result;
+    }
+
+    /**
+     * 数据库字段类型 对应 Jdbc数据类型
+     * @param dbType
+     * @param columnType
+     * @return
+     */
+    public static String getJdbcType(String dbType, String columnType) {
+        int sqlType = getSqlType(dbType, columnType);
+
+        return getJdbcType(sqlType);
+    }
+
+    /**
+     * 数据库字段类型 对应 Jdbc数据类型
+     * @param sqlType
+     * @return
+     */
+    public static String getJdbcType(int sqlType) {
+        String result = _SQL_TYPE_CODE_2_NAME.get(sqlType);
+        if (result == null) {
+            result = _SQL_TYPE_CODE_2_NAME.get(Types.OTHER);
+        }
+        return result;
+    }
+
+    private static int getSqlType(String dbType, String columnType) {
+        int sqlType = Types.OTHER;
+
+        if (dbType.equals(JdbcUtils.ORACLE)) {
+            sqlType = getOracleSqlTypeByName(columnType);
+        } else if (dbType.equals(JdbcUtils.SQL_SERVER)) {
+            sqlType = getMssqlSqlTypeByName(columnType);
+        } else if (dbType.equals(JdbcUtils.MYSQL)) {
+            sqlType = getMysqlSqlTypeByName(columnType);
+        }
+        return sqlType;
     }
     
     /**
@@ -165,7 +287,7 @@ public class JavaTypes {
     	
         Integer sqlType = _MSSQL_SQL_TYPE.get(typeName);
         if (sqlType == null) {
-        	return Types.JAVA_OBJECT;
+        	return Types.OTHER;
 		}
     	
     	return sqlType;

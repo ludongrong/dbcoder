@@ -2,6 +2,7 @@ package io.github.ludongrong.dbcoder.controller;
 
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import io.github.ludongrong.dbcoder.controller.dto.BaseDto;
 import io.github.ludongrong.dbcoder.exception.BadGatewayException;
 
+@Slf4j
 @ControllerAdvice
 public class BaseController {
 
@@ -36,6 +38,9 @@ public class BaseController {
     @ResponseBody
     public BaseDto handleMethodArgumentNotValidException(
             MethodArgumentNotValidException methodArgumentNotValidException) {
+
+        log.info("Exception:{}", methodArgumentNotValidException.getMessage());
+        log.error("Exception", methodArgumentNotValidException);
 
         List<FieldError> fieldErrors = methodArgumentNotValidException.getBindingResult().getFieldErrors();
         for (FieldError fieldError : fieldErrors) {
@@ -77,6 +82,9 @@ public class BaseController {
     @ResponseStatus(HttpStatus.BAD_GATEWAY)
     @ResponseBody
     public BaseDto handleDefaultException(Exception exception) {
+
+        log.info("Exception:{}", exception.getMessage());
+        log.error("Exception", exception);
 
         return new BaseDto(_BAD_GATEWAY_MSG);
     }

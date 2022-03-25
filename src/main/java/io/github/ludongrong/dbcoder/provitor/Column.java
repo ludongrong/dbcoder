@@ -70,6 +70,13 @@ public class Column extends Element {
     private String javaName;
 
 	/**
+	 * 类型 > JDBC
+	 */
+	@Getter
+	@Setter
+	private String jdbcType;
+
+	/**
 	 * 所属表
 	 */
     @Getter
@@ -107,6 +114,7 @@ public class Column extends Element {
 		model.put("javaName", StringUtil.toJavaClassName(column.getName()));
 		model.put("javaNameVariable", StringUtil.toJavaVariableName(column.getName()));
 		model.put("javaType", column.getJavaType());
+		model.put("jdbcType", column.getJdbcType());
 		model.put("name", column.getName());
 		model.put("dataType", column.getDataType());
 		model.put("length", column.getLength());
@@ -130,13 +138,15 @@ public class Column extends Element {
 	
 	        String dbType = t.getTable().getProject().getDbType();
 	
-	        String preferredJavaType = JavaTypes.getPreferredJavaType(dbType,
-	                columnType,
+	        String javaType = JavaTypes.getJavaType(dbType, columnType,
 	                t.getLength(),
 	                t.getPrecision());
+
+			String jdbcType = JavaTypes.getJdbcType(dbType, columnType);
 	
-	        t.setJavaType(preferredJavaType);
+	        t.setJavaType(javaType);
 	        t.setJavaName(StringUtil.toJavaClassName(t.getName()));
+	        t.setJdbcType(jdbcType);
 	
 	        return toModel(t);
 	    }, Collectors.toList()));
