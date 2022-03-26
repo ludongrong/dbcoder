@@ -21,7 +21,7 @@
             </if>
             <#else>
             <if test='${column.name?upper_case} != null'>
-                AND t1.${column.name} = ${column.name?upper_case}
+                AND t1.${column.name} = <#noparse>#{</#noparse>${column.name?upper_case}<#noparse>}</#noparse>
             </if>
 			</#if>
 		</#list>

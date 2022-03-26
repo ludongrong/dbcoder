@@ -1,11 +1,9 @@
 package ${basePackage}.entity.header;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * ${tableNameCN} 实体字段说明
@@ -14,13 +12,11 @@ import lombok.Setter;
  * @since ${currentDate?string("yyyy-MM-dd")}
  */
 @ApiModel(value = "${className}Header", description = "${tableNameCN}")
-public class ${className}Header {
+public class ${className}Header implements Serializable {
 
 <#list columns as column>
 	@JsonProperty(value = "${column.name?upper_case}")
-    @Getter
-    @Setter
-	private final ${column.javaType} ${column.javaNameVariable} = "${column.nameCN}";
+	private final String ${column.javaNameVariable} = "${column.nameCN}";
 	
 </#list>	
     private static final ${className}Header ${tableName?upper_case} = new ${className}Header();

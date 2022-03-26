@@ -143,8 +143,8 @@ public class Table extends Element {
 	    model.put("currentDate", project.getCurrentDate());
 	    model.put("tableName", table.getCode());
 	    model.put("tableNameCN", table.getName());
-	    model.put("className", StringUtil.toJavaClassName(table.getName()));
-	    model.put("classNameVariable", StringUtil.toJavaVariableName(table.getName()));
+	    model.put("className", StringUtil.toJavaClassName(table.getCode()));
+	    model.put("classNameVariable", StringUtil.toJavaVariableName(table.getCode()));
 	    model.put("columns", Column.toModel(table.getColumns()));
 	    model.put("primaryColumns", primaryColumns);
 	    model.put("parentReferences", parentReferences);

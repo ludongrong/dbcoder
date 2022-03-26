@@ -70,7 +70,7 @@ public class PdFileController {
             TemplateReader templateReader = new TemplateReader(templatePath);
             inBuf = templateReader.generate(project);
         } catch (Exception e) {
-            throw new BadGatewayException("Can not parse upload files. " + pdFileId);
+            throw new BadGatewayException("Can not parse upload files. " + pdFileId, e);
         }
 
         response.setContentType("application/x-msdownload");

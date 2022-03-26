@@ -95,13 +95,13 @@ public class TemplateReader {
             File templateFile = st.pop();
 
             String subPath = FileUtil.subPath(templateDirectoryFile.getPath(), templateFile);
-            String newPath = FreeMarker.process(subPath, model);
+            String newPath = FreeMarker.process("path", subPath, model);
 
             if (templateFile.isDirectory()) {
                 writeDirectory(newPath);
                 st.addAll(Arrays.asList(templateFile.listFiles()));
             } else {
-                processTemplate(newPath, model, templateFile, macro);
+                processTemplate(templateFile.getName(), newPath, model, templateFile, macro);
             }
         }
     }
@@ -119,7 +119,7 @@ public class TemplateReader {
         zipOutputStream.closeEntry();
     }
 
-    private void processTemplate(String local, Map<String, Object> model, File templateFile, String macro)
+    private void processTemplate(String name, String local, Map<String, Object> model, File templateFile, String macro)
             throws IORuntimeException, IOException, TemplateException {
 
         if (! names.add(local)) {
@@ -131,7 +131,7 @@ public class TemplateReader {
         Writer out = new BufferedWriter(new OutputStreamWriter(outStream, CharsetUtil.UTF_8));
 
         try {
-            FreeMarker.process(FileUtil.readString(templateFile, CharsetUtil.CHARSET_UTF_8), model, out,
+            FreeMarker.process(name, FileUtil.readString(templateFile, CharsetUtil.CHARSET_UTF_8), model, out,
                     Optional.ofNullable(macro).orElse(""));
 
             byte[] data = outStream.toByteArray();

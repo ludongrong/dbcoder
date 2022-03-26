@@ -111,8 +111,8 @@ public class Column extends Element {
 		
 		Map<String, Object> model = new HashMap<String, Object>();
 		
-		model.put("javaName", StringUtil.toJavaClassName(column.getName()));
-		model.put("javaNameVariable", StringUtil.toJavaVariableName(column.getName()));
+		model.put("javaName", StringUtil.toJavaClassName(column.getCode()));
+		model.put("javaNameVariable", StringUtil.toJavaVariableName(column.getCode()));
 		model.put("javaType", column.getJavaType());
 		model.put("jdbcType", column.getJdbcType());
 		model.put("name", column.getCode());

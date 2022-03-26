@@ -33,18 +33,18 @@ public final class FreeMarker {
         configuration.setDateTimeFormat("yyyy-MM-dd HH:mm:ss");
     }
 
-    public static void process(@NonNull String templateString, @NonNull Map<String, Object> model, @NonNull Writer out,
+    public static void process(String name, @NonNull String templateString, @NonNull Map<String, Object> model, @NonNull Writer out,
             String include) throws IOException, TemplateException {
-        Template template = new Template("template", templateString, configuration);
+        Template template = new Template(name, templateString, configuration);
         Environment env = template.createProcessingEnvironment(model, out, null);
         env.include(new Template(UUID.randomUUID().toString(), include, configuration));
         env.process();
     }
 
-    public static String process(@NonNull String templateString, @NonNull Map<String, Object> model)
+    public static String process(String name, @NonNull String templateString, @NonNull Map<String, Object> model)
             throws IOException, TemplateException {
         StringWriter out = new StringWriter();
-        new Template("template", templateString, configuration).process(model, out);
+        new Template(name, templateString, configuration).process(model, out);
         return out.toString();
     }
 }

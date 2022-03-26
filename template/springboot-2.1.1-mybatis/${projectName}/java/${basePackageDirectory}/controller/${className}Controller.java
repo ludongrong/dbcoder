@@ -49,12 +49,12 @@ public class ${className}Controller extends BaseController {
      */
     @ApiOperation(value = "查询", notes = "入参 <#list columns as column>“${column.nameCN}”<#if column_has_next>, </#if></#list>...")
     @PostMapping(value = "/query.action", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public BaseResult<List<${className}Entity>, ${className}Header> queryWx(@RequestBody String jsonStr) {
+    public BaseResult<List<${className}Entity>, ${className}Header> query(@RequestBody String jsonStr) {
 
         try {
             Map<String, Object> paramMap = getJsonValues(jsonStr, <#list columns as column>"${column.name?upper_case}"<#if column_has_next>, </#if></#list>);
-            List<${className}Entity> ${classNameVariable}list = ${className}Service.queryList(paramMap);
-            return successJson(${classNameVariable}List, className}Header.getInstance());
+            List<${className}Entity> ${classNameVariable}List = ${classNameVariable}Service.queryList(paramMap);
+            return successJson(${classNameVariable}List, ${className}Header.getInstance());
         } catch (Exception e) {
             return handleException(e);
         }
