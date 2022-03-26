@@ -24,9 +24,18 @@ public class Element implements Serializable {
 
     /**
      * 名称
-     * <pre>列名或者表名</pre>
+     * <pre>列名或者表的解释名称</pre>
      */
     @Getter
     @Setter
     private String name;
+    
+    /**
+     * 名称
+     * <pre>列名或者表的字段</pre>
+     */
+    @Getter
+    @Setter
+    private String code;
+    
 }

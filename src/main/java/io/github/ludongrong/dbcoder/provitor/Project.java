@@ -1,5 +1,6 @@
 package io.github.ludongrong.dbcoder.provitor;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,21 +16,40 @@ import lombok.Setter;
 */
 public class Project {
 
-    @Getter
+	/**
+	 * 工程名
+	 */
+	@Getter
     @Setter
-    private List<Table> tables;
-
+    private String projectName;
+	
+    /**
+     * 工程包
+     */
     @Getter
     @Setter
     private String basePackage;
-
+    
+    /**
+     * 创建时间
+     */
     @Getter
     @Setter
-    private String projectName;
+    private Date currentDate;
 
+    /**
+     * 数据库类型
+     */
     @Getter
     @Setter
     private String dbType;
+    
+    /**
+     * 数据库的表
+     */
+    @Getter
+    @Setter
+    private List<Table> tables;
 
 	public static Map<String, Object> toTestModel() {
 	    Map<String, Object> model = new HashMap<String, Object>();

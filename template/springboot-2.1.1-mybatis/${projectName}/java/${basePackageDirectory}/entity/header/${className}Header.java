@@ -8,19 +8,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
-* ${className}Header
-*
-* @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
-* <#noparse>@since ${currentDate:date('yyyy-MM-dd')}</#noparse>
-*/
-@ApiModel(value = "${className}Header", description = "${tableName}")
+ * ${tableNameCN} 实体字段说明
+ *
+ * @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
+ * @since ${lastUpdated?string("yyyy-MM-dd")}
+ */
+@ApiModel(value = "${className}Header", description = "${tableNameCN}")
 public class ${className}Header {
 
 <#list columns as column>
-	@JsonProperty(value = "${column.name}")
+	@JsonProperty(value = "${column.name?upper_case}")
     @Getter
     @Setter
-	private final ${column.javaType} ${column.javaNameVariable} = "${column.name}";
+	private final ${column.javaType} ${column.javaNameVariable} = "${column.nameCN}";
 	
 </#list>	
     private static final ${className}Header ${tableName?upper_case} = new ${className}Header();

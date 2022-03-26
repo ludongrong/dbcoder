@@ -140,7 +140,9 @@ public class Table extends Element {
 	    model.put("projectName", project.getProjectName());
 	    model.put("basePackage", basePackage);
 	    model.put("basePackageDirectory", basePackage.replaceAll("\\.", "/"));
-	    model.put("tableName", table.getName());
+	    model.put("currentDate", project.getCurrentDate());
+	    model.put("tableName", table.getCode());
+	    model.put("tableNameCN", table.getName());
 	    model.put("className", StringUtil.toJavaClassName(table.getName()));
 	    model.put("classNameVariable", StringUtil.toJavaVariableName(table.getName()));
 	    model.put("columns", Column.toModel(table.getColumns()));

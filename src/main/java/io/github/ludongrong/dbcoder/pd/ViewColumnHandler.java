@@ -46,7 +46,8 @@ public class ViewColumnHandler implements ElementHandler {
         
         Column column = new Column();
         column.setId(element.attributeValue("Id"));
-        column.setName(DomUtil.getText(element, "Code"));
+        column.setName(DomUtil.getText(element, "Name"));
+        column.setCode(DomUtil.getText(element, "Code"));
         column.setDataType(DomUtil.getText(element, "DataType"));
         column.setLength(0);
         column.setPrecision(0);

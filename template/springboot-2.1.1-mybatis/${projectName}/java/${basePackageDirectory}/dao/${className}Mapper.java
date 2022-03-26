@@ -6,11 +6,11 @@ import java.util.Map;
 import ${basePackage}.entity.${className}Entity;
 
 /**
-* ${className}Mapper
-*
-* @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
-* <#noparse>@since ${currentDate:date('yyyy-MM-dd')}</#noparse>
-*/
+ * ${tableNameCN} 数据操作层
+ *
+ * @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
+ * @since ${lastUpdated?string("yyyy-MM-dd")}
+ */
 public interface ${className}Mapper {
     
 	List<${className}Entity> queryList(Map<String, Object> paramMap);

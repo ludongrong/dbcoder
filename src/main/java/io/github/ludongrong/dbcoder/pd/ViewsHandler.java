@@ -46,7 +46,8 @@ public class ViewsHandler implements ElementHandler {
 
     public void onEnd(ElementPath path) {
         Element element = path.getCurrent();
-        table.setName(DomUtil.getText(element, "Code"));
+        table.setName(DomUtil.getText(element, "Name"));
+        table.setCode(DomUtil.getText(element, "Code"));
         table.setColumns(viewColumnHandler.getColumnList());
 
         tableList.add(table);

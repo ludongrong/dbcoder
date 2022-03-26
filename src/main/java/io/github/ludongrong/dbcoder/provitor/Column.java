@@ -115,7 +115,8 @@ public class Column extends Element {
 		model.put("javaNameVariable", StringUtil.toJavaVariableName(column.getName()));
 		model.put("javaType", column.getJavaType());
 		model.put("jdbcType", column.getJdbcType());
-		model.put("name", column.getName());
+		model.put("name", column.getCode());
+		model.put("nameCN", column.getName());
 		model.put("dataType", column.getDataType());
 		model.put("length", column.getLength());
 		model.put("precision", column.getPrecision());

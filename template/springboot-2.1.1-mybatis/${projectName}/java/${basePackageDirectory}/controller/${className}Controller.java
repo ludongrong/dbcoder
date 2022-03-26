@@ -23,12 +23,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
-* ${className}Controller
-*
-* @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
-* <#noparse>@since ${currentDate:date('yyyy-MM-dd')}</#noparse>
-*/
-@Api(value = "${className}Controller", tags = "${className}Controller")
+ * ${tableNameCN} 接口控制层
+ *
+ * @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
+ * @since ${lastUpdated?string("yyyy-MM-dd")}
+ */
+@Api(value = "${tableNameCN}", tags = "${tableNameCN}")
 @RestController
 @RequestMapping("/${tableName?lower_case}")
 public class ${className}Controller extends BaseController {
@@ -47,7 +47,7 @@ public class ${className}Controller extends BaseController {
      * @param jsonStr {@code {}} 入参
      * @return java.util.List<${basePackage}.entity.${className}Entity>
      */
-    @ApiOperation(value = "查询", notes = "入参 <#list columns as column>“${column.name?upper_case}”<#if column_has_next>, </#if></#list>...")
+    @ApiOperation(value = "查询", notes = "入参 <#list columns as column>“${column.nameCN}”<#if column_has_next>, </#if></#list>...")
     @PostMapping(value = "/query.action", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public BaseResult<List<${className}Entity>, ${className}Header> queryWx(@RequestBody String jsonStr) {
 

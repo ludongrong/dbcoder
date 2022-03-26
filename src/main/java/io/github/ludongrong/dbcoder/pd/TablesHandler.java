@@ -32,8 +32,11 @@ public class TablesHandler implements ElementHandler {
         table.setId(element.attributeValue("Id"));
         table.setProject(project);
 
+        // 列
         columnHandler = new ColumnHandler(table);
+        // 普通键
         keysHandler = new KeysHandler();
+        // 主键
         primaryKeyHandler = new PrimaryKeyHandler();
 
         path.addHandler("Columns/Column", columnHandler);
@@ -43,7 +46,8 @@ public class TablesHandler implements ElementHandler {
 
     public void onEnd(ElementPath path) {
         Element element = path.getCurrent();
-        table.setName(DomUtil.getText(element, "Code"));
+        table.setName(DomUtil.getText(element, "Name"));
+        table.setCode(DomUtil.getText(element, "Code"));
         table.setColumns(columnHandler.getColumnList());
 
         Map<String, String[]> keysMap = keysHandler.getKeysMap();

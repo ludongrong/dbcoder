@@ -13,11 +13,11 @@ import ${basePackage}.entity.${className}Entity;
 import ${basePackage}.service.${className}Service;
 
 /**
-* ${className}ServiceImpl
-*
-* @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
-* <#noparse>@since ${currentDate:date('yyyy-MM-dd')}</#noparse>
-*/
+ * ${tableNameCN} 业务逻辑实现层
+ *
+ * @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
+ * @since ${lastUpdated?string("yyyy-MM-dd")}
+ */
 @Service("${classNameVariable}Service")
 public class ${className}ServiceImpl implements ${className}Service {
     

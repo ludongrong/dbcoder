@@ -8,17 +8,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
-* ${className}Entity
-*
-* @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
-* <#noparse>@since ${currentDate:date('yyyy-MM-dd')}</#noparse>
-*/
-@ApiModel(value = "${className}Entity", description = "${tableName}")
+ * ${tableNameCN} 实体
+ *
+ * @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
+ * @since ${lastUpdated?string("yyyy-MM-dd")}
+ */
+@ApiModel(value = "${className}Entity", description = "${tableNameCN}")
 public class ${className}Entity implements Serializable {
 	
 <#list columns as column>
-	@JsonProperty(value = "${column.name}")
-	@ApiModelProperty(value = "${column.name}", name = "${column.name}")
+	@JsonProperty(value = "${column.name?upper_case}")
+	@ApiModelProperty(value = "${column.nameCN}", name = "${column.name?upper_case}")
     @Getter
     @Setter
 	private ${column.javaType} ${column.javaNameVariable};
