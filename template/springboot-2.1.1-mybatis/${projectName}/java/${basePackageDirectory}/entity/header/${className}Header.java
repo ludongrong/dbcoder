@@ -11,7 +11,7 @@ import lombok.Setter;
  * ${tableNameCN} 实体字段说明
  *
  * @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
- * @since ${lastUpdated?string("yyyy-MM-dd")}
+ * @since ${currentDate?string("yyyy-MM-dd")}
  */
 @ApiModel(value = "${className}Header", description = "${tableNameCN}")
 public class ${className}Header {

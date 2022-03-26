@@ -26,7 +26,7 @@ import lombok.Setter;
  * ${tableNameCN} 接口控制层
  *
  * @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
- * @since ${lastUpdated?string("yyyy-MM-dd")}
+ * @since ${currentDate?string("yyyy-MM-dd")}
  */
 @Api(value = "${tableNameCN}", tags = "${tableNameCN}")
 @RestController

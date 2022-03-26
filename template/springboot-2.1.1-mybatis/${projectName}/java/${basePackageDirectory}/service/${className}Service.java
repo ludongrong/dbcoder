@@ -9,7 +9,7 @@ import ${basePackage}.entity.${className}Entity;
  * ${tableNameCN} 业务逻辑层
  *
  * @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
- * @since ${lastUpdated?string("yyyy-MM-dd")}
+ * @since ${currentDate?string("yyyy-MM-dd")}
  */
 public interface ${className}Service {
     

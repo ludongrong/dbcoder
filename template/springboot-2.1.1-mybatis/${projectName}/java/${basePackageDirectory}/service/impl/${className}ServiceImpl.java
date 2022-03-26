@@ -16,7 +16,7 @@ import ${basePackage}.service.${className}Service;
  * ${tableNameCN} 业务逻辑实现层
  *
  * @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
- * @since ${lastUpdated?string("yyyy-MM-dd")}
+ * @since ${currentDate?string("yyyy-MM-dd")}
  */
 @Service("${classNameVariable}Service")
 public class ${className}ServiceImpl implements ${className}Service {

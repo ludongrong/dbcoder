@@ -2,6 +2,7 @@ package io.github.ludongrong.dbcoder.pd;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +32,7 @@ public class PdmReader {
         Project project = new Project();
         project.setBasePackage(pdFileBo.getBasePackage());
         project.setProjectName(pdFileBo.getProjectName());
+        project.setCurrentDate(new Date());
 
         DbmsHandler dbmsHandler = new DbmsHandler();
         TablesHandler tablesHandler = new TablesHandler(project);

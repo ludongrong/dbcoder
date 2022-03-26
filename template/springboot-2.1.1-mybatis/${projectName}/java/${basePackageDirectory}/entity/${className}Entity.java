@@ -11,7 +11,7 @@ import lombok.Setter;
  * ${tableNameCN} 实体
  *
  * @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
- * @since ${lastUpdated?string("yyyy-MM-dd")}
+ * @since ${currentDate?string("yyyy-MM-dd")}
  */
 @ApiModel(value = "${className}Entity", description = "${tableNameCN}")
 public class ${className}Entity implements Serializable {
