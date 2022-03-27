@@ -20,6 +20,11 @@ public class ${className}Entity implements Serializable {
 	
 <#list columns as column>
 	@JsonProperty(value = "${column.name?upper_case}")
+<#if column.javaType == "java.sql.Date" || column.javaType == "java.sql.Timestamp">
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+<#elseif column.javaType == "java.sql.Time">
+@JsonFormat(pattern = "HH:mm:ss", timezone = "GMT+8")
+</#if>
 	@ApiModelProperty(value = "${column.nameCN}", name = "${column.name?upper_case}")
     @Getter
     @Setter
