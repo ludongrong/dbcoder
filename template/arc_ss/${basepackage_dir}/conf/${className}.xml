@@ -1,0 +1,10 @@
+<#assign proName = projectName>
+<#assign className = table.className>
+<#assign classNameLower = className?uncap_first> 
+<!-- ${classNameLower} -->
+<bean id="${proName}${className}Dao" class="${basepackage}.dao.jdbc.${className}DaoImpl"
+	parent="nameParamDaoSupport"
+/>
+<bean id="${proName}${className}Svc" class="${basepackage}.svc.impl.${className}SvcImpl" 
+	p:${classNameLower}Dao-ref="${proName}${className}Dao"
+/>

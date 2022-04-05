@@ -322,8 +322,7 @@ public class ${className}Controller {
         ByteArrayInputStream byteInBuf = new ByteArrayInputStream(byteOutbuf.toByteArray());
 
         response.setContentType("application/x-msdownload");
-        response.addHeader("Content-Disposition",
-                "attachment; filename=\"" + "${classNameVariable?lower_case}-" + DateUtil.formatDate(new Date()) + ".xlsx\"");
+        response.addHeader("Content-Disposition", "attachment; filename=\"" + "${classNameVariable?lower_case}-" + DateUtil.formatDate(new Date()) + ".xlsx\"");
         response.setHeader("Content-Length", Integer.toString(byteInBuf.available()));
 
         try (OutputStream oStream = response.getOutputStream()) {

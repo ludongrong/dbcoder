@@ -1,0 +1,32 @@
+<#assign proName = projectName>
+<#assign className = table.className>
+<#assign classNameLower = className?uncap_first> 
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-4.0.xsd ">
+
+	<!-- 导入applicationContext -->
+	<import resource="applicationContext.xml" />
+
+	<!-- 导入其他模块配置 -->
+	<import resource="xml/framework/dbbean.xml" />
+	<import resource="xml/framework/enbean.xml" />
+	<import resource="xml/${proName}/dbbean.xml" />
+	<!-- <import resource="xml/${proName}/enbean.xml" /> -->
+	<!-- <import resource="xml/${proName}/quartz.xml" /> -->
+
+	<!-- 定时器工厂 -->
+	<bean id="app.startQuertz" lazy-init="false" autowire="no"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<!-- <ref bean="${proName}.goodsDoTime" /> -->
+			</list>
+		</property>
+	</bean>
+</beans>

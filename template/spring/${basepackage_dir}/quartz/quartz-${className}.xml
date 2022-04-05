@@ -1,0 +1,35 @@
+<#assign proName = projectName>
+<#assign className = table.className>
+<#assign classNameLower = className?uncap_first>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+	
+<beans>
+	<!-- ${className}定时器，，，，，，，，，，，start -->
+	<bean id="${proName}.${classNameLower}Quartz" class="${basepackage}.quartz.${className}Quartz"
+		singleton="true" init-method="init">
+		<property name="${classNameLower}Svc">
+			<ref bean="${proName}.${classNameLower}Svc" />
+		</property>
+	</bean>
+
+	<bean id="${proName}.${classNameLower}Task"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="${proName}.${classNameLower}Quartz" />
+		</property>
+		<property name="targetMethod">
+			<value>execute</value>
+		</property>
+	</bean>
+
+	<bean id="${proName}.${classNameLower}DoTime" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="${proName}.${classNameLower}Task" />
+		</property>
+		<property name="cronExpression">
+			<value>${r'${'}${proName}.${classNameLower}_cron${r'}'}</value>
+		</property>
+	</bean>
+	<!-- ${className}定时器，，，，，，，，，，，end -->
+</beans>

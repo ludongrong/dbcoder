@@ -1,22 +1,5 @@
 package io.github.ludongrong.dbcoder.controller;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Date;
-import java.util.UUID;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
@@ -26,8 +9,21 @@ import io.github.ludongrong.dbcoder.controller.dto.PdFileVo;
 import io.github.ludongrong.dbcoder.exception.BadGatewayException;
 import io.github.ludongrong.dbcoder.pd.PdmReader;
 import io.github.ludongrong.dbcoder.provitor.Project;
-import io.github.ludongrong.dbcoder.service.IPdFileService;
 import io.github.ludongrong.dbcoder.template.TemplateReader;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * xxx.
@@ -38,9 +34,6 @@ import io.github.ludongrong.dbcoder.template.TemplateReader;
 @Controller
 @RequestMapping("/pdfile")
 public class PdFileController {
-
-    @Resource(name = "dbcoder-PdFileServiceImpl")
-    private IPdFileService pdFileService;
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/x-msdownload")
     public void create(PdFileVo pdFileVo, @RequestParam(value = "file") MultipartFile file,

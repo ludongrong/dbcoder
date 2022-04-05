@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-4.3.xsd ">
+
+	<!-- admin -->
+	<bean id="goods.adminDao" class="com.nsn.goods.service.dao.jdbc.AdminDaoImpl"
+		parent="fw.baseDao" />
+	<bean id="goods.adminSvc" class="com.nsn.goods.service.impl.AdminSvcImpl"
+		p:adminDao-ref="goods.adminDao" />
+
+	<!-- attribute -->
+	<bean id="goods.attributeDao" class="com.nsn.goods.service.dao.jdbc.AttributeDaoImpl"
+		parent="fw.baseDao" />
+	<bean id="goods.attributeSvc" class="com.nsn.goods.service.impl.AttributeSvcImpl"
+		p:attributeDao-ref="goods.attributeDao" />
+
+	<!-- brand -->
+	<bean id="goods.brandDao" class="com.nsn.goods.service.dao.jdbc.BrandDaoImpl"
+		parent="fw.baseDao" />
+	<bean id="goods.brandSvc" class="com.nsn.goods.service.impl.BrandSvcImpl"
+		p:brandDao-ref="goods.brandDao" />
+
+	<!-- goods -->
+	<bean id="goods.goodsDao" class="com.nsn.goods.service.dao.jdbc.GoodsDaoImpl"
+		parent="fw.baseDao" />
+	<bean id="goods.goodsSvc" class="com.nsn.goods.service.impl.GoodsSvcImpl"
+		p:goodsDao-ref="goods.goodsDao" p:productSvc-ref="goods.productSvc" />
+
+	<!-- product -->
+	<bean id="goods.productDao" class="com.nsn.goods.service.dao.jdbc.ProductDaoImpl"
+		parent="fw.baseDao" />
+	<bean id="goods.productSvc" class="com.nsn.goods.service.impl.ProductSvcImpl"
+		p:productDao-ref="goods.productDao" />
+
+	<!-- productCategory -->
+	<bean id="goods.productCategoryDao" class="com.nsn.goods.service.dao.jdbc.ProductCategoryDaoImpl"
+		parent="fw.baseDao" />
+	<bean id="goods.productCategorySvc" class="com.nsn.goods.service.impl.ProductCategorySvcImpl"
+		p:productCategoryDao-ref="goods.productCategoryDao" />
+
+	<!-- promotion -->
+	<bean id="goods.promotionDao" class="com.nsn.goods.service.dao.jdbc.PromotionDaoImpl"
+		parent="fw.baseDao" />
+	<bean id="goods.promotionSvc" class="com.nsn.goods.service.impl.PromotionSvcImpl"
+		p:promotionDao-ref="goods.promotionDao" />
+
+	<!-- specification -->
+	<bean id="goods.specificationDao" class="com.nsn.goods.service.dao.jdbc.SpecificationDaoImpl"
+		parent="fw.baseDao" />
+	<bean id="goods.specificationSvc" class="com.nsn.goods.service.impl.SpecificationSvcImpl"
+		p:specificationDao-ref="goods.specificationDao" />
+
+	<!-- tag -->
+	<bean id="goods.tagDao" class="com.nsn.goods.service.dao.jdbc.TagDaoImpl"
+		parent="fw.baseDao" />
+	<bean id="goods.tagSvc" class="com.nsn.goods.service.impl.TagSvcImpl"
+		p:tagDao-ref="goods.tagDao" />
+
+</beans>

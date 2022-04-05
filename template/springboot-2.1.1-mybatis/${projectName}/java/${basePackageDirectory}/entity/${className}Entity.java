@@ -2,6 +2,7 @@ package ${basePackage}.entity;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -23,7 +24,7 @@ public class ${className}Entity implements Serializable {
 <#if column.javaType == "java.sql.Date" || column.javaType == "java.sql.Timestamp">
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 <#elseif column.javaType == "java.sql.Time">
-@JsonFormat(pattern = "HH:mm:ss", timezone = "GMT+8")
+	@JsonFormat(pattern = "HH:mm:ss", timezone = "GMT+8")
 </#if>
 	@ApiModelProperty(value = "${column.nameCN}", name = "${column.name?upper_case}")
     @Getter

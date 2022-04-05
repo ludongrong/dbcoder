@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+						http://www.springframework.org/schema/tx 
+						http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+						http://www.springframework.org/schema/jee 
+						http://www.springframework.org/schema/jee/spring-jee-4.0.xsd 
+						http://www.springframework.org/schema/aop 
+						http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
+						http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context-4.0.xsd"
+	default-lazy-init="true">
+
+	<!-- 配置数据源 -->
+	<bean id="dataSourceMain" class="com.alibaba.druid.pool.DruidDataSource"
+		destroy-method="close">
+		<!-- 驱动类 -->
+		<property name="driverClassName" value="${db.driver.${dynamicDS.main}}" />
+		<!-- 数据库连接地址 -->
+		<property name="url" value="${db.url.${dynamicDS.main}}" />
+		<!-- 登录用户 -->
+		<property name="username" value="${db.user.${dynamicDS.main}}" />
+		<!-- 登录密码 -->
+		<property name="password" value="${db.password.${dynamicDS.main}}" />
+		<!-- 连接池的最大值 -->
+		<property name="maxActive" value="${db.maxActive.${dynamicDS.main}}" />
+		<!-- 最小空间值，当空间的连接数少于阀值时，连接池就会预申请一些连接，以免洪峰来时 来不及申请 -->
+		<property name="minIdle" value="${db.minIdle.${dynamicDS.main}}" />
+		<!-- 连接池启动时的初始值 -->
+		<property name="initialSize" value="${db.initialSize.${dynamicDS.main}}" />
+		<!-- 默认值 false； 设置为 true 时，当回收策略返回false时，则 调用 factory.activateObject()和factory.validateObject() -->
+		<property name="testWhileIdle" value="${db.testWhileIdle.${dynamicDS.main}}" />
+		<!-- 测试/验证连接池连接的SQL语句 -->
+		<property name="validationQuery" value="${db.validationQuery.${dynamicDS.main}}" />
+		<!-- 资源回收线程执行一次回收操作，回收资源的数量 -->
+		<property name="numTestsPerEvictionRun" value="${db.maxActive.${dynamicDS.main}}" />
+		<!-- 回收资源线程的执行周期，单位毫,秒默认值 -1 ，-1 表示不启用线程回收资源。（long类型） -->
+		<property name="timeBetweenEvictionRunsMillis"
+			value="${db.timeBetweenEvictionRunsMillis.${dynamicDS.main}}" />
+	</bean>
+
+	<!-- 数据源动态管理,切换数据源使用 -->
+	<bean id="dataSource" class="com.nsn.framework.springjdbc.DynamicDataSource">
+		<property name="targetDataSources">
+			<map key-type="java.lang.String">
+				<entry value-ref="dataSourceMain" key="dataSourceMain"></entry>
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="dataSourceMain"></property>
+	</bean>
+
+	<!-- 事务管理 -->
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		abstract="false" lazy-init="default">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+	</bean>
+
+	<!-- 事务管理-切点动作 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="save*" propagation="REQUIRED"
+				rollback-for="Exception" />
+			<tx:method name="create*" propagation="REQUIRED"
+				rollback-for="Exception" />
+			<tx:method name="update*" propagation="REQUIRED"
+				rollback-for="Exception" />
+			<tx:method name="del*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="doLog*" propagation="REQUIRES_NEW" />
+			<tx:method name="*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="*" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- 事务管理-切点 -->
+	<aop:config>
+		<aop:pointcut id="serviceOperation"
+			expression="execution(* com.nsn.*.service.impl.*Impl.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceOperation" />
+	</aop:config>
+</beans>
