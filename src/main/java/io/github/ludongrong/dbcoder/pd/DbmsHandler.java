@@ -55,6 +55,8 @@ public class DbmsHandler implements ElementHandler {
                 dbType = JdbcUtils.SQL_SERVER;
             } else if (code.startsWith(JdbcUtils.MYSQL)) {
                 dbType = JdbcUtils.MYSQL;
+            } else if (code.startsWith("pgsql")) {
+                dbType = JdbcUtils.POSTGRESQL;
             }
         }
 

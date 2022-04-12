@@ -1,0 +1,27 @@
+<#-- 构造函数 -->
+<#macro generateConstructor constructor>
+    public ${constructor}() {}
+</#macro>
+
+
+
+
+<#-- 构造函数 -->
+<#macro generateWhere columns prefix blank>
+${blank}<where>
+<#list columns as column>
+<#if column.javaType == "java.lang.String">
+${blank}    <if test='${column.name?upper_case} != null and ${column.name?upper_case} != ""'>
+${blank}        AND <#if prefix != "">${prefix}.</#if>${column.name} = <#noparse>#{</#noparse>${column.name?upper_case}<#noparse>}</#noparse>
+${blank}    </if>
+<#else>
+${blank}    <if test='${column.name?upper_case} != null'>
+${blank}        AND <#if prefix != "">${prefix}.</#if>${column.name} = <#noparse>#{</#noparse>${column.name?upper_case}<#noparse>}</#noparse>
+${blank}    </if>
+</#if>
+</#list>
+${blank}</where>
+</#macro>
+
+
+

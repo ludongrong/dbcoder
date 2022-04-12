@@ -38,6 +38,7 @@ public class Reference {
 
 	/**
 	 * 表的关联 转 模板模型数据
+	 *
 	 * @param referenceList
 	 * @return
 	 */
@@ -45,14 +46,18 @@ public class Reference {
 	
 	    return referenceList.stream().collect(Collectors.mapping(t -> {
 	        Map<String, Object> referenceModel = new HashMap<String, Object>();
-	        
-	        String tableName = t.getReferenceTable().getName();
-	        
+
+	        Table table = t.referenceTable;
+	        String tableName = table.getCode();
+	        String tableNameCN = table.getName();
+
 	        referenceModel.put("tableName", tableName);
+			referenceModel.put("tableNameCN", tableNameCN);
 	        referenceModel.put("className", StringUtil.toJavaClassName(tableName));
 	        referenceModel.put("classNameVariable", StringUtil.toJavaVariableName(tableName));
 	        referenceModel.put("columnMappings", Column.toModelForJoin(t.getColumnMappingList()));
-	        
+			referenceModel.put("columns", Column.toModel(table.getColumns()));
+
 	        return referenceModel;
 	    }, Collectors.toList()));
 	}
