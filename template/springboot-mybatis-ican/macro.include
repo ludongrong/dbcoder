@@ -6,7 +6,7 @@
 
 
 
-<#-- 构造函数 -->
+<#-- mybatis where -->
 <#macro generateWhere columns prefix blank>
 ${blank}<where>
 <#list columns as column>
@@ -23,5 +23,10 @@ ${blank}    </if>
 ${blank}</where>
 </#macro>
 
+
+
+
+<#-- postman 请求参数 -->
+<#macro generatePostmanParam columns>"{<#list columns as column><#if column.javaType == "java.sql.Date" || column.javaType == "java.sql.Timestamp">\"${column.javaNameVariable}\": \"2022-04-13 15:20:11\"<#elseif column.javaType == "java.sql.Time">\"${column.javaNameVariable}\": \"15:20:11\"<#else>\"${column.javaNameVariable}\": \"\"</#if><#if column_has_next>, </#if></#list>}",</#macro>
 
 

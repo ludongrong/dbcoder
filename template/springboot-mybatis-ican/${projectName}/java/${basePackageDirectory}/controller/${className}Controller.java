@@ -28,6 +28,60 @@ public class ${className}Controller extends BaseController {
 
     @Resource
     private ${className}Service ${classNameVariable}Service;
+    
+    /**
+     * ${tableNameCN} 创建
+     * 
+     * <pre>
+     * URI 样例
+     *   POST /${classNameVariable}/create
+     * </pre>
+     * 
+     * @param ${classNameVariable} {@code {}} 入参
+     * @return ${basePackage}.entity.${className}
+     */
+    @ApiOperation(value = "${tableNameCN} 创建", notes = "入参 <#list columns as column>“${column.nameCN}”<#if column_has_next>, </#if></#list>...")
+    @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
+    public RestResult<${className}> create(@RequestBody ${className} ${classNameVariable}) {
+
+        return ${classNameVariable}Service.create(${classNameVariable});
+    }
+    
+    /**
+     * ${tableNameCN} 更新
+     * 
+     * <pre>
+     * URI 样例
+     *   POST /${classNameVariable}/update
+     * </pre>
+     * 
+     * @param ${classNameVariable} {@code {}} 入参
+     * @return ${basePackage}.entity.${className}
+     */
+    @ApiOperation(value = "${tableNameCN} 更新", notes = "入参 <#list columns as column>“${column.nameCN}”<#if column_has_next>, </#if></#list>...")
+    @PostMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
+    public RestResult<${className}> update(@RequestBody ${className} ${classNameVariable}) {
+
+        return ${classNameVariable}Service.update(${classNameVariable});
+    }
+    
+    /**
+     * ${tableNameCN} 删除
+     * 
+     * <pre>
+     * URI 样例
+     *   POST /${classNameVariable}/delete
+     * </pre>
+     * 
+     * @param ${classNameVariable} {@code {}} 入参
+     * @return ${basePackage}.entity.${className}
+     */
+    @ApiOperation(value = "${tableNameCN} 删除", notes = "入参 <#list columns as column>“${column.nameCN}”<#if column_has_next>, </#if></#list>...")
+    @PostMapping(value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
+    public RestResult<${className}> delete(@RequestBody ${className} ${classNameVariable}) {
+
+        return ${classNameVariable}Service.delete(${classNameVariable});
+    }
 	
 	/**
      * ${tableNameCN} 查询列表

@@ -11,8 +11,14 @@ import com.hiz.system.entity.VuePage;
  * @since ${currentDate?string("yyyy-MM-dd")}
  */
 public interface ${className}Service {
-	
-	/**
+    
+    RestResult<${className}> insert(${className} ${classNameVariable});
+    
+    RestResult<${className}> update(${className} ${classNameVariable});
+    
+    RestResult<${className}> delete(${className} ${classNameVariable});
+    
+    /**
      * ${tableNameCN} 查询列表
      * 
      * @param ${classNameVariable} 查询参数
@@ -20,4 +26,12 @@ public interface ${className}Service {
      */
     RestResult<VuePage<${className}>> list${className}(${className} ${classNameVariable});
     
+    <#list parentReferences as reference>
+    RestResult<VuePage<${className}>> list${className}${reference.className}ToOne${reference_index}(${className} ${classNameVariable});
+    
+    </#list>
+    <#list childReferences as reference>
+    RestResult<VuePage<${className}>> list${className}${reference.className}ToMany${reference_index}(${className} ${classNameVariable});
+    
+    </#list>
 }

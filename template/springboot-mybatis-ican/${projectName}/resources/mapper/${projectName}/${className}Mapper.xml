@@ -69,7 +69,6 @@
     </select>
 
 </#list>
-
 <#list childReferences as reference>
     <resultMap id="list${className}${reference.className}ToMany${reference_index}Result" type="${basePackage}.entity.${className}">
         <#list columns as column>

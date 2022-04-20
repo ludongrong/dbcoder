@@ -14,14 +14,15 @@ import cn.hutool.core.util.StrUtil;
 import io.github.ludongrong.dbcoder.util.StringUtil;
 import oracle.jdbc.OracleType;
 
-/** 
-* JavaTypesUtils
-*
-* @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
-* @since 2022-03-24
-*/
+/**
+ * JavaTypesUtils
+ *
+ * @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
+ * @since 2022-03-24
+ */
 public class JavaTypes {
 
+    // JDBC 的 SQL_TYPE 对应 JAVA_TYPE
     final static private Map<Integer, String> _SQL_TYPE_2_JAVA_TYPE = new HashMap<Integer, String>();
 
     static {
@@ -80,6 +81,7 @@ public class JavaTypes {
 //        _SQL_TYPE_2_JAVA_TYPE.put(java.sql.Types.TIMESTAMP, LocalDateTime.class.getName());
     }
 
+    // JDBC 的 SQL_TYPE 对应 JDBC 的 SQL_TYPE_NAME
     final static private Map<Integer, String> _SQL_TYPE_CODE_2_NAME = new HashMap<Integer, String>();
 
     static {
@@ -123,6 +125,7 @@ public class JavaTypes {
         _SQL_TYPE_CODE_2_NAME.put(microsoft.sql.Types.DATETIMEOFFSET, "DATETIMEOFFSET");
     }
 
+    // Microsoft Sql Server 数据类型 对应 JDBC 的 SQL_TYPE
     final static private Map<String, Integer> _MSSQL_SQL_TYPE = new HashMap<String, Integer>();
 
     /**
@@ -172,7 +175,7 @@ public class JavaTypes {
         _MSSQL_SQL_TYPE.put("TIMESTAMP_WITH_TIMEZONE", 2014);
         _MSSQL_SQL_TYPE.put("TINYINT", Types.TINYINT);
         _MSSQL_SQL_TYPE.put("VARBINARY", Types.VARBINARY);
-        _MSSQL_SQL_TYPE.put("VARCHAR",java.sql.Types.VARCHAR);
+        _MSSQL_SQL_TYPE.put("VARCHAR", java.sql.Types.VARCHAR);
 
         // v10.2.0
 //        _MSSQL_SQL_TYPE.put("MONEY", microsoft.sql.Types.MONEY);
@@ -188,7 +191,60 @@ public class JavaTypes {
     }
 
     /**
+     * PostgreSQL 的基础 数据类型
+     */
+    final static private Map<String, Integer> _PGSQL_SQL_TYPE = new HashMap<String, Integer>();
+
+    /**
+     * @see org.postgresql.jdbc.TypeInfoCache
+     */
+    static {
+        _PGSQL_SQL_TYPE.put("int2", Types.SMALLINT);
+        _PGSQL_SQL_TYPE.put("int4", Types.INTEGER);
+        _PGSQL_SQL_TYPE.put("int8", Types.BIGINT);
+
+        _PGSQL_SQL_TYPE.put("smallint", Types.SMALLINT);
+        _PGSQL_SQL_TYPE.put("int", Types.INTEGER);
+        _PGSQL_SQL_TYPE.put("integer", Types.INTEGER);
+        _PGSQL_SQL_TYPE.put("long", Types.BIGINT);
+        _PGSQL_SQL_TYPE.put("bigint", Types.BIGINT);
+        _PGSQL_SQL_TYPE.put("oid", Types.BIGINT);
+
+        _PGSQL_SQL_TYPE.put("numeric", Types.NUMERIC);
+        _PGSQL_SQL_TYPE.put("decimal", Types.NUMERIC);
+        _PGSQL_SQL_TYPE.put("numeric", Types.NUMERIC);
+
+        _PGSQL_SQL_TYPE.put("float4", Types.REAL);
+        _PGSQL_SQL_TYPE.put("float8", Types.DOUBLE);
+        _PGSQL_SQL_TYPE.put("float", Types.REAL);
+        _PGSQL_SQL_TYPE.put("double", Types.DOUBLE);
+        _PGSQL_SQL_TYPE.put("money", Types.DOUBLE);
+
+        _PGSQL_SQL_TYPE.put("char", Types.CHAR);
+        _PGSQL_SQL_TYPE.put("bpchar", Types.CHAR);
+        _PGSQL_SQL_TYPE.put("varchar", Types.VARCHAR);
+        _PGSQL_SQL_TYPE.put("text", Types.VARCHAR);
+        _PGSQL_SQL_TYPE.put("name", Types.VARCHAR);
+        _PGSQL_SQL_TYPE.put("bytea", Types.BINARY);
+
+        _PGSQL_SQL_TYPE.put("bool", Types.BIT);
+        _PGSQL_SQL_TYPE.put("bit", Types.BIT);
+        _PGSQL_SQL_TYPE.put("boolean", Types.BIT);
+
+        _PGSQL_SQL_TYPE.put("date", Types.DATE);
+        _PGSQL_SQL_TYPE.put("time", Types.TIME);
+        _PGSQL_SQL_TYPE.put("timetz", Types.TIME);
+        _PGSQL_SQL_TYPE.put("timestamp", Types.TIMESTAMP);
+        _PGSQL_SQL_TYPE.put("timestamptz", Types.TIMESTAMP);
+        _PGSQL_SQL_TYPE.put("refcursor", Types.REF_CURSOR);
+
+        _PGSQL_SQL_TYPE.put("json", Types.OTHER);
+        _PGSQL_SQL_TYPE.put("point", Types.OTHER);
+    }
+
+    /**
      * 数据库字段类型 对应 Java数据类型
+     *
      * @param dbType
      * @param columnType
      * @param size
@@ -203,6 +259,7 @@ public class JavaTypes {
 
     /**
      * 数据库字段类型 对应 Java数据类型
+     *
      * @param sqlType
      * @param size
      * @param decimalDigits
@@ -225,13 +282,15 @@ public class JavaTypes {
 
         String result = _SQL_TYPE_2_JAVA_TYPE.get(sqlType);
         if (result == null) {
-            result = _SQL_TYPE_2_JAVA_TYPE.get(Types.OTHER);;
+            result = _SQL_TYPE_2_JAVA_TYPE.get(Types.OTHER);
+            ;
         }
         return result;
     }
 
     /**
      * 数据库字段类型 对应 Jdbc数据类型
+     *
      * @param dbType
      * @param columnType
      * @return
@@ -244,6 +303,7 @@ public class JavaTypes {
 
     /**
      * 数据库字段类型 对应 Jdbc数据类型
+     *
      * @param sqlType
      * @return
      */
@@ -264,44 +324,43 @@ public class JavaTypes {
             sqlType = getMssqlSqlTypeByName(columnType);
         } else if (dbType.equals(JdbcUtils.MYSQL)) {
             sqlType = getMysqlSqlTypeByName(columnType);
+        } else if (dbType.equalsIgnoreCase(JdbcUtils.POSTGRESQL)) {
+            sqlType = getPostgreSqlTypeByName(columnType);
         }
+
         return sqlType;
     }
-    
+
     /**
      * MySql字段类型 对应 JdbcType
+     *
      * @param fullTypeName
      * @return
      */
     public static int getMysqlSqlTypeByName(String fullTypeName) {
         return MysqlType.getByName(fullTypeName).getJdbcType();
     }
-    
+
     /**
      * MsSql字段类型 对应 JdbcType
+     *
      * @param fullTypeName
      * @return
      */
     public static int getMssqlSqlTypeByName(String fullTypeName) {
-    	String typeName = StringUtil.subStringBeforeParenthesis(fullTypeName);
-    	
-        Integer sqlType = _MSSQL_SQL_TYPE.get(typeName);
-        if (sqlType == null) {
-        	return Types.OTHER;
-		}
-    	
-    	return sqlType;
+        return getSqlTypeByName(fullTypeName, _MSSQL_SQL_TYPE);
     }
 
     /**
      * Oracle字段类型 对应 JdbcType
+     *
      * @param fullTypeName
      * @return
      */
     public static int getOracleSqlTypeByName(String fullTypeName) {
 
         String typeName = StringUtil.subStringBeforeParenthesis(fullTypeName);
-        
+
         if (StrUtil.indexOfIgnoreCase(typeName, OracleType.ANYDATA.getName()) != -1) {
             return OracleType.ANYDATA.getVendorTypeNumber();
         } else if (StrUtil.indexOfIgnoreCase(typeName, OracleType.ANYDATASET.getName()) != -1) {
@@ -405,5 +464,26 @@ public class JavaTypes {
         }
 
         return Types.OTHER;
+    }
+
+    /**
+     * PostgreSQL字段类型 对应 JdbcType
+     *
+     * @param fullTypeName
+     * @return
+     */
+    public static int getPostgreSqlTypeByName(String fullTypeName) {
+        return getSqlTypeByName(fullTypeName, _PGSQL_SQL_TYPE);
+    }
+
+    private static int getSqlTypeByName(String fullTypeName, Map<String, Integer> sqlTypeMap) {
+        String typeName = StringUtil.subStringBeforeParenthesis(fullTypeName);
+
+        Integer sqlType = sqlTypeMap.get(typeName);
+        if (sqlType == null) {
+            return Types.OTHER;
+        }
+
+        return sqlType;
     }
 }
