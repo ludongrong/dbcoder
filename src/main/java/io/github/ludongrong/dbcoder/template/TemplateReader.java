@@ -10,7 +10,6 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.*;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;
 
 import cn.hutool.core.io.FileUtil;
@@ -19,8 +18,8 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import freemarker.template.TemplateException;
-import io.github.ludongrong.dbcoder.provitor.Project;
-import io.github.ludongrong.dbcoder.provitor.Table;
+import io.github.ludongrong.dbcoder.pdm.PDMProject;
+import io.github.ludongrong.dbcoder.pdm.Table;
 import lombok.Getter;
 
 public class TemplateReader {
@@ -66,7 +65,7 @@ public class TemplateReader {
         this.zipOutputStream = new ZipOutputStream(baos);
     }
 
-    public ByteArrayInputStream generate(Project project) throws Exception {
+    public ByteArrayInputStream generate(PDMProject project) throws Exception {
 
         Iterator<Table> iterable = project.getTables().iterator();
         while (iterable.hasNext()) {
@@ -79,7 +78,13 @@ public class TemplateReader {
         return new ByteArrayInputStream(baos.toByteArray());
     }
 
-    private void generate(Map<String, Object> model) throws Exception {
+    public ByteArrayInputStream finish() throws Exception {
+        zipOutputStream.flush();
+        zipOutputStream.finish();
+        return new ByteArrayInputStream(baos.toByteArray());
+    }
+
+    public void generate(Map<String, Object> model) throws Exception {
 
         TemplateFilter templateFilter = new TemplateFilter();
 

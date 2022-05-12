@@ -1,0 +1,134 @@
+{
+	"info": {
+		"_postman_id": "585ceadb-9cc3-4a0e-ae23-9576a072e875",
+		"name": "临时导入-及时修改",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+        {
+			"name": "${tableNameCN}",
+			"item": [
+				{
+					"name": "创建",
+					"request": {
+						"method": "POST",
+						"header": [],
+                        "body": {
+							"mode": "raw",
+							"raw": <@generatePostmanParam columns />
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{ip}}:{{port}}/ican-api/${classNameVariable}/create",
+							"protocol": "http",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"${projectName}",
+								"${classNameVariable}",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+                {
+					"name": "更新",
+					"request": {
+						"method": "POST",
+						"header": [],
+                        "body": {
+							"mode": "raw",
+							"raw": <@generatePostmanParam columns />
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{ip}}:{{port}}/ican-api/${classNameVariable}/update",
+							"protocol": "http",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"${projectName}",
+								"${classNameVariable}",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+                {
+					"name": "删除",
+					"request": {
+						"method": "POST",
+						"header": [],
+                        "body": {
+							"mode": "raw",
+							"raw": <@generatePostmanParam columns />
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{ip}}:{{port}}/ican-api/${classNameVariable}/delete",
+							"protocol": "http",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"${projectName}",
+								"${classNameVariable}",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+                {
+					"name": "列表",
+					"request": {
+						"method": "POST",
+						"header": [],
+                        "body": {
+							"mode": "raw",
+							"raw": <@generatePostmanParam columns />
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{ip}}:{{port}}/ican-api/${classNameVariable}/list",
+							"protocol": "http",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"${projectName}",
+								"${classNameVariable}",
+								"list"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

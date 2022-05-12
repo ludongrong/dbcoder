@@ -14,7 +14,7 @@ public class ApplicationConfiguration {
 
     static final public int _UPLOAD_MAX_SIZE = 10 * 1024 * 1024;
 
-    static final public String _FILE_TYPE_PDM = "pdm";
+    static final public String[] _FILE_TYPE = {"pdm","oom"};
 
     static final public String _FILE_STORE = "pdm";
 

@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${basePackage}.mapper.${className}Dao">
+
+    <resultMap id="${className}ResultMap" type="${basePackage}.entity.${className}">
+        <#list columns as column>
+        <result column="${column.name}" jdbcType="${column.jdbcType}" property="${column.javaNameVariable}"/>
+        </#list>
+    </resultMap>
+    
+    <sql id="default_select_column_sql">
+        <#list columns as column>
+            <#noparse>${alias}</#noparse>.${column.name}<#if column_has_next>, </#if>
+        </#list>
+    </sql>
+
+    <sql id="default_condition_sql">
+        <#list columns as column>
+        <#if column.javaType == "java.sql.Date" || column.javaType == "java.sql.Timestamp">
+            <#if dbType == "oracle">
+            <if test='${column.javaNameVariable}BeginTime != null and ${column.javaNameVariable}BeginTime != ""'>
+                AND <#noparse>${alias}</#noparse>.${column.name} <![CDATA[>=]]> TO_DATE(<#noparse>#{</#noparse>${column.javaNameVariable}BeginTime<#noparse>}</#noparse>, 'YYYY-MM-DD HH24:MI:SS')
+            </if>
+            <if test='${column.javaNameVariable}EndTime != null and ${column.javaNameVariable}EndTime != ""'>
+                AND <#noparse>${alias}</#noparse>.${column.name} <![CDATA[<=]]> TO_DATE(<#noparse>#{</#noparse>${column.javaNameVariable}EndTime<#noparse>}</#noparse>, 'YYYY-MM-DD HH24:MI:SS')
+            </if>
+            <#elseif dbType == "sqlserver">
+            <if test='${column.javaNameVariable}BeginTime != null and ${column.javaNameVariable}BeginTime != ""'>
+                AND <#noparse>${alias}</#noparse>.${column.name} <![CDATA[>=]]> CONVERT(DATETIME, <#noparse>#{</#noparse>${column.javaNameVariable}BeginTime<#noparse>}</#noparse>, 120)
+            </if>
+            <if test='${column.javaNameVariable}EndTime != null and ${column.javaNameVariable}EndTime != ""'>
+                AND <#noparse>${alias}</#noparse>.${column.name} <![CDATA[<=]]> CONVERT(DATETIME, <#noparse>#{</#noparse>${column.javaNameVariable}EndTime<#noparse>}</#noparse>, 120)
+            </if>
+            <#elseif dbType == "mysql">
+            <if test='${column.javaNameVariable}BeginTime != null and ${column.javaNameVariable}BeginTime != ""'>
+                AND <#noparse>${alias}</#noparse>.${column.name} <![CDATA[>=]]> STR_TO_DATE(<#noparse>#{</#noparse>${column.javaNameVariable}BeginTime<#noparse>}</#noparse>, '%Y-%m-%d %T')
+            </if>
+            <if test='${column.javaNameVariable}EndTime != null and ${column.javaNameVariable}EndTime != ""'>
+                AND <#noparse>${alias}</#noparse>.${column.name} <![CDATA[<=]]> STR_TO_DATE(<#noparse>#{</#noparse>${column.javaNameVariable}EndTime<#noparse>}</#noparse>, '%Y-%m-%d %T')
+            </if>
+            <#elseif dbType == "postgresql">
+            <if test='${column.javaNameVariable}BeginTime != null and ${column.javaNameVariable}BeginTime != ""'>
+                AND <#noparse>${alias}</#noparse>.${column.name} <![CDATA[>=]]> to_timestamp(<#noparse>#{</#noparse>${column.javaNameVariable}BeginTime<#noparse>}</#noparse>, 'yyyy-MM-dd hh24:mi:ss')
+            </if>
+            <if test='${column.javaNameVariable}EndTime != null and ${column.javaNameVariable}EndTime != ""'>
+                AND <#noparse>${alias}</#noparse>.${column.name} <![CDATA[<=]]> to_timestamp(<#noparse>#{</#noparse>${column.javaNameVariable}EndTime<#noparse>}</#noparse>, 'yyyy-MM-dd hh24:mi:ss')
+            </if>
+            </#if>
+        <#elseif column.javaType == "java.sql.Time">
+            <#if dbType == "oracle">
+            <if test='${column.javaNameVariable}BeginTime != null and ${column.javaNameVariable}BeginTime != ""'>
+                AND <#noparse>${alias}</#noparse>.${column.name} <![CDATA[>=]]> TO_DATE(<#noparse>#{</#noparse>${column.javaNameVariable}BeginTime<#noparse>}</#noparse>, 'HH24:MI:SS')
+            </if>
+            <if test='${column.javaNameVariable}EndTime != null and ${column.javaNameVariable}EndTime != ""'>
+                AND <#noparse>${alias}</#noparse>.${column.name} <![CDATA[<=]]> TO_DATE(<#noparse>#{</#noparse>${column.javaNameVariable}EndTime<#noparse>}</#noparse>, 'HH24:MI:SS')
+            </if>
+            <#elseif dbType == "sqlserver">
+            <if test='${column.javaNameVariable}BeginTime != null and ${column.javaNameVariable}BeginTime != ""'>
+                AND <#noparse>${alias}</#noparse>.${column.name} <![CDATA[>=]]> CONVERT(DATETIME, <#noparse>#{</#noparse>${column.javaNameVariable}BeginTime<#noparse>}</#noparse>, 24)
+            </if>
+            <if test='${column.javaNameVariable}EndTime != null and ${column.javaNameVariable}EndTime != ""'>
+                AND <#noparse>${alias}</#noparse>.${column.name} <![CDATA[<=]]> CONVERT(DATETIME, <#noparse>#{</#noparse>${column.javaNameVariable}EndTime<#noparse>}</#noparse>, 24)
+            </if>
+            <#elseif dbType == "mysql">
+            <if test='${column.javaNameVariable}BeginTime != null and ${column.javaNameVariable}BeginTime != ""'>
+                AND <#noparse>${alias}</#noparse>.${column.name} <![CDATA[>=]]> STR_TO_DATE(<#noparse>#{</#noparse>${column.javaNameVariable}BeginTime<#noparse>}</#noparse>, '%T')
+            </if>
+            <if test='${column.javaNameVariable}EndTime != null and ${column.javaNameVariable}EndTime != ""'>
+                AND <#noparse>${alias}</#noparse>.${column.name} <![CDATA[<=]]> STR_TO_DATE(<#noparse>#{</#noparse>${column.javaNameVariable}EndTime<#noparse>}</#noparse>, '%T')
+            </if>
+            <#elseif dbType == "postgresql">
+            <if test='${column.javaNameVariable}BeginTime != null and ${column.javaNameVariable}BeginTime != ""'>
+                AND <#noparse>${alias}</#noparse>.${column.name} <![CDATA[>=]]> to_timestamp(<#noparse>#{</#noparse>${column.javaNameVariable}BeginTime<#noparse>}</#noparse>, 'hh24:mi:ss')
+            </if>
+            <if test='${column.javaNameVariable}EndTime != null and ${column.javaNameVariable}EndTime != ""'>
+                AND <#noparse>${alias}</#noparse>.${column.name} <![CDATA[<=]]> to_timestamp(<#noparse>#{</#noparse>${column.javaNameVariable}EndTime<#noparse>}</#noparse>, 'hh24:mi:ss')
+            </if>
+            </#if>
+        <#elseif column.javaType == "java.lang.String">
+            <if test='${column.javaNameVariable} != null and ${column.javaNameVariable} != ""'>
+                AND <#noparse>${alias}</#noparse>.${column.name} = <#noparse>#{</#noparse>${column.javaNameVariable}<#noparse>}</#noparse>
+            </if>
+        <#else>
+            <if test='${column.javaNameVariable} != null'>
+                AND <#noparse>${alias}</#noparse>.${column.name} = <#noparse>#{</#noparse>${column.javaNameVariable}<#noparse>}</#noparse>
+            </if>
+        </#if>
+        </#list>
+    </sql>
+
+    <sql id="default_where_sql">
+        <where>
+            <include refid="default_condition_sql"/>
+        </where>
+    </sql>
+    
+    <sql id="query_list_by_admin_sql">
+        SELECT
+            WO.activity_id AS activity_id,
+            WO.lane_name AS orders_stage,
+            M.*
+        FROM
+            ${tableName} M
+        LEFT JOIN ican_wo WO ON
+            M.task_id = WO.id
+        LEFT JOIN ican_process_instance PI ON
+            M.process_instance_id = PI.ID
+        WHERE
+        <choose>
+            <when test='todo != null and todo == "1"'>
+                PI.instance_status = '1'
+            </when>
+            <otherwise>
+                PI.instance_status = '2'
+            </otherwise>
+        </choose>
+        <include refid="default_condition_sql">
+            <property name="alias" value="M"/>
+        </include>
+    </sql>
+    
+    <!--管理员查询-->
+    <select id="queryListByAdmin" parameterType="${basePackage}.entity.${className}" resultType="MiddleFJ">
+        <include refid="query_list_by_admin_sql"/>
+        <if test="order_by != null">ORDER BY <#noparse>${order_by}</#noparse></if>
+        <if test="order_by == null">ORDER BY TASK_ID DESC</if>
+    </select>
+    
+    <!--管理员统计-->
+    <select id="queryCountByAdmin" parameterType="${basePackage}.entity.${className}" resultType="java.lang.Integer">
+        SELECT count(0) FROM (<include refid="query_list_by_admin_sql"/>) count_tb
+    </select>
+    
+    <!--用户查询-1代表什么意思-->
+    <sql id="query_list_by_user_sql_1">
+        SELECT
+            WO.activity_id AS activity_id,
+            WO.lane_name AS orders_stage,
+            M.*
+        FROM
+            ${tableName} M
+        LEFT JOIN ican_wo WO ON
+            M.task_id = WO.id
+        LEFT JOIN (
+            SELECT
+                i.process_instance_id
+            FROM
+                ican_issue_user iu
+            LEFT JOIN ican_issue i ON
+                i.ID = iu.issue_id
+            WHERE
+                iu.waituser = <#noparse>#{user_id}</#noparse>
+                AND (i.dealuser IS NULL
+                    OR i.dealuser = ''
+                    OR i.dealuser = <#noparse>#{user_id})</#noparse>
+                AND (i.issue_status = '0'
+                    OR i.issue_status = '1')
+            GROUP BY
+                i.process_instance_id) pi ON
+            pi.process_instance_id = m.process_instance_id
+        WHERE
+            pi.process_instance_id IS NOT NULL
+        <include refid="default_condition_sql">
+            <property name="alias" value="M"/>
+        </include>
+    </sql>
+    
+    <!--用户查询-0代表什么意思-->
+    <sql id="query_list_by_user_sql_0">
+        SELECT
+            DISTINCT WO.activity_id AS activity_id,
+            WO.lane_name AS orders_stage,
+            M.*
+        FROM
+            ${tableName} M
+        LEFT JOIN ican_wo WO ON
+            M.task_id = WO.id
+        LEFT JOIN public.ican_issue i ON
+            i.process_instance_id = m.process_instance_id
+        WHERE
+            i.dealuser = <#noparse>#{user_id}</#noparse>
+            AND i.issue_status = '2'
+            AND i.process_instance_id IS NOT NULL
+            AND i.process_instance_id NOT IN
+              (
+            SELECT
+                i.process_instance_id
+            FROM
+                public.ican_issue i
+            WHERE
+                i.issue_status = '0'
+                OR i.issue_status = '1')
+        <include refid="default_condition_sql">
+            <property name="alias" value="M"/>
+        </include>
+    </sql>
+    
+    <!--用户查询列表-->
+    <select id="queryListByUser" parameterType="${basePackage}.entity.${className}" resultMap="${className}ResultMap">
+        <if test="todo == 1">
+            <include refid="query_list_by_user_sql_1"/>
+        </if>
+        <if test="todo == 0">
+            <include refid="query_list_by_user_sql_0"/>
+        </if>
+        <if test="order_by != null">ORDER BY <#noparse>${order_by}</#noparse></if>
+        <if test="order_by == null">ORDER BY TASK_ID DESC</if>
+    </select>
+    
+    <!--用户查询统计-->
+    <select id="queryCountByUser" parameterType="${basePackage}.entity.${className}" resultMap="${className}ResultMap">
+        SELECT count(0) FROM (
+        <if test="todo == 1">
+            <include refid="query_list_by_user_sql_1"/>
+        </if>
+        <if test="todo == 0">
+            <include refid="query_list_by_user_sql_0"/>
+        </if>) count_tb
+    </select>
+    
+    <select id="queryList" parameterType="${basePackage}.entity.${className}" resultMap="${className}ResultMap">
+        SELECT 
+        <include refid="default_select_column_sql">
+            <property name="alias" value="M"/>
+        </include> 
+        FROM public.${tableName} M
+        <include refid="default_where_sql">
+            <property name="alias" value="M"/>
+        </include>
+    </select>
+
+    <insert id="insert" parameterType="${basePackage}.entity.${className}">
+        INSERT INTO ${tableName?upper_case} 
+            (<#list columns as column>${column.name}<#if column_has_next>, </#if></#list>)
+        VALUES 
+            (<#list columns as column><#noparse>#{</#noparse>${column.javaNameVariable}<#noparse>}</#noparse><#if column_has_next>, </#if></#list>)
+    </insert>
+
+    <update id="update" parameterType="${basePackage}.entity.${className}">
+        UPDATE ${tableName?upper_case} t1
+        <trim prefix="SET" suffixOverrides=",">
+        <#list columns as column>
+            <if test='${column.javaNameVariable} != null'>
+                t1.${column.name} = <#noparse>#{</#noparse>${column.javaNameVariable}<#noparse>}</#noparse>
+            </if>
+        </#list>
+        </trim>
+        <include refid="default_where_sql">
+            <property name="alias" value="t1"/>
+        </include>
+    </update>
+
+    <delete id="delete" parameterType="${basePackage}.entity.${className}">
+        DELETE FROM ${tableName?upper_case} t1
+        <include refid="default_where_sql">
+            <property name="alias" value="t1"/>
+        </include>
+    </delete>
+
+</mapper>

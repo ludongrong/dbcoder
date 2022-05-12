@@ -1,0 +1,93 @@
+<#-- 构造函数 -->
+<#macro generateConstructor constructor>
+    public ${constructor}() {}
+</#macro>
+
+
+
+
+<#-- mybatis where -->
+<#macro generateWhere columns prefix blank>
+${blank}<where>
+<#list columns as column>
+<#if column.javaType == "java.sql.Date" || column.javaType == "java.sql.Timestamp">
+    <#if dbType == "oracle">
+    <if test='${column.name?upper_case}_BEGIN_TIME != null and ${column.name?upper_case}_BEGIN_TIME != ""'>
+        AND ${column.name} <![CDATA[>=]]> TO_DATE(<#noparse>#{</#noparse>${column.name?upper_case}_BEGIN_TIME<#noparse>}</#noparse>, 'YYYY-MM-DD HH24:MI:SS')
+    </if>
+    <if test='${column.name?upper_case}_END_TIME != null and ${column.name?upper_case}_END_TIME != ""'>
+        AND ${column.name} <![CDATA[<=]]> TO_DATE(<#noparse>#{</#noparse>${column.name?upper_case}_END_TIME<#noparse>}</#noparse>, 'YYYY-MM-DD HH24:MI:SS')
+    </if>
+    <#elseif dbType == "sqlserver">
+    <if test='${column.name?upper_case}_BEGIN_TIME != null and ${column.name?upper_case}_BEGIN_TIME != ""'>
+        AND ${column.name} <![CDATA[>=]]> CONVERT(DATETIME, <#noparse>#{</#noparse>${column.name?upper_case}_BEGIN_TIME<#noparse>}</#noparse>, 120)
+    </if>
+    <if test='${column.name?upper_case}_END_TIME != null and ${column.name?upper_case}_END_TIME != ""'>
+        AND ${column.name} <![CDATA[<=]]> CONVERT(DATETIME, <#noparse>#{</#noparse>${column.name?upper_case}_END_TIME<#noparse>}</#noparse>, 120)
+    </if>
+    <#elseif dbType == "mysql">
+    <if test='${column.name?upper_case}_BEGIN_TIME != null and ${column.name?upper_case}_BEGIN_TIME != ""'>
+        AND ${column.name} <![CDATA[>=]]> STR_TO_DATE(<#noparse>#{</#noparse>${column.name?upper_case}_BEGIN_TIME<#noparse>}</#noparse>, '%Y-%m-%d %T')
+    </if>
+    <if test='${column.name?upper_case}_END_TIME != null and ${column.name?upper_case}_END_TIME != ""'>
+        AND ${column.name} <![CDATA[<=]]> STR_TO_DATE(<#noparse>#{</#noparse>${column.name?upper_case}_END_TIME<#noparse>}</#noparse>, '%Y-%m-%d %T')
+    </if>
+    <#elseif dbType == "postgresql">
+    <if test='${column.name?upper_case}_BEGIN_TIME != null and ${column.name?upper_case}_BEGIN_TIME != ""'>
+        AND ${column.name} <![CDATA[>=]]> to_timestamp(<#noparse>#{</#noparse>${column.name?upper_case}_BEGIN_TIME<#noparse>}</#noparse>, 'yyyy-MM-dd hh24:mi:ss')
+    </if>
+    <if test='${column.name?upper_case}_END_TIME != null and ${column.name?upper_case}_END_TIME != ""'>
+        AND ${column.name} <![CDATA[<=]]> to_timestamp(<#noparse>#{</#noparse>${column.name?upper_case}_END_TIME<#noparse>}</#noparse>, 'yyyy-MM-dd hh24:mi:ss')
+    </if>
+    </#if>
+<#elseif column.javaType == "java.sql.Time">
+	<#if dbType == "oracle">
+    <if test='${column.name?upper_case}_BEGIN_TIME != null and ${column.name?upper_case}_BEGIN_TIME != ""'>
+        AND ${column.name} <![CDATA[>=]]> TO_DATE(<#noparse>#{</#noparse>${column.name?upper_case}_BEGIN_TIME<#noparse>}</#noparse>, 'HH24:MI:SS')
+    </if>
+    <if test='${column.name?upper_case}_END_TIME != null and ${column.name?upper_case}_END_TIME != ""'>
+        AND ${column.name} <![CDATA[<=]]> TO_DATE(<#noparse>#{</#noparse>${column.name?upper_case}_END_TIME<#noparse>}</#noparse>, 'HH24:MI:SS')
+    </if>
+    <#elseif dbType == "sqlserver">
+    <if test='${column.name?upper_case}_BEGIN_TIME != null and ${column.name?upper_case}_BEGIN_TIME != ""'>
+        AND ${column.name} <![CDATA[>=]]> CONVERT(DATETIME, <#noparse>#{</#noparse>${column.name?upper_case}_BEGIN_TIME<#noparse>}</#noparse>, 24)
+    </if>
+    <if test='${column.name?upper_case}_END_TIME != null and ${column.name?upper_case}_END_TIME != ""'>
+        AND ${column.name} <![CDATA[<=]]> CONVERT(DATETIME, <#noparse>#{</#noparse>${column.name?upper_case}_END_TIME<#noparse>}</#noparse>, 24)
+    </if>
+    <#elseif dbType == "mysql">
+    <if test='${column.name?upper_case}_BEGIN_TIME != null and ${column.name?upper_case}_BEGIN_TIME != ""'>
+        AND ${column.name} <![CDATA[>=]]> STR_TO_DATE(<#noparse>#{</#noparse>${column.name?upper_case}_BEGIN_TIME<#noparse>}</#noparse>, '%T')
+    </if>
+    <if test='${column.name?upper_case}_END_TIME != null and ${column.name?upper_case}_END_TIME != ""'>
+        AND ${column.name} <![CDATA[<=]]> STR_TO_DATE(<#noparse>#{</#noparse>${column.name?upper_case}_END_TIME<#noparse>}</#noparse>, '%T')
+    </if>
+    <#elseif dbType == "postgresql">
+    <if test='${column.name?upper_case}_BEGIN_TIME != null and ${column.name?upper_case}_BEGIN_TIME != ""'>
+        AND ${column.name} <![CDATA[>=]]> to_timestamp(<#noparse>#{</#noparse>${column.name?upper_case}_BEGIN_TIME<#noparse>}</#noparse>, 'hh24:mi:ss')
+    </if>
+    <if test='${column.name?upper_case}_END_TIME != null and ${column.name?upper_case}_END_TIME != ""'>
+        AND ${column.name} <![CDATA[<=]]> to_timestamp(<#noparse>#{</#noparse>${column.name?upper_case}_END_TIME<#noparse>}</#noparse>, 'hh24:mi:ss')
+    </if>
+    </#if>
+</#if>
+<#if column.javaType == "java.lang.String">
+${blank}    <if test='${column.name?upper_case} != null and ${column.name?upper_case} != ""'>
+${blank}        AND <#if prefix != "">${prefix}.</#if>${column.name} = <#noparse>#{</#noparse>${column.name?upper_case}<#noparse>}</#noparse>
+${blank}    </if>
+<#else>
+${blank}    <if test='${column.name?upper_case} != null'>
+${blank}        AND <#if prefix != "">${prefix}.</#if>${column.name} = <#noparse>#{</#noparse>${column.name?upper_case}<#noparse>}</#noparse>
+${blank}    </if>
+</#if>
+</#list>
+${blank}</where>
+</#macro>
+
+
+
+
+<#-- postman 请求参数 -->
+<#macro generatePostmanParam columns>"{<#list columns as column><#if column.javaType == "java.sql.Date" || column.javaType == "java.sql.Timestamp">\"${column.javaNameVariable}\": \"2022-04-13 15:20:11\"<#elseif column.javaType == "java.sql.Time">\"${column.javaNameVariable}\": \"15:20:11\"<#else>\"${column.javaNameVariable}\": \"\"</#if><#if column_has_next>, </#if></#list>}",</#macro>
+
+
