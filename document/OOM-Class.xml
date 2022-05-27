@@ -1,0 +1,182 @@
+<c:Classes>
+    <o:Class Id="o26">
+        <a:ObjectID>79C88A58-BDDA-4C8A-859D-A55CDD31384B</a:ObjectID>
+        <a:Name>Class_1</a:Name>
+        <a:Code>Class1</a:Code>
+        <c:Attributes>
+            <o:Attribute Id="o38">
+                <a:ObjectID>D4009E32-FAEE-4B8F-9BC1-3970149A4CA9</a:ObjectID>
+                <a:Name>Attribute_1</a:Name>
+                <a:Code>attribute1</a:Code>
+                <a:DataType>int</a:DataType>
+                <a:Attribute.Visibility>-</a:Attribute.Visibility>
+                <a:InitialValue>0</a:InitialValue>
+            </o:Attribute>
+            <o:Attribute Id="o39">
+                <a:ObjectID>D0643835-6B6D-4687-AC04-BC3B811F597F</a:ObjectID>
+                <a:Name>Attribute_2</a:Name>
+                <a:Code>attribute2</a:Code>
+                <a:CreationDate>1652413277</a:CreationDate>
+                <a:Multiplicity>1..1</a:Multiplicity>
+                <a:Static>1</a:Static>
+                <a:Volatile>1</a:Volatile>
+            </o:Attribute>
+            <o:Attribute Id="o40">
+                <a:ObjectID>49F2BEDF-9E94-4E41-9418-F1D5A828F816</a:ObjectID>
+                <a:Name>Attribute_3</a:Name>
+                <a:Code>attribute3</a:Code>
+                <a:DataType>String</a:DataType>
+                <a:Attribute.Visibility>*</a:Attribute.Visibility>
+                <a:Multiplicity>1..1</a:Multiplicity>
+                <a:InitialValue>9</a:InitialValue>
+                <a:Static>1</a:Static>
+                <a:Volatile>1</a:Volatile>
+                <c:Annotations>
+                    <o:Annotation Id="o41">
+                        <a:ObjectID>8BB66965-B29B-4CE8-BAF0-5325C0616B74</a:ObjectID>
+                        <a:Annotation.Name>_Annotation</a:Annotation.Name>
+                    </o:Annotation>
+                </c:Annotations>
+            </o:Attribute>
+        </c:Attributes>
+        <c:Operations>
+            <o:Operation Id="o42">
+                <a:ObjectID>D04FF67F-49D6-4107-9AF7-EAEB81957FFE</a:ObjectID>
+                <a:Name>Operation_1</a:Name>
+                <a:Code>operation1</a:Code>
+                <a:ReturnType>int</a:ReturnType>
+                <a:Operation.Final>1</a:Operation.Final>
+                <a:Operation.Static>1</a:Operation.Static>
+                <a:TemplateBody>%DefaultBody%</a:TemplateBody>
+            </o:Operation>
+            <o:Operation Id="o43">
+                <a:ObjectID>37ED90C4-60D4-4535-A94C-25395D2FC48D</a:ObjectID>
+                <a:Name>Operation_2</a:Name>
+                <a:Code>operation2</a:Code>
+                <a:ReturnType>String</a:ReturnType>
+                <a:Operation.Visibility>-</a:Operation.Visibility>
+                <a:Operation.Abstract>1</a:Operation.Abstract>
+                <a:Operation.Static>1</a:Operation.Static>
+                <a:Array>1</a:Array>
+                <a:TemplateBody>%DefaultBody%</a:TemplateBody>
+                <a:Readonly>1</a:Readonly>
+                <c:Parameters>
+                    <o:Parameter Id="o44">
+                        <a:ObjectID>102989A0-D2B8-4EFF-BE76-F0E2D5E90455</a:ObjectID>
+                        <a:Name>Parameter_1</a:Name>
+                        <a:Code>parameter1</a:Code>
+                        <a:Parameter.DataType>int</a:Parameter.DataType>
+                        <a:ParameterType>I</a:ParameterType>
+                    </o:Parameter>
+                    <o:Parameter Id="o45">
+                        <a:ObjectID>A83DC7E4-FA25-42C5-A963-CC64951D2192</a:ObjectID>
+                        <a:Name>Parameter_2</a:Name>
+                        <a:Code>parameter2</a:Code>
+                        <a:Parameter.DataType>int</a:Parameter.DataType>
+                        <a:ParameterType>I</a:ParameterType>
+                    </o:Parameter>
+                </c:Parameters>
+            </o:Operation>
+        </c:Operations>
+        <c:Identifiers>
+            <o:Identifier Id="o46">
+            <a:ObjectID>53650105-4108-4EC7-8A0A-5D86B59EB784</a:ObjectID>
+            <a:Name>Identifier_1</a:Name>
+            <a:Code>Identifier_1</a:Code>
+            </o:Identifier>
+        </c:Identifiers>
+        <c:PrimaryIdentifier>
+        <o:Identifier Ref="o46"/>
+        </c:PrimaryIdentifier>
+    </o:Class>
+    <o:Class Id="o27">
+        <a:ObjectID>4F015293-FC9F-428F-A37D-2FC01176E9F1</a:ObjectID>
+        <a:Name>Class_2</a:Name>
+        <a:Code>Class2</a:Code>
+        <a:Classifier.Abstract>1</a:Classifier.Abstract>
+    </o:Class>
+    <o:Class Id="o29">
+        <a:ObjectID>BB2BC0B8-1367-4054-9278-6C8A863896E9</a:ObjectID>
+        <a:Name>Class_3</a:Name>
+        <a:Code>Class3</a:Code>
+        <a:Final>1</a:Final>
+        <c:Attributes>
+            <o:Attribute Id="o47">
+                <a:ObjectID>81845785-8498-4BCC-8F7B-7AAEBADCB39A</a:ObjectID>
+                <a:Name>Attribute_1</a:Name>
+                <a:Code>attribute1</a:Code>
+                <a:DataType>int</a:DataType>
+                <a:Attribute.Visibility>-</a:Attribute.Visibility>
+                <a:Multiplicity>1..1</a:Multiplicity>
+                <a:Static>1</a:Static>
+                <a:Volatile>1</a:Volatile>
+            </o:Attribute>
+        </c:Attributes>
+    </o:Class>
+</c:Classes>
+
+
+
+
+<c:Generalizations>
+    <o:Generalization Id="o9">
+        <a:ObjectID>51EA65F7-601F-4F3B-BBF1-032A9CCF1440</a:ObjectID>
+        <a:Name>Generalization_1</a:Name>
+        <a:Code>Generalization_1</a:Code>
+        <c:Object1>
+            <o:Interface Ref="o22"/>
+        </c:Object1>
+        <c:Object2>
+            <o:Interface Ref="o21"/>
+        </c:Object2>
+    </o:Generalization>
+    <o:Generalization Id="o12">
+        <a:ObjectID>AFAF7791-C554-4ED4-84F1-A3B707BFCEBE</a:ObjectID>
+        <a:Name>Generalization_2</a:Name>
+        <a:Code>Generalization_2</a:Code>
+        <c:Object1>
+            <o:Interface Ref="o23"/>
+        </c:Object1>
+        <c:Object2>
+            <o:Interface Ref="o21"/>
+        </c:Object2>
+    </o:Generalization>
+    <o:Generalization Id="o16">
+        <a:ObjectID>75DCE17F-3E93-468E-A507-E2DEA83EAF30</a:ObjectID>
+        <a:Name>Generalization_3</a:Name>
+        <a:Code>Generalization_3</a:Code>
+        <c:Object1>
+            <o:Class Ref="o27"/>
+        </c:Object1>
+        <c:Object2>
+            <o:Class Ref="o26"/>
+        </c:Object2>
+    </o:Generalization>
+</c:Generalizations>
+
+
+
+<c:Realizations>
+    <o:Realization Id="o18">
+        <a:ObjectID>2450B387-584E-4591-A151-288797F0AA1C</a:ObjectID>
+        <a:Name>Realization_1</a:Name>
+        <a:Code>Realization_1</a:Code>
+        <c:Object1>
+            <o:Interface Ref="o23"/>
+        </c:Object1>
+        <c:Object2>
+            <o:Class Ref="o26"/>
+        </c:Object2>
+    </o:Realization>
+    <o:Realization Id="o20">
+        <a:ObjectID>0B290B72-A529-4ADC-B67A-B524ECC34032</a:ObjectID>
+        <a:Name>Realization_2</a:Name>
+        <a:Code>Realization_2</a:Code>
+        <c:Object1>
+            <o:Interface Ref="o21"/>
+        </c:Object1>
+        <c:Object2>
+            <o:Class Ref="o26"/>
+        </c:Object2>
+    </o:Realization>
+</c:Realizations>

@@ -17,7 +17,7 @@ public class DomUtil {
     public static String getText(Element element, String tag) {
         return Optional.ofNullable(element.element(tag)).map(t -> {
             return t.getText();
-        }).orElse("Empty");
+        }).orElse(null);
     }
 
     public static int getInt(Element element, String tag) {
