@@ -77,20 +77,20 @@ public class OOMReader {
      */
     private static void connectWithRef(GeneralizationHandler generalizationHandler, RealizationHandler realizationHandler, List<Map<String, Object>> modelList) {
         generalizationHandler.getModelList().forEach(model -> {
-            Map<String, Object> ref1 = getMatchModel(OOMProject.OOM_REF1_ID, model, modelList);
-            Map<String, Object> ref2 = getMatchModel(OOMProject.OOM_REF2_ID, model, modelList);
+            Map<String, Object> ref1 = getMatchModel(OOMProject.OOM_NODE_REF1_ID, model, modelList);
+            Map<String, Object> ref2 = getMatchModel(OOMProject.OOM_NODE_REF2_ID, model, modelList);
             // ref1 被 ref2 继承
-            List<Map<String, Object>> implementsList = (List)ref2.computeIfAbsent(OOMProject.OOM_REF_EXTENDS, (k) -> {
+            List<Map<String, Object>> implementsList = (List)ref2.computeIfAbsent(OOMProject.OOM_OBJECT_EXTENDS, (k) -> {
                 return new ArrayList<String>();
             });
             implementsList.add(ref1);
         });
 
         realizationHandler.getModelList().forEach(model -> {
-            Map<String, Object> ref1 = getMatchModel(OOMProject.OOM_REF1_ID, model, modelList);
-            Map<String, Object> ref2 = getMatchModel(OOMProject.OOM_REF2_ID, model, modelList);
+            Map<String, Object> ref1 = getMatchModel(OOMProject.OOM_NODE_REF1_ID, model, modelList);
+            Map<String, Object> ref2 = getMatchModel(OOMProject.OOM_NODE_REF2_ID, model, modelList);
             // ref1 被 ref2 实现
-            List<Map<String, Object>> implementsList = (List)ref2.computeIfAbsent(OOMProject.OOM_REF_IMPLEMENTS, (k) -> {
+            List<Map<String, Object>> implementsList = (List)ref2.computeIfAbsent(OOMProject.OOM_OBJECT_IMPLEMENTS, (k) -> {
                 return new ArrayList<String>();
             });
             implementsList.add(ref1);
@@ -100,7 +100,7 @@ public class OOMReader {
     private static Map<String, Object> getMatchModel(String refKey, Map<String, Object> refModel, List<Map<String, Object>> modelList) {
         String refId = MapUtils.getString(refModel, refKey, "");
         Map<String, Object> matchModel = CollectionUtil.findOne(modelList, (model) -> {
-            String eleId = MapUtils.getString(model, OOMProject.OOM_ELE_ID, "");
+            String eleId = MapUtils.getString(model, OOMProject.OOM_NODE_ELE_ID, "");
             return refId.equals(eleId);
         });
         return matchModel;

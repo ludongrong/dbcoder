@@ -1,6 +1,9 @@
 package io.github.ludongrong.dbcoder.oom.handler;
 
+import io.github.ludongrong.dbcoder.oom.OOMProject;
 import org.dom4j.ElementPath;
+
+import static io.github.ludongrong.dbcoder.oom.OOMProject.*;
 
 public class ClassHandler extends OOMElementHandler {
 
@@ -10,10 +13,10 @@ public class ClassHandler extends OOMElementHandler {
 
     public static final String TAG = "Class";
 
-    public static final String NODE_KEY_CODE = "Code";
-
     public static final String[] NODES = new String[]{
-            "ObjectID", "Name", NODE_KEY_CODE
+            OOM_NODE_OBJECT_ID,
+            OOM_OBJECT_NAME,
+            OOM_OBJECT_CODE
     };
 
     ClassAttributeHandler attributeHandler;
@@ -39,7 +42,9 @@ public class ClassHandler extends OOMElementHandler {
         attributeHandler.onParentNodeHandlerEnd(ClassAttributeHandler.TAG, this);
         operationHandler.onParentNodeHandlerEnd(ClassOperationHandler.TAG, this);
 
-        convertVariable(NODE_KEY_CODE);
+        convertCodeVariable(OOM_OBJECT_CODE);
+        getCurrentModel().put("className", getCurrentModel().get(OOMProject.CODE_CAMEL_FIRST_UPPER));
+        getCurrentModel().put("classNameVariable", getCurrentModel().get(OOMProject.CODE_CAMEL_FIRST_LOWER));
     }
 
 }

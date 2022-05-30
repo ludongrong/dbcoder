@@ -34,14 +34,30 @@ public class StringUtil {
         return clazz;
     }
 
+    /**
+     * 首字母大写
+     * @param str
+     * @return
+     */
     public static String capitalize(String str) {
         return changeFirstCharacterCase(str, true);
     }
 
+    /**
+     * 首字母小写
+     * @param str
+     * @return
+     */
     public static String uncapitalize(String str) {
         return changeFirstCharacterCase(str, false);
     }
 
+    /**
+     * 首字母转大写或小写
+     * @param str
+     * @param capitalize
+     * @return
+     */
     private static String changeFirstCharacterCase(String str, boolean capitalize) {
         if (str == null || str.length() == 0) {
             return str;

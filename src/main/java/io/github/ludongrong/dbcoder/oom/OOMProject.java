@@ -14,6 +14,22 @@ import java.util.*;
  */
 public class OOMProject {
 
+    public static final String OOM_OBJECT_NAME = "Name";
+
+    public static final String OOM_OBJECT_CODE = "Code";
+
+    // 大写下划线
+    public static final String CODE_UNDERLINE_UPPER = "CodeUnderlineUpper";
+
+    // 小写下划线
+    public static final String CODE_UNDERLINE_LOWER = "CodeUnderlineLower";
+
+    // 驼峰 - 首字符大写
+    public static final String CODE_CAMEL_FIRST_UPPER = "CodeCamelFirstUpper";
+
+    // 驼峰 - 首字符小写
+    public static final String CODE_CAMEL_FIRST_LOWER = "CodeCamelFirstLower";
+
     /**
      * 工程名
      */
@@ -49,25 +65,41 @@ public class OOMProject {
     @Setter
     private List<Map<String, Object>> classes;
 
-    public static final String OOM_ELE_ID = "Id";
+    public static final String OOM_NODE_ELE_ID = "Id";
 
-    public static final String OOM_REF1_ID = "Ref1Id";
+    public static final String OOM_NODE_REF1_ID = "Ref1Id";
 
-    public static final String OOM_REF2_ID = "Ref2Id";
+    public static final String OOM_NODE_REF2_ID = "Ref2Id";
 
-    public static final String OOM_REF_EXTENDS = "Extends";
+    public static final String OOM_NODE_OBJECT_ID = "ObjectID";
 
-    public static final String OOM_REF_IMPLEMENTS = "Implements";
+    public static final String OOM_NODE_PARAMETER_DATA_TYPE = "Parameter.DataType";
 
-    public static final String OOM_VISIBILITY = "Visibility";
+    public static final String OOM_OBJECT_DATA_TYPE = "DataType";
 
-    public static final String OOM_VOLATILE = "Volatile";
+    public static final String OOM_OBJECT_RETURN_TYPE = "ReturnType";
 
-    public static final String OOM_ABSTRACT = "Abstract";
+    public static final String OOM_OBJECT_EXTENDS = "Extends";
 
-    public static final String OOM_STATIC = "Static";
+    public static final String OOM_OBJECT_IMPLEMENTS = "Implements";
 
-    public static final String OOM_FINAL = "Final";
+    public static final String OOM_OBJECT_VISIBILITY = "Visibility";
+
+    public static final String OOM_OBJECT_VOLATILE = "Volatile";
+
+    public static final String OOM_OBJECT_INITIAL_VALUE = "InitialValue";
+
+    public static final String OOM_OBJECT_ABSTRACT = "Abstract";
+
+    public static final String OOM_OBJECT_STATIC = "Static";
+
+    public static final String OOM_OBJECT_FINAL = "Final";
+
+    public static final String OOM_OBJECT_SYNCHRONIZED = "Synchronized";
+
+    public static final String OOM_OBJECT_STRICTFP = "Strictfp";
+
+    public static final String OOM_OBJECT_NATIVE = "Native";
 
     public enum VISIBILITY_ENUM {
         PRIVATE("-"), PUBLIC("+"), PACKAGE("*"), PROTECTED("#");

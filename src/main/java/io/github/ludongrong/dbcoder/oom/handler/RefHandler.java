@@ -32,8 +32,8 @@ public class RefHandler extends OOMElementHandler {
         Map<String, Object> lastModel = getLastModel();
 
         // 映射ID
-        lastModel.put(OOMProject.OOM_REF1_ID, ref1Id);
-        lastModel.put(OOMProject.OOM_REF2_ID, ref2Id);
+        lastModel.put(OOMProject.OOM_NODE_REF1_ID, ref1Id);
+        lastModel.put(OOMProject.OOM_NODE_REF2_ID, ref2Id);
     }
 
 }

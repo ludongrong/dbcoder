@@ -1,6 +1,7 @@
 package io.github.ludongrong.dbcoder.oom.handler;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import io.github.ludongrong.dbcoder.oom.OOMProject;
 import io.github.ludongrong.dbcoder.util.DomUtil;
 import io.github.ludongrong.dbcoder.util.StringUtil;
@@ -45,7 +46,7 @@ public class OOMElementHandler implements ElementHandler {
             modelList = new ArrayList<>();
 
         this.currentModel = new HashMap<>();
-        this.currentModel.put(OOMProject.OOM_ELE_ID, element.attributeValue(OOMProject.OOM_ELE_ID));
+        this.currentModel.put(OOMProject.OOM_NODE_ELE_ID, element.attributeValue(OOMProject.OOM_NODE_ELE_ID));
     }
 
     public void onEnd(ElementPath elementPath) {
@@ -105,15 +106,18 @@ public class OOMElementHandler implements ElementHandler {
     }
 
     /**
-     * 类名、接口名转变量
-     * @param nodeKey 原有标记
+     * 类名、接口、属性名转变量名
+     * @param codeNodeKey 原有标记
      */
-    protected void convertVariable(String nodeKey) {
+    protected void convertCodeVariable(String codeNodeKey) {
         Map<String, Object> lastModel = getLastModel();
-        String code = MapUtils.getString(lastModel, nodeKey, "");
-        lastModel.put(nodeKey + "Variable", StringUtil.toJavaVariableName(code));
-        lastModel.put("className", code);
-        lastModel.put("classNameVariable", StringUtil.toJavaVariableName(code));
+        String code = MapUtils.getString(lastModel, codeNodeKey, "");
+
+        String codeUnderLine = StrUtil.toUnderlineCase(code);
+        lastModel.put(OOMProject.CODE_UNDERLINE_UPPER, codeUnderLine.toUpperCase());
+        lastModel.put(OOMProject.CODE_UNDERLINE_LOWER, codeUnderLine.toLowerCase());
+        lastModel.put(OOMProject.CODE_CAMEL_FIRST_UPPER, StringUtil.toJavaClassName(codeUnderLine));
+        lastModel.put(OOMProject.CODE_CAMEL_FIRST_LOWER, StringUtil.toJavaVariableName(codeUnderLine));
     }
 
 }
