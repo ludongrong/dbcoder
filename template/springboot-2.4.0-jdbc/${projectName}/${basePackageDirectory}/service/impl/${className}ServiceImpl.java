@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.github.ludongrong.dbcoder.entity.Table3Bo;
 import io.github.ludongrong.dbcoder.sql.DynamicCondition;
 
 @Service("${projectName}-${className}ServiceImpl")

@@ -39,7 +39,6 @@ import io.github.ludongrong.dbcoder.controller.dto.ResponseDto;
 import io.github.ludongrong.dbcoder.controller.dto.Table3Dto;
 import io.github.ludongrong.dbcoder.controller.dto.Table3Mapper;
 import io.github.ludongrong.dbcoder.controller.dto.Table3Vo;
-import io.github.ludongrong.dbcoder.entity.Table3Bo;
 import io.github.ludongrong.dbcoder.exception.BadGatewayException;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

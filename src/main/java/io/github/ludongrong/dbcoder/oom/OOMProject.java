@@ -14,8 +14,10 @@ import java.util.*;
  */
 public class OOMProject {
 
+    // 别名
     public static final String OOM_OBJECT_NAME = "Name";
 
+    // 命名
     public static final String OOM_OBJECT_CODE = "Code";
 
     // 大写下划线
@@ -52,18 +54,11 @@ public class OOMProject {
     private Date currentDate;
 
     /**
-     * 接口
+     * 接口、类
      */
     @Getter
     @Setter
-    private List<Map<String, Object>> interfaces;
-
-    /**
-     * 类
-     */
-    @Getter
-    @Setter
-    private List<Map<String, Object>> classes;
+    private List<Map<String, Object>> modelList;
 
     public static final String OOM_NODE_ELE_ID = "Id";
 
@@ -102,6 +97,7 @@ public class OOMProject {
     public static final String OOM_OBJECT_NATIVE = "Native";
 
     public enum VISIBILITY_ENUM {
+
         PRIVATE("-"), PUBLIC("+"), PACKAGE("*"), PROTECTED("#");
 
         VISIBILITY_ENUM(String value) {

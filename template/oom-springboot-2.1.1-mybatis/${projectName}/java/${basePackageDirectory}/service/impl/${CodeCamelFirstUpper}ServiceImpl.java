@@ -18,17 +18,17 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * ${tableNameCN} 业务逻辑实现层
+ * ${Name} 业务逻辑实现层
  *
  * @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
  * @since ${currentDate?string("yyyy-MM-dd")}
  */
 @Slf4j
-@Service("${classNameVariable}Service")
-public class ${className}ServiceImpl implements ${className}Service {
+@Service("${CodeCamelFirstLower}Service")
+public class ${CodeCamelFirstUpper}ServiceImpl implements ${CodeCamelFirstUpper}Service {
     
 	@Resource
-    private ${className}Mapper ${classNameVariable}Mapper;
+    private ${CodeCamelFirstUpper}Mapper ${CodeCamelFirstLower}Mapper;
 	
 	@Resource
     private DownloadService downloadService;
@@ -36,14 +36,14 @@ public class ${className}ServiceImpl implements ${className}Service {
     // @Transactional
 	
 	@Override
-    public PageInfo<${className}Entity> queryPage(Map<String, Object> paramMap) {
+    public PageInfo<${CodeCamelFirstUpper}Entity> queryPage(Map<String, Object> paramMap) {
         Page.startPage(paramMap);
-        return new PageInfo<>(${classNameVariable}Mapper.queryList(paramMap));
+        return new PageInfo<>(${CodeCamelFirstLower}Mapper.queryList(paramMap));
     }
 	
     @Override
-    public List<${className}Entity> queryList(Map<String, Object> paramMap) {
-        return ${classNameVariable}Mapper.queryList(paramMap);
+    public List<${CodeCamelFirstUpper}Entity> queryList(Map<String, Object> paramMap) {
+        return ${CodeCamelFirstLower}Mapper.queryList(paramMap);
     }
 	
 	@Async
@@ -53,8 +53,8 @@ public class ${className}ServiceImpl implements ${className}Service {
 
         boolean writeFlag = false;
         try {
-            List<${className}Entity> ${classNameVariable}List = ${classNameVariable}Mapper.queryList(paramMap);
-            EasyExcel.write(reallyFile, ${className}Entity.class).sheet(fileName).doWrite(${classNameVariable}List);
+            List<${CodeCamelFirstUpper}Entity> ${CodeCamelFirstLower}List = ${CodeCamelFirstLower}Mapper.queryList(paramMap);
+            EasyExcel.write(reallyFile, ${CodeCamelFirstUpper}Entity.class).sheet(fileName).doWrite(${CodeCamelFirstLower}List);
             writeFlag = true;
         } catch (Exception e) {
             writeFlag = false;

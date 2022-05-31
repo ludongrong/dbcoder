@@ -79,7 +79,7 @@ public class PdFileController {
     private List<Map<String, Object>> parseOOM(PdFileVo pdFileVo, MultipartFile file) {
         try {
             OOMProject project = OOMReader.read(PdFileMapper.INSTANCE.vo2bo(pdFileVo), file.getInputStream());
-            return project.getInterfaces();
+            return project.getModelList();
         } catch (Exception e) {
             throw new BadGatewayException("Can not parse upload files. " + randomUUID(), e);
         }

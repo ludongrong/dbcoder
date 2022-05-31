@@ -3,7 +3,6 @@ package ${basePackage}.service;
 import java.util.List;
 import java.util.Map;
 
-import io.github.ludongrong.dbcoder.entity.Table3Bo;
 import io.github.ludongrong.dbcoder.sql.DynamicCondition;
 
 public interface I${className}Service {

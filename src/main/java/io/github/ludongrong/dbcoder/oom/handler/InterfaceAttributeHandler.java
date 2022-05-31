@@ -1,5 +1,7 @@
 package io.github.ludongrong.dbcoder.oom.handler;
 
+import org.dom4j.ElementPath;
+
 import static io.github.ludongrong.dbcoder.oom.OOMProject.*;
 
 public class InterfaceAttributeHandler extends OOMElementHandler {
@@ -17,6 +19,12 @@ public class InterfaceAttributeHandler extends OOMElementHandler {
 
     public InterfaceAttributeHandler() {
         super(ATTRIBUTE_HANDLER_PATH, NODES);
+    }
+
+    @Override
+    public void onEnd(ElementPath elementPath) {
+        super.onEnd(elementPath);
+        convertCodeVariable(OOM_OBJECT_CODE);
     }
 
 }

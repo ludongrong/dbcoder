@@ -6,8 +6,10 @@ import org.dom4j.ElementPath;
 import static io.github.ludongrong.dbcoder.oom.OOMProject.*;
 
 /**
- * @author ldr
- * @version 1.0
+ * 关联关系 - 实现
+ *
+ * @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
+ * @since 2022-05-09
  */
 public class RealizationHandler extends RefHandler {
 

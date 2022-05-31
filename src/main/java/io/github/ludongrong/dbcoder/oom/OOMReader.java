@@ -3,59 +3,61 @@ package io.github.ludongrong.dbcoder.oom;
 import cn.hutool.core.collection.CollectionUtil;
 import io.github.ludongrong.dbcoder.entity.PdFileBo;
 import io.github.ludongrong.dbcoder.oom.handler.*;
+import io.github.ludongrong.dbcoder.oom.util.OOMXmlUtil;
+import io.github.ludongrong.dbcoder.oom.util.ReaderHandler;
 import org.apache.commons.collections4.MapUtils;
 import org.dom4j.DocumentException;
-import org.dom4j.DocumentFactory;
 import org.dom4j.io.SAXReader;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class OOMReader {
-
-    static Map<String, String> uris = new HashMap<String, String>();
-
-    static {
-        uris.put("o", "fooNamespace");
-        uris.put("a", "barNamespace");
-    }
 
     public static OOMProject read(PdFileBo pdFileBo, InputStream in) throws DocumentException {
 
         // 项目信息 -> 初始
         OOMProject project = onBeforeRead(pdFileBo);
 
-        // 解析 -> DocumentFactory
-        DocumentFactory factory = new DocumentFactory();
-        factory.setXPathNamespaceURIs(uris);
+        OOMXmlUtil.read(in, new ReaderHandler() {
 
-        // 解析 -> SAXReader
-        SAXReader reader = new SAXReader();
-        reader.setDocumentFactory(factory);
-        InterfaceHandler interfaceHandler = readInterface(reader);
-        ClassHandler classHandler = readClass(reader);
-        GeneralizationHandler generalizationHandler = readGeneralization(reader);
-        RealizationHandler realizationHandler = readRealization(reader);
-        reader.read(in);
+            InterfaceHandler interfaceHandler = null;
+            ClassHandler classHandler = null;
+            GeneralizationHandler generalizationHandler = null;
+            RealizationHandler realizationHandler = null;
 
-        mergeObjects(project, interfaceHandler, classHandler, generalizationHandler, realizationHandler);
+            @Override
+            public void onStart(SAXReader reader) {
+                interfaceHandler = readInterface(reader);
+                classHandler = readClass(reader);
+                generalizationHandler = readGeneralization(reader);
+                realizationHandler = readRealization(reader);
+            }
 
-        project.setInterfaces(interfaceHandler.getModelList());
-        project.setClasses(classHandler.getModelList());
+            @Override
+            public void onEnd() {
+                mergeObjects(project, interfaceHandler, classHandler, generalizationHandler, realizationHandler);
+            }
+        });
 
         return project;
     }
 
     private static void mergeObjects(OOMProject project, InterfaceHandler interfaceHandler, ClassHandler classHandler, GeneralizationHandler generalizationHandler, RealizationHandler realizationHandler) {
         List<Map<String, Object>> modelList = new ArrayList<>();
-        interfaceHandler.getModelList().forEach(model->{
+        interfaceHandler.getModelList().forEach(model -> {
             project.fillInProjectInformation(model);
             modelList.add(model);
         });
-        classHandler.getModelList().forEach(model->{
+        classHandler.getModelList().forEach(model -> {
             project.fillInProjectInformation(model);
             modelList.add(model);
         });
+
+        project.setModelList(modelList);
 
         connectWithRef(generalizationHandler, realizationHandler, modelList);
     }
@@ -80,7 +82,7 @@ public class OOMReader {
             Map<String, Object> ref1 = getMatchModel(OOMProject.OOM_NODE_REF1_ID, model, modelList);
             Map<String, Object> ref2 = getMatchModel(OOMProject.OOM_NODE_REF2_ID, model, modelList);
             // ref1 被 ref2 继承
-            List<Map<String, Object>> implementsList = (List)ref2.computeIfAbsent(OOMProject.OOM_OBJECT_EXTENDS, (k) -> {
+            List<Map<String, Object>> implementsList = (List) ref2.computeIfAbsent(OOMProject.OOM_OBJECT_EXTENDS, (k) -> {
                 return new ArrayList<String>();
             });
             implementsList.add(ref1);
@@ -90,7 +92,7 @@ public class OOMReader {
             Map<String, Object> ref1 = getMatchModel(OOMProject.OOM_NODE_REF1_ID, model, modelList);
             Map<String, Object> ref2 = getMatchModel(OOMProject.OOM_NODE_REF2_ID, model, modelList);
             // ref1 被 ref2 实现
-            List<Map<String, Object>> implementsList = (List)ref2.computeIfAbsent(OOMProject.OOM_OBJECT_IMPLEMENTS, (k) -> {
+            List<Map<String, Object>> implementsList = (List) ref2.computeIfAbsent(OOMProject.OOM_OBJECT_IMPLEMENTS, (k) -> {
                 return new ArrayList<String>();
             });
             implementsList.add(ref1);
