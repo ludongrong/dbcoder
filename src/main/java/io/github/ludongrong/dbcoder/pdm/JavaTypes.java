@@ -13,6 +13,7 @@ import com.mysql.cj.MysqlType;
 import cn.hutool.core.util.StrUtil;
 import io.github.ludongrong.dbcoder.util.StringUtil;
 import oracle.jdbc.OracleType;
+import oracle.jdbc.internal.OracleTypes;
 
 /**
  * JavaTypesUtils
@@ -193,53 +194,53 @@ public class JavaTypes {
     /**
      * PostgreSQL 的基础 数据类型
      */
-    final static private Map<String, Integer> _PGSQL_SQL_TYPE = new HashMap<String, Integer>();
+    final static private Map<String, Integer> _PGSQL_SQL_TYPE = new HashMap<>();
 
     /**
      * @see org.postgresql.jdbc.TypeInfoCache
      */
     static {
-        _PGSQL_SQL_TYPE.put("int2", Types.SMALLINT);
-        _PGSQL_SQL_TYPE.put("int4", Types.INTEGER);
-        _PGSQL_SQL_TYPE.put("int8", Types.BIGINT);
+        _PGSQL_SQL_TYPE.put("INT2", Types.SMALLINT);
+        _PGSQL_SQL_TYPE.put("INT4", Types.INTEGER);
+        _PGSQL_SQL_TYPE.put("INT8", Types.BIGINT);
 
-        _PGSQL_SQL_TYPE.put("smallint", Types.SMALLINT);
-        _PGSQL_SQL_TYPE.put("int", Types.INTEGER);
-        _PGSQL_SQL_TYPE.put("integer", Types.INTEGER);
-        _PGSQL_SQL_TYPE.put("long", Types.BIGINT);
-        _PGSQL_SQL_TYPE.put("bigint", Types.BIGINT);
-        _PGSQL_SQL_TYPE.put("oid", Types.BIGINT);
+        _PGSQL_SQL_TYPE.put("SMALLINT", Types.SMALLINT);
+        _PGSQL_SQL_TYPE.put("INT", Types.INTEGER);
+        _PGSQL_SQL_TYPE.put("INTEGER", Types.INTEGER);
+        _PGSQL_SQL_TYPE.put("LONG", Types.BIGINT);
+        _PGSQL_SQL_TYPE.put("BIGINT", Types.BIGINT);
+        _PGSQL_SQL_TYPE.put("OID", Types.BIGINT);
 
-        _PGSQL_SQL_TYPE.put("numeric", Types.NUMERIC);
-        _PGSQL_SQL_TYPE.put("decimal", Types.NUMERIC);
-        _PGSQL_SQL_TYPE.put("numeric", Types.NUMERIC);
+        _PGSQL_SQL_TYPE.put("NUMERIC", Types.NUMERIC);
+        _PGSQL_SQL_TYPE.put("DECIMAL", Types.NUMERIC);
+        _PGSQL_SQL_TYPE.put("NUMERIC", Types.NUMERIC);
 
-        _PGSQL_SQL_TYPE.put("float4", Types.REAL);
-        _PGSQL_SQL_TYPE.put("float8", Types.DOUBLE);
-        _PGSQL_SQL_TYPE.put("float", Types.REAL);
-        _PGSQL_SQL_TYPE.put("double", Types.DOUBLE);
-        _PGSQL_SQL_TYPE.put("money", Types.DOUBLE);
+        _PGSQL_SQL_TYPE.put("FLOAT4", Types.REAL);
+        _PGSQL_SQL_TYPE.put("FLOAT8", Types.DOUBLE);
+        _PGSQL_SQL_TYPE.put("FLOAT", Types.REAL);
+        _PGSQL_SQL_TYPE.put("DOUBLE", Types.DOUBLE);
+        _PGSQL_SQL_TYPE.put("MONEY", Types.DOUBLE);
 
-        _PGSQL_SQL_TYPE.put("char", Types.CHAR);
-        _PGSQL_SQL_TYPE.put("bpchar", Types.CHAR);
-        _PGSQL_SQL_TYPE.put("varchar", Types.VARCHAR);
-        _PGSQL_SQL_TYPE.put("text", Types.VARCHAR);
-        _PGSQL_SQL_TYPE.put("name", Types.VARCHAR);
-        _PGSQL_SQL_TYPE.put("bytea", Types.BINARY);
+        _PGSQL_SQL_TYPE.put("CHAR", Types.CHAR);
+        _PGSQL_SQL_TYPE.put("BPCHAR", Types.CHAR);
+        _PGSQL_SQL_TYPE.put("VARCHAR", Types.VARCHAR);
+        _PGSQL_SQL_TYPE.put("TEXT", Types.VARCHAR);
+        _PGSQL_SQL_TYPE.put("NAME", Types.VARCHAR);
+        _PGSQL_SQL_TYPE.put("BYTEA", Types.BINARY);
 
         _PGSQL_SQL_TYPE.put("bool", Types.BIT);
         _PGSQL_SQL_TYPE.put("bit", Types.BIT);
         _PGSQL_SQL_TYPE.put("boolean", Types.BIT);
 
-        _PGSQL_SQL_TYPE.put("date", Types.DATE);
-        _PGSQL_SQL_TYPE.put("time", Types.TIME);
-        _PGSQL_SQL_TYPE.put("timetz", Types.TIME);
-        _PGSQL_SQL_TYPE.put("timestamp", Types.TIMESTAMP);
-        _PGSQL_SQL_TYPE.put("timestamptz", Types.TIMESTAMP);
-        _PGSQL_SQL_TYPE.put("refcursor", Types.REF_CURSOR);
+        _PGSQL_SQL_TYPE.put("DATE", Types.DATE);
+        _PGSQL_SQL_TYPE.put("TIME", Types.TIME);
+        _PGSQL_SQL_TYPE.put("TIMETZ", Types.TIME);
+        _PGSQL_SQL_TYPE.put("TIMESTAMP", Types.TIMESTAMP);
+        _PGSQL_SQL_TYPE.put("TIMESTAMPTZ", Types.TIMESTAMP);
+        _PGSQL_SQL_TYPE.put("REFCURSOR", Types.REF_CURSOR);
 
-        _PGSQL_SQL_TYPE.put("json", Types.OTHER);
-        _PGSQL_SQL_TYPE.put("point", Types.OTHER);
+        _PGSQL_SQL_TYPE.put("JSON", Types.OTHER);
+        _PGSQL_SQL_TYPE.put("POINT", Types.OTHER);
     }
 
     /**
@@ -283,7 +284,6 @@ public class JavaTypes {
         String result = _SQL_TYPE_2_JAVA_TYPE.get(sqlType);
         if (result == null) {
             result = _SQL_TYPE_2_JAVA_TYPE.get(Types.OTHER);
-            ;
         }
         return result;
     }
@@ -297,7 +297,6 @@ public class JavaTypes {
      */
     public static String getJdbcType(String dbType, String columnType) {
         int sqlType = getSqlType(dbType, columnType);
-
         return getJdbcType(sqlType);
     }
 
@@ -481,7 +480,7 @@ public class JavaTypes {
     private static int getSqlTypeByName(String fullTypeName, Map<String, Integer> sqlTypeMap) {
         String typeName = StringUtil.subStringBeforeParenthesis(fullTypeName);
 
-        Integer sqlType = sqlTypeMap.get(typeName);
+        Integer sqlType = sqlTypeMap.get(typeName.toUpperCase());
         if (sqlType == null) {
             return Types.OTHER;
         }
