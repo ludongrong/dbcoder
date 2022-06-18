@@ -1,0 +1,72 @@
+<c:Tables>
+    <o:Table Id="o9">
+        <a:ObjectID>B33DCBB2-C844-4AE4-B7E4-D4612E745ABB</a:ObjectID>
+        <a:Name>XZ_TASK_AUTO</a:Name>
+        <a:Code>XZ_TASK_AUTO</a:Code>
+        <c:Columns>
+            <o:Column Id="o12">
+                <a:ObjectID>C5DCBF57-2AF3-4A7A-830D-549F78A68AC9</a:ObjectID>
+                <a:Name>任务ID</a:Name>
+                <a:Code>TASK_ID</a:Code>
+                <a:Comment>任务ID</a:Comment>
+                <a:DataType>DOUBLE PRECISION</a:DataType>
+                <a:Column.Mandatory>1</a:Column.Mandatory>
+            </o:Column>
+            <o:Column Id="o13">
+                <a:ObjectID>1581D682-352E-4638-A565-65D07A7FB17D</a:ObjectID>
+                <a:Name>月份</a:Name>
+                <a:Code>month</a:Code>
+                <a:DataType>INTEGER</a:DataType>
+                <a:AutoMigrated>1</a:AutoMigrated>
+            </o:Column>
+        </c:Columns>
+        <c:Keys>
+            <o:Key Id="o15">
+                <a:ObjectID>19D5E73A-5597-4CFD-BD06-B545DD1DD9F5</a:ObjectID>
+                <a:Name>Key_1</a:Name>
+                <a:Code>Key_1</a:Code>
+                <c:Key.Columns>
+                    <o:Column Ref="o12"/>
+                    <o:Column Ref="..."/>
+                </c:Key.Columns>
+            </o:Key>
+        </c:Keys>
+        <c:PrimaryKey>
+            <o:Key Ref="o15"/>
+        </c:PrimaryKey>
+    </o:Table>
+    
+    <o:Table Id="o10">
+        <a:ObjectID>EBFA769F-F50C-48E4-9E7D-403C40DD2C1C</a:ObjectID>
+        <a:Name>月份秘钥</a:Name>
+        <a:Code>d_data_tao_key</a:Code>
+        <c:Columns>
+            <o:Column Id="o16">
+                <a:ObjectID>2647B489-CF05-4C83-9F6F-447955B842E1</a:ObjectID>
+                <a:Name>月份</a:Name>
+                <a:Code>month</a:Code>
+                <a:DataType>INTEGER</a:DataType>
+                <a:Column.Mandatory>1</a:Column.Mandatory>
+            </o:Column>
+            <o:Column Id="o17">
+                <a:ObjectID>F2EF3583-5D78-4E64-965A-201B7BE04BE8</a:ObjectID>
+                <a:Name>秘钥</a:Name>
+                <a:Code>key_des</a:Code>
+                <a:DataType>INTEGER</a:DataType>
+            </o:Column>
+        </c:Columns>
+        <c:Keys>
+            <o:Key Id="o18">
+                <a:ObjectID>BE2FC60F-5822-492B-BCD5-878C09BC5687</a:ObjectID>
+                <a:Name>Key_1</a:Name>
+                <a:Code>Key_1</a:Code>
+                <c:Key.Columns>
+                    <o:Column Ref="o16"/>
+                </c:Key.Columns>
+            </o:Key>
+        </c:Keys>
+        <c:PrimaryKey>
+            <o:Key Ref="o18"/>
+        </c:PrimaryKey>
+    </o:Table>
+</c:Tables>
