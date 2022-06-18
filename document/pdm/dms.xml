@@ -1,0 +1,7 @@
+<c:DBMS>
+    <o:Shortcut Id="o3">
+        <a:ObjectID>CB2A5A52-64CA-41FF-AB2A-6617C94D7123</a:ObjectID>
+        <a:Name>ORACLE Version 19c</a:Name>
+        <a:Code>ORA19C</a:Code>
+    </o:Shortcut>
+</c:DBMS>

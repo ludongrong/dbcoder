@@ -3,7 +3,7 @@ package io.github.ludongrong.dbcoder.dao;
 import java.util.List;
 import java.util.Map;
 
-import io.github.ludongrong.dbcoder.entity.PdFileBo;
+import io.github.ludongrong.dbcoder.powerdesigner.entity.PdFileBo;
 import io.github.ludongrong.dbcoder.sql.DynamicCondition;
 
 public interface IPdFileDao {

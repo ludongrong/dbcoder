@@ -25,9 +25,9 @@ import org.testng.Assert;
 
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
-import io.github.ludongrong.dbcoder.controller.${className}Controller;
-import io.github.ludongrong.dbcoder.entity.$
-import io.github.ludongrong.dbcoder.entity.PdFileBo;
+import io.github.ludongrong.dbcoder.powerdesigner.controller.${className}Controller;
+import io.github.ludongrong.dbcoder.powerdesigner.entity.$
+import io.github.ludongrong.dbcoder.powerdesigner.entity.PdFileBo;
 import io.github.ludongrong.dbcoder.service.I${className}Service;
 
 @WebMvcTest(${className}Controller.class)

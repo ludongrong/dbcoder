@@ -7,9 +7,10 @@
 		http://www.springframework.org/schema/aop 
 		http://www.springframework.org/schema/aop/spring-aop-3.0.xsd ">
 	
+    <#-- 注释 -->
 	<#assign proName = projectName>
 	<#assign className = table.className>
-	<#assign classNameLower = className?uncap_first> 
+	<#assign classNameLower = className?uncap_first>
 	
    	<bean id="${proName}.${classNameLower}Dao" class="${basepackage}.service.dao.jdbc.${className}DaoImpl"
    		parent="mt.baseDao"

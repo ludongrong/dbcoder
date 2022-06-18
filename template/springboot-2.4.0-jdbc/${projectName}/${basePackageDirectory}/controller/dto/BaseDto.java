@@ -1,4 +1,4 @@
-package io.github.ludongrong.dbcoder.controller.dto;
+package io.github.ludongrong.dbcoder.powerdesigner.controller.dto;
 
 import java.io.Serializable;
 

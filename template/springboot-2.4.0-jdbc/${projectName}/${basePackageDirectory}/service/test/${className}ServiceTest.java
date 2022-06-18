@@ -50,13 +50,5 @@ public class ${className}ServiceTest extends AbstractTestNGSpringContextTests {
 		${className} ${classNameVariable} = this.${classNameVariable}Service.findById("");
 		MatcherAssert.assertThat(${classNameVariable}, Matchers.nullValue());
 	}
-
-	@Test
-	public void findPage() {
-
-		${className} ${classNameVariable} = new ${className}();
-		Page<${className}> page${className} = this.${classNameVariable}Service.findPage(${classNameVariable}, 0, 10);
-		System.out.println(page${className}.getTotalElements());
-	}
 	
 }

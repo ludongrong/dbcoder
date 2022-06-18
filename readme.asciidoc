@@ -1,4 +1,100 @@
 
+[source,text]
+----
+{
+	projectName
+    basePackage
+    basePackageDirectory
+    tableName
+    className
+    classNameVariable
+    columns:[{
+		javaName
+		javaNameVariable
+		javaType
+		jdbcType
+		name
+		dataType
+		length
+		precision
+		mandatory
+		premaryKey
+	}]
+    primaryColumns:[{
+		columns
+		javaName
+		javaNameVariable
+		javaType
+		jdbcType
+		name
+		dataType
+		length
+		precision
+		mandatory
+		primaryKey
+	}]
+    parentReferences:[{
+		tableName
+		className
+		classNameVariable
+		columnMappings:[{
+			self:{
+				javaName
+				javaNameVariable
+				javaType
+				jdbcType
+				name
+				dataType
+				length
+				precision
+				mandatory
+				premaryKey
+			}
+			mapping:{
+				javaName
+				javaNameVariable
+				javaType
+				jdbcType
+				name
+				dataType
+				length
+				precision
+				mandatory
+				premaryKey
+			}
+		}]
+	}]
+    childReferences:[{
+		tableName
+		className
+		classNameVariable
+		columnMappings:[{
+			self -> Column
+			mapping -> Column
+		}]
+	}]
+}
+----
+
+
+[source,text]
+----
+# 创建变量
+<#assign proName = projectName>
+# 创建变量 -> 首字符小写
+<#assign classNameLower = className?uncap_first>
+
+# 注释
+<#-- 覆盖默认的 toString() 方法 -->
+
+# 包含
+<#if column.contains("begin,start,end")>
+
+<#else>
+
+</#if>
+----
+
 .XML - 接口
 [source,xml]
 ----

@@ -1,5 +1,7 @@
 package io.github.ludongrong.dbcoder.util;
 
+import java.util.Objects;
+
 public class StringUtil {
 
     public static String makeAllWordFirstLetterUpperCase(String sqlName) {
@@ -129,7 +131,7 @@ public class StringUtil {
 		
 		String beforeParenthesisStr;
 
-        if (str == null) {
+        if (Objects.isNull(str)) {
             return "";
         }
 		

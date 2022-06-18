@@ -1,4 +1,4 @@
-package io.github.ludongrong.dbcoder.config;
+package io.github.ludongrong.dbcoder.common.config;
 
 import java.io.File;
 

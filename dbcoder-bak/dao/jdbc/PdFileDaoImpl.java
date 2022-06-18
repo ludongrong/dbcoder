@@ -16,7 +16,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 
 import io.github.ludongrong.dbcoder.dao.IPdFileDao;
-import io.github.ludongrong.dbcoder.entity.PdFileBo;
+import io.github.ludongrong.dbcoder.powerdesigner.entity.PdFileBo;
 import io.github.ludongrong.dbcoder.sql.DynamicCondition;
 
 @Repository("dbcoder-PdFileDaoImpl")
