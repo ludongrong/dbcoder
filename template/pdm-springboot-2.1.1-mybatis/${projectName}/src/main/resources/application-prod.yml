@@ -1,0 +1,8 @@
+logging:
+  level:
+    io:
+      github:
+        ludongrong: info
+spring:
+  application:
+    name: spring-boot-prod

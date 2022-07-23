@@ -1,0 +1,36 @@
+project:
+  generate-directory: ''
+  template-directory: ''
+
+## https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: non_null
+    time-zone: GMT+8
+  profiles:
+    active: '@profiles.active@'
+
+## mybatis 增强
+mybatis-plus:
+  # 指定Mapper.xml文件的路径
+  mapper-locations: classpath*:mybatis/*/*.xml
+  configuration:
+    # 禁用自定的驼峰映射
+    map-underscore-to-camel-case: true
+    # 禁用缓存
+    cache-enabled: false
+  global-config:
+    db-config:
+      # 全局的id生成策略
+      id-type: auto
+      # 全局的表名的前缀
+      table-prefix: tb_
+
+## 分页
+pagehelper:
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+  auto-dialect: true
+  auto-runtime-dialect: true

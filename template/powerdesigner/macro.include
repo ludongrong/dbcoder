@@ -1,0 +1,4 @@
+<#-- 构造函数 -->
+<#macro generateDmnRuleColumns column>
+<#list column?split(",") as item>"${item!""?trim}"<#if item_has_next>, </#if></#list><#t>
+</#macro>

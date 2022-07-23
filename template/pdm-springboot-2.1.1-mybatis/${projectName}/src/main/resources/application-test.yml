@@ -1,0 +1,8 @@
+logging:
+  level:
+    io:
+      github:
+        ludongrong: debug
+spring:
+  application:
+    name: spring-boot-test

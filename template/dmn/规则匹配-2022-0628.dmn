@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" id="Definitions_1o8ldnk" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="4.0.0">
+  <decision id="Dmn-7d40d3" name="规则数据匹配">
+    <decisionTable id="decisionTable_1" hitPolicy="RULE ORDER">
+      <input id="input_1" label="厂家">
+        <inputExpression id="inputExpression_1" typeRef="string">
+          <text>cell.LIST_PORD</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_17nq471" label="参数对象英文名称">
+        <inputExpression id="LiteralExpression_0titqlj" typeRef="string">
+          <text>cell.PARA_OBJECT_NAME</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_1a1e4iv" label="参数英文名称">
+        <inputExpression id="LiteralExpression_1slvwet" typeRef="string">
+          <text>cell.PARA_OMC_NAME</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0nngcpv" label="枚举值">
+        <inputExpression id="LiteralExpression_07xyo6f" typeRef="string">
+          <text>cell.ENUM_VALUE</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_1g1n20h" label="区间值">
+        <inputExpression id="LiteralExpression_19unj8a" typeRef="double">
+          <text>cell.SECTION_VALUE</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_11z3j26" label="规则类型">
+        <inputExpression id="LiteralExpression_1uz8fi9" typeRef="string">
+          <text>cell.RULE_TYPE</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_1icyp1x" label="主键" name="ID" typeRef="string" />
+      <output id="OutputClause_1x4d5sf" label="是否规范" name="IS_STANDARD" typeRef="string" />
+      <output id="OutputClause_1suffln" label="规则类型" name="RULE_TYPE" typeRef="string" />
+      <output id="OutputClause_1b2nieg" label="取值范围" name="RANGE_VALUE" typeRef="string" />
+      <output id="OutputClause_1t3f00v" label="数据来源" name="DATA_SOURCE" typeRef="string" />
+<#list modelList as DMN行>
+    <#if (DMN行["规则样式"])?? && DMN行["规则样式"] == "枚举">
+      <rule id="DecisionRule_${uuid7()}">
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.厂家!""}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.参数对象英文名称?upper_case}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.参数英文名称?upper_case}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text><@generateDmnRuleColumns DMN行.取值范围/></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>""</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.规则样式!""}"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.ID</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>"是"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.RULE_TYPE</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>"${DMN行.取值范围!""}"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.DATA_SOURCE</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_${uuid7()}">
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.厂家!""}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.参数对象英文名称?upper_case}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.参数英文名称?upper_case}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>not(<@generateDmnRuleColumns DMN行.取值范围/>)</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.规则样式!""}"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.ID</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>"否"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.RULE_TYPE</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>"${DMN行.取值范围!""}"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.DATA_SOURCE</text>
+        </outputEntry>
+      </rule>
+    <#elseif (DMN行["规则样式"])?? && DMN行["规则样式"] == "区间">
+      <rule id="DecisionRule_${uuid7()}">
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.厂家}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.参数对象英文名称?upper_case}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.参数英文名称?upper_case}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>${DMN行.取值范围?replace(",", "..")}</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"区间"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.ID</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>"是"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.RULE_TYPE</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>"${DMN行.取值范围}"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.DATA_SOURCE</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_${uuid7()}">
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.厂家}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.参数对象英文名称?upper_case}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.参数英文名称?upper_case}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>&lt;${DMN行.取值范围?remove_beginning("[")?remove_ending("]")?replace(",", ",&gt;")}</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"区间"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.ID</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>"否"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.RULE_TYPE</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>"${DMN行.取值范围}"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.DATA_SOURCE</text>
+        </outputEntry>
+      </rule>
+    <#elseif (DMN行["规则样式"])?? && DMN行["规则样式"] == "等于">
+      <rule id="DecisionRule_${uuid7()}">
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.厂家}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.参数对象英文名称?upper_case}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.参数英文名称?upper_case}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>${DMN行.取值范围}</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"区间"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.ID</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>"是"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.RULE_TYPE</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>"'${DMN行.取值范围}'"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.DATA_SOURCE</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_${uuid7()}">
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.厂家}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+            <text>"${DMN行.参数对象英文名称?upper_case}"</text>
+          </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.参数英文名称?upper_case}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>not(${DMN行.取值范围})</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"区间"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.ID</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>"否"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.RULE_TYPE</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>"${DMN行.取值范围}"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.DATA_SOURCE</text>
+        </outputEntry>
+      </rule>
+    </#if>
+</#list>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_1crjrgc">
+      <dmndi:DMNShape id="DMNShape_0itkhm0" dmnElementRef="Dmn-7d40d3">
+        <dc:Bounds height="80" width="180" x="156" y="90" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

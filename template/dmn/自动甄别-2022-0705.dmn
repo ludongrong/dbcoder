@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" id="Definitions_1o8ldnk" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="4.0.0">
+  <decision id="Dmn-e06778" name="自动甄别">
+    <decisionTable id="DecisionTable_${uuid7()}" hitPolicy="RULE ORDER">
+      <input id="InputClause_${uuid7()}" label="网络制式">
+        <inputExpression id="LiteralExpression_${uuid7()}" typeRef="string">
+          <text>cell.NET_TYPE</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_${uuid7()}" label="厂家">
+        <inputExpression id="LiteralExpression_${uuid7()}" typeRef="string">
+          <text>cell.LIST_PROD</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_${uuid7()}" label="参数对象英文名称">
+        <inputExpression id="LiteralExpression_${uuid7()}" typeRef="string">
+          <text>cell.PARA_OBJECT_NAME</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_${uuid7()}" label="参数英文名称">
+        <inputExpression id="LiteralExpression_${uuid7()}" typeRef="string">
+          <text>cell.PARA_OMC_NAME</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_${uuid7()}" label="主键id" name="ID" typeRef="string" />
+      <output id="OutputClause_${uuid7()}" label="执行类型" name="MODIFY_TYPE" typeRef="string" />
+      <output id="OutputClause_${uuid7()}" label="数据来源" name="DATA_SOURCE" typeRef="string" />
+<#list modelList as DMN行>
+      <rule id="DecisionRule_${uuid7()}">
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${(DMN行.网络制式!"")?replace("/", "\",\"")}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.厂家}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.参数对象英文名称?upper_case}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.参数英文名称?upper_case}"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.ID</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>"${DMN行.执行类型!""}"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.DATA_SOURCE</text>
+        </outputEntry>
+      </rule>
+</#list>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_${uuid7()}">
+      <dmndi:DMNShape id="DMNShape_${uuid7()}" dmnElementRef="Dmn-e06778">
+        <dc:Bounds height="80" width="180" x="160" y="110" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

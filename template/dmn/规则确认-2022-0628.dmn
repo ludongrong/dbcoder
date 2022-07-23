@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" id="Definitions_1o8ldnk" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="4.0.0">
+  <decision id="Dmn-811c14" name="规则确认">
+    <decisionTable id="DecisionTable_1krmidd" hitPolicy="RULE ORDER">
+      <input id="InputClause_0qzlj9u" label="厂家">
+        <inputExpression id="LiteralExpression_1qyravy" typeRef="string">
+          <text>cell.LIST_PROD</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_08ohksc" label="参数对象英文名称">
+        <inputExpression id="LiteralExpression_1akpeh2" typeRef="string">
+          <text>cell.PARA_OBJECT_NAME</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_16j3s5r" label="参数英文名称">
+        <inputExpression id="LiteralExpression_02rewf4" typeRef="string">
+          <text>cell.PARA_OMC_NAME</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0kk1rye" label="主键" name="ID" typeRef="string" />
+      <output id="OutputClause_07t4izd" label="厂家" name="LIST_PORD" typeRef="string" />
+      <output id="OutputClause_0a4hh8e" label="参数对象英文名称" name="PARA_OBJECT_NAME" typeRef="string" />
+      <output id="OutputClause_03brf63" label="参数英文名称" name="PARA_OMC_NAME" typeRef="string" />
+      <output id="OutputClause_10j2cr3" label="枚举值" name="ENUM_VALUE" typeRef="string" />
+      <output id="OutputClause_09c8t0c" label="区间值" name="SECTION_VALUE" typeRef="double" />
+      <output id="OutputClause_136xduu" label="规则样式" name="RULE_TYPE" typeRef="string" />
+      <output id="OutputClause_140dwgw" label="数据来源" name="DATA_SOURCE" typeRef="string" />
+<#list modelList as DMN行>
+<#if (DMN行["规则样式"])?? && DMN行["规则样式"] == "枚举">
+      <rule id="DecisionRule_${uuid7()}">
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.厂家}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.参数对象英文名称?upper_case}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.参数英文名称?upper_case}"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.ID</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.LIST_PROD</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.PARA_OBJECT_NAME</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.PARA_OMC_NAME</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.PARA_NEW_VALUE</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>""</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>"枚举"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.DATA_SOURCE</text>
+        </outputEntry>
+      </rule>
+<#elseif (DMN行["规则样式"])?? && (DMN行["规则样式"] == "区间" || DMN行["规则样式"] == "等于")>
+      <rule id="DecisionRule_${uuid7()}">
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.厂家}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.参数对象英文名称?upper_case}"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_${uuid7()}">
+          <text>"${DMN行.参数英文名称?upper_case}"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.ID</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.LIST_PROD</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.PARA_OBJECT_NAME</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.PARA_OMC_NAME</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>""</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.PARA_NEW_VALUE</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>"区间"</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_${uuid7()}">
+          <text>cell.DATA_SOURCE</text>
+        </outputEntry>
+      </rule>
+</#if>
+</#list>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_1crjrgc">
+      <dmndi:DMNShape id="DMNShape_0p221nx" dmnElementRef="Dmn-811c14">
+        <dc:Bounds height="80" width="180" x="160" y="90" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
