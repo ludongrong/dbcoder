@@ -144,4 +144,5 @@ public class StringUtil {
 		
 		return beforeParenthesisStr;
 	}
+
 }

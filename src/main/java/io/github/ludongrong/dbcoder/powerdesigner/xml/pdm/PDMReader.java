@@ -49,12 +49,14 @@ public class PDMReader {
             TableHandler.getColumnList(tableModel).forEach(columnModel -> {
                 ObjectsUtil.convertDataTypeToJdbcType(columnModel, project.getDbType());
             });
+            tableModel.put("dbType", project.getDbType());
         });
         // View的DataType转JdbcType
         project.getViewHandler().getModelList().forEach(viewModel -> {
             ViewHandler.getColumnList(viewModel).forEach(columnModel -> {
                 ObjectsUtil.convertDataTypeToJdbcType(columnModel, project.getDbType());
             });
+            viewModel.put("dbType", project.getDbType());
         });
         // 关联表和表的关系
         List<Map<String, Object>> modelList = ObjectsUtil.mergeObjects(project, project.getTableHandler(), project.getViewHandler());

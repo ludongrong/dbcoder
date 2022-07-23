@@ -9,7 +9,7 @@
     className
     classNameVariable
     columns:[{
-		javaName
+		javaNameinclude::template\pdm-springboot-2.1.1-mybatis\${projectName}\readme.asciidoc[]
 		javaNameVariable
 		javaType
 		jdbcType

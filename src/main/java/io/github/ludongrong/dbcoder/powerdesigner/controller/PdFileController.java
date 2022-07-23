@@ -1,9 +1,8 @@
 package io.github.ludongrong.dbcoder.powerdesigner.controller;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.IoUtil;
 import io.github.ludongrong.dbcoder.common.config.ApplicationConfiguration;
+import io.github.ludongrong.dbcoder.common.util.ControllerUtil;
 import io.github.ludongrong.dbcoder.powerdesigner.controller.dto.PdFileMapper;
 import io.github.ludongrong.dbcoder.powerdesigner.controller.dto.PdFileVo;
 import io.github.ludongrong.dbcoder.common.exception.BadGatewayException;
@@ -22,8 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.*;
 
 /**
@@ -35,6 +32,9 @@ import java.util.*;
 @Controller
 @RequestMapping("/pdfile")
 public class PdFileController {
+
+    // 导出文件的名称前缀
+    private static final String PDFILE = "pdfile";
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/x-msdownload")
     public void create(PdFileVo pdFileVo, @RequestParam(value = "file") MultipartFile uploadFile, HttpServletResponse response) {
@@ -54,7 +54,7 @@ public class PdFileController {
 
         String templatePath = ApplicationConfiguration._template_directory + File.separator + pdFileVo.getName();
         ByteArrayInputStream inBuf = TemplateUtil.generateTemplate(templatePath, modelList);
-        responseStream(response, inBuf);
+        ControllerUtil.responseStream(response, inBuf, PDFILE);
     }
 
     private List<Map<String, Object>> parsePDM(PdFileVo pdFileVo, MultipartFile file) {
@@ -82,42 +82,18 @@ public class PdFileController {
      * @return
      */
     private String checkUploadFile(MultipartFile file) {
-        if (file.isEmpty()) {
-            throw new IllegalArgumentException("File must have a non-nulls!");
-        }
-
-        if (file.getSize() > ApplicationConfiguration._UPLOAD_MAX_SIZE) {
-            throw new IllegalStateException("The file size exceeds max upload size("
-                    + ApplicationConfiguration._UPLOAD_MAX_SIZE / 1024 / 1024 + "M)!");
-        }
+        ControllerUtil.checkUploadFileSize(file);
 
         String fileType = FileUtil.extName(file.getOriginalFilename());
 
-        boolean match = Arrays.asList(ApplicationConfiguration._FILE_TYPE).stream().anyMatch(v -> {
-            return fileType.equalsIgnoreCase(v);
-        });
-
-        if (match == false) {
-            throw new IllegalStateException("The current file upload type is not support!");
-        }
+        List<String> fileSuffice = Arrays.asList(ApplicationConfiguration._PD_FILE_TYPE);
+        ControllerUtil.checkFileSuffix(fileType, fileSuffice);
 
         return fileType;
     }
 
     private String randomUUID() {
         return UUID.randomUUID().toString();
-    }
-
-    private void responseStream(HttpServletResponse response, ByteArrayInputStream inBuf) {
-        response.setContentType("application/x-msdownload");
-        response.addHeader("Content-Disposition", "attachment; filename=\"" + "pdfile-" + DateUtil.formatDate(new Date()) + ".zip\"");
-        response.setHeader("Content-Length", Integer.toString(inBuf.available()));
-
-        try (OutputStream oStream = response.getOutputStream()) {
-            IoUtil.copy(inBuf, oStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 }

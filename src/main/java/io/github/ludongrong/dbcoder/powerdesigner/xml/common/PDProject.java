@@ -99,7 +99,7 @@ public class PDProject {
         model.put("basePackageDirectory", basePackage.replaceAll("\\.", "/"));
         // 应用类型(web, app)
         model.put("appType", getAppType());
-
+        // 当前时间
         model.put("currentDate", getCurrentDate());
     }
 

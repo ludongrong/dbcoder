@@ -34,23 +34,4 @@ public class ${className}SvcTest
 		${classNameLower}Svc.save(${classNameLower});
 	}
 
-	@Test
-	public void delete()
-	{
-		${classNameLower}Svc.delete("f1458887a2c3469f8cf74a37cccc1737");
-	}
-
-	@Test
-	public void update()
-	{
-		${className} ${classNameLower} = new ${className}();
-		${classNameLower}.setId("f1458887a2c3469f8cf74a37cccc1737");
-		${classNameLower}Svc.update(${classNameLower});
-	}
-
-	@Test
-	public void findById()
-	{
-		${className} ${classNameLower} = ${classNameLower}Svc.findById("f1458887a2c3469f8cf74a37cccc1737");
-	}
 }

@@ -58,10 +58,11 @@ public class TableHandler extends PDMElementHandler {
         convertCodeVariable(ELE_OBJECT_CODE);
         setClassNameAndVariable();
 
-        tableColumnHandler.onParentNodeHandlerEnd(TableColumnHandler.TAG, this);
-
+        /*关联主键*/
         annotatePrimaryColumn(elementPath);
         keyHandler.onParentNodeHandlerEnd(TableKeyHandler.TAG);
+
+        tableColumnHandler.onParentNodeHandlerEnd(TableColumnHandler.TAG, this);
     }
 
     public static List<Map<String, Object>> getColumnList(Map<String, Object> model) {

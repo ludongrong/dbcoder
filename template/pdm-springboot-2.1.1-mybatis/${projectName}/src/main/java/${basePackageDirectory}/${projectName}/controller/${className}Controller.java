@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
-
 <#--
 “数据对象”可统称为资源，“业务领域”就是业务相近的“资源”的集合。
 
@@ -42,21 +41,22 @@ import java.util.Map;
  * @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
  * @since ${currentDate?string("yyyy-MM-dd")}
  */
+@Slf4j
 @Api(value = "${Name}", tags = "${Name}")
 @RestController
 <#-- apiv1：充当接口的版本 -->
 <#-- 驼峰：不建议（在URL上不美观）-->
-<#-- @RequestMapping("/apiv1/projectName/${CodeCamelFirstLower}") -->
+<#-- @RequestMapping("/apiv1/${projectName}/${CodeCamelFirstLower}") -->
 <#-- 全小写： -->
-<#-- @RequestMapping("/apiv1/projectName/${CodeLower}") -->
+<#-- @RequestMapping("/apiv1/${projectName}/${CodeLower}") -->
 <#-- 下划线： -->
-<#-- @RequestMapping("/apiv1/projectName/${CodeUnderlineLower}") -->
+<#-- @RequestMapping("/apiv1/${projectName}/${CodeUnderlineLower}") -->
 <#-- 短横线： -->
-@RequestMapping("/apiv1/projectName/${CodeKebabCaseLower}")
+@RequestMapping("/apiv1/${projectName}/${CodeKebabCaseLower}")
 public class ${className}Controller extends BaseController {
 
     @Resource("${classNameVariable}Service")
-    private ${className}Service ${classNameVariable}Service;
+    private I${className}Service ${classNameVariable}Service;
 
 <#-- 内部跳转 --- 路径
     public static final String PAGE_LIST = "/account/${CodeKebabCaseLower}/listpage";
@@ -68,7 +68,6 @@ public class ${className}Controller extends BaseController {
     public static final String PAGE_EDIT_DATA = "/account/${CodeKebabCaseLower}/editpage/data";
     public static final String PAGE_EDIT_UPDATE = "/account/${CodeKebabCaseLower}/editpage/update";
 -->
-
 <#-- 内部跳转 --- 接口
 	@RequestMapping(value = "list")
 	public String list(Model model) {
@@ -105,8 +104,8 @@ public class ${className}Controller extends BaseController {
      */
     @ApiOperation(value = "${Name} 创建", notes = "其他")
     @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
-    public RestResult<${className}> save(@RequestBody ${className} ${classNameVariable}) {
-        RestResult<${className}> result = new RestResult<${className}>();
+    public RestResult<${className}Vo> save(@RequestBody ${className}Vo ${classNameVariable}Vo) {
+        RestResult<${className}Vo> result = new RestResult<${className}Vo>();
         try {
             ${classNameVariable}Service.save(${classNameVariable});
             result.setMessage("新增 “${Name}” 成功");
@@ -127,8 +126,8 @@ public class ${className}Controller extends BaseController {
      */
     @ApiOperation(value = "${Name} 删除", notes = "其他")
     @PostMapping(value = "/remove", produces = MediaType.APPLICATION_JSON_VALUE)
-    public RestResult<${className}> remove(@RequestBody ${className} ${classNameVariable}) {
-        RestResult<${className}> result = new RestResult<${className}>();
+    public RestResult<${className}Vo> remove(@RequestBody ${className}Vo ${classNameVariable}Vo) {
+        RestResult<${className}Vo> result = new RestResult<${className}Vo>();
         try {
             ${classNameVariable}Service.remove(${classNameVariable});
             result.setMessage("删除 “${Name}” 成功");
@@ -149,8 +148,8 @@ public class ${className}Controller extends BaseController {
      */
     @ApiOperation(value = "${Name} 更新", notes = "其他")
     @PostMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
-    public RestResult<${className}> update(@RequestBody ${className} ${classNameVariable}) {
-        RestResult<${className}> result = new RestResult<${className}>();
+    public RestResult<${className}Vo> update(@RequestBody ${className}Vo ${classNameVariable}Vo) {
+        RestResult<${className}Vo> result = new RestResult<${className}Vo>();
         try {
             ${classNameVariable}Service.update(${classNameVariable});
             result.setMessage("更新 “${Name}” 成功");
@@ -165,8 +164,8 @@ public class ${className}Controller extends BaseController {
     
     <#if HasPrimaryKey == '1'>
     @Override
-    public RestResult<${className}Entity> getByPrimary(<#list Columns as column><#if column.PrimaryKey == "1">${column.JavaType} ${column.CodeCamelFirstLower}</#if><#if column_has_next>, </#if></#list>) {
-        RestResult<${className}Entity> result = new RestResult<>();
+    public RestResult<${className}Vo> getByPrimary(<#list Columns as column><#if column.PrimaryKey == "1">${column.JavaType} ${column.CodeCamelFirstLower}</#if><#if column_has_next>, </#if></#list>) {
+        RestResult<${className}Vo> result = new RestResult<>();
         try {
             ${className}Entity entity = ${classNameVariable}Service.getByPrimary(<#list Columns as column><#if column.PrimaryKey == "1">${column.JavaType} ${column.CodeCamelFirstLower}</#if><#if column_has_next>, </#if></#list>);
             result.setData(entity);
@@ -189,7 +188,7 @@ public class ${className}Controller extends BaseController {
      */
     @ApiOperation(value = "${Name} 查询分页", notes = "其他")
     @PostMapping(value = "/paging", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public BaseResult<PageInfo<${className}Entity>, ${className}Header> paging(@RequestBody String jsonStr) {
+    public BaseResult<PageInfo<${className}Vo>, ${className}Header> paging(@RequestBody String jsonStr) {
 
         try {
             Map<String, Object> paramMap = queryParam(jsonStr);
@@ -208,7 +207,7 @@ public class ${className}Controller extends BaseController {
      */
     @ApiOperation(value = "${Name} 查询列表", notes = "其他")
     @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public BaseResult<List<${className}Entity>, ${className}Header> list(@RequestBody String jsonStr) {
+    public BaseResult<List<${className}Vo>, ${className}Header> list(@RequestBody String jsonStr) {
 
         try {
             Map<String, Object> paramMap = queryParam(jsonStr);
@@ -263,7 +262,7 @@ public class ${className}Controller extends BaseController {
 	private Map<String, Object> queryParam(String jsonStr) {
         return getJsonValues(jsonStr, "PAGE_NUM", "PAGE_SIZE",
 			<#list Columns as column>
-				"${column.CodeUnderlineUpper}"<#if column_has_next>, </#if>
+				"${column.CodeUpper}"<#if column_has_next>, </#if>
 			</#list>);
     }
 

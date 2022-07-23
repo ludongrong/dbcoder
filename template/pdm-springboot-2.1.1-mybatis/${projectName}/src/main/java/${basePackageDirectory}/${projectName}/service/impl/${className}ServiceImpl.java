@@ -1,14 +1,15 @@
 package ${basePackage}.${projectName}.service.impl;
 
 import com.alibaba.excel.EasyExcel;
-
-import ${basePackage}.${projectName}.service.DownloadService;
-import ${basePackage}.${projectName}.dao.${className}Mapper;
-import ${basePackage}.${projectName}.entity.${className}Entity;
-import ${basePackage}.${projectName}.service.${className}Service;
-
-import com.github.pagehelper.PageInfo;
+import com.baomidou.dynamic.datasource.annotation.DS;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.github.ludongrong.common.service.DownloadService;
+import ${basePackage}.${projectName}.entity.${className}Bo;
+import ${basePackage}.${projectName}.mapper.${className}Mapper;
+import ${basePackage}.${projectName}.service.I${className}Service;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -25,71 +26,37 @@ import java.util.Map;
  */
 @Slf4j
 @Service("${classNameVariable}Service")
-public class ${className}ServiceImpl implements ${className}Service {
+@DS("primary")
+public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${className}Bo> implements I${className}Service {
     
-	@Resource
-    private ${className}Mapper ${classNameVariable}Mapper;
+    private final ${className}Mapper ${classNameVariable}Mapper;
 
-<#--
     @Autowired
-    DownConfDaoImpl(@Qualifier("dataSource") DataSource dataSource) {
-        super(dataSource);
+    ${className}ServiceImpl(${className}Mapper ${classNameVariable}Mapper) {
+        super();
+        this.${classNameVariable}Mapper = ${classNameVariable}Mapper;
     }
--->
 	
 	@Resource
     private DownloadService downloadService;
-	
-    @Transactional
-    @Override
-    public ${className}Entity save(${className}Entity ${classNameVariable}) {
-        ${classNameVariable}Mapper.insert(${classNameVariable});
+
+	@Autowired
+    public void setDownloadService(@Qualifier("downloadService") DownloadService downloadService) {
+        this.downloadService = downloadService;
     }
     
-    @Transactional
+<#if HasPrimaryKey == '1'>
     @Override
-    public void remove(${className}Entity ${classNameVariable}) {
-        ${classNameVariable}Mapper.delete(${classNameVariable});
+    public ${className}Bo getByPrimary(<#list Columns?filter(x -> x.PrimaryKey == "1") as column>${column.JavaType} ${column.CodeCamelFirstLower}<#sep>, </#sep></#list>) {
+        return ${classNameVariable}Mapper.getByPrimary(<#list Columns?filter(x -> x.PrimaryKey == "1") as column>${column.CodeCamelFirstLower}<#sep>, </#sep></#list>);
     }
-    
-    @Transactional
-    @Override
-    public void update(${className}Entity ${classNameVariable}) {
-        ${classNameVariable}Mapper.update(${classNameVariable});
-    }
-    
-    <#if HasPrimaryKey == '1'>
-    @Override
-    public ${className}Entity getByPrimary(<#list Columns as column><#if column.PrimaryKey == "1">${column.JavaType} ${column.CodeCamelFirstLower}</#if><#if column_has_next>, </#if></#list>) {
-        return ${classNameVariable}Mapper.getByPrimary(<#list Columns as column><#if column.PrimaryKey == "1">${column.JavaType} ${column.CodeCamelFirstLower}</#if><#if column_has_next>, </#if></#list>);
-    }
-    </#if>
-	
+
+</#if>
 	@Override
-    public PageInfo<${className}Entity> paging(Map<String, Object> paramMap) {
-        Page.startPage(paramMap);
-        return new PageInfo<>(${classNameVariable}Mapper.list(paramMap));
-    }
-    
-    @Override
-    public RestResult<VuePage<${className}>> list(${className} ${classNameVariable}) {
-        VuePage<${className}> result = null;
-        
-        try {
-            List<${className}> dataList = ${classNameVariable}Mapper.list${className}(${classNameVariable});
-            result = new VuePage<${className}>(dataList);
-        } catch (Exception e) {
-            log.error("${className}ServiceImpl", e);
-            return RestResult.buildErrorResult("查询 “${Name}” 失败");
-        }
-        return RestResult.buildSuccessResult(result);
-    }
-	
-    @Override
-    public List<${className}Entity> list(Map<String, Object> paramMap) {
+    public List<${className}Bo> list(Map<String, Object> paramMap) {
         return ${classNameVariable}Mapper.list(paramMap);
     }
-	
+
 	@Async
     @Override
     public String listForExport(String fileName, Map<String, Object> paramMap) {
@@ -97,8 +64,8 @@ public class ${className}ServiceImpl implements ${className}Service {
 
         boolean writeFlag = false;
         try {
-            List<${className}Entity> ${classNameVariable}List = ${classNameVariable}Mapper.queryList(paramMap);
-            EasyExcel.write(reallyFile, ${className}Entity.class).sheet(fileName).doWrite(${classNameVariable}List);
+            List<${className}Bo> ${classNameVariable}List = ${classNameVariable}Mapper.selectByMap(paramMap);
+            EasyExcel.write(reallyFile, ${className}Bo.class).sheet(fileName).doWrite(${classNameVariable}List);
             writeFlag = true;
         } catch (Exception e) {
             writeFlag = false;

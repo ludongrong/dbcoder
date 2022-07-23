@@ -1,10 +1,69 @@
 == 约定
 
-== 技术框架
+[source,text]
+----
+领域模型命名规约
+1） 数据对象：xxxDO，xxx 即为数据表名。
+2） 数据传输对象：xxxDTO，xxx 为业务领域相关的名称。
+3） 展示对象：xxxVO，xxx 一般为网页名称。
+4） POJO 是 DO/DTO/BO/VO 的统称，禁止命名成 xxxPOJO。
+
+@NotEmpty(groups = Save.class)
+@NotNull(groups = { Create.class }, message = "Missing longitude")
+@Pattern(regexp = "^[0-9a-zA-Z_\\u4e00-\\u9fa5]+$")
+@Length(min = 2, max = 20)
+----
+
+=== 技术框架
 
 [source,text]
 ----
+mybatis
+  mybatis-plus
+  p6spy
+
+测试 - junit5
+  junit4向junit5迁移
+https://junit.org/junit5/docs/current/user-guide/#migrating-from-junit4
+
+# 初始化数据
+https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto.data-initialization.using-basic-sql-scripts
+
+# springboot - properties
+https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html
+
 java bean validation
+----
+
+==== 依赖注入
+
+.@Autowired的使用
+[source,text]
+----
+https://zhuanlan.zhihu.com/p/92395282
+对于必需的依赖，建议使用基于构造函数的注入，设置它们为不可变的，并防止它们为null。
+对于可选的依赖项，建议使用基于sett的注入。
+
+基于字段依赖注入的缺陷：
+  1、不允许声明不可变域
+    基于字段的依赖注入在声明为final/immutable的字段上不起作用
+  2、容易违反单一职责设计原则（五大设计原则SOLID）
+  3、与依赖注入容器紧密耦合
+    设置这些字段的唯一方法是通过Spring容器实例化类并使用反射注入它们，否则字段将保持null。
+----
+
+==== mvc
+
+[source,text]
+----
+springfox代码位置
+> https://github.com/Drong/springfox.git
+swagger-samples代码位置
+> https://github.com/swagger-api/swagger-samples.git
+访问地址
+> http://ip:port/swagger-ui.html
+例如：
+    http://127.0.0.1:8080/swagger-ui.html
 ----
 
 ==== java bean validation

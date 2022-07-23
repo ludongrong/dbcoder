@@ -25,4 +25,14 @@ public class TemplateUtil {
         }
     }
 
+    public static ByteArrayInputStream generateTemplate(String templatePath, Map<String, Object> model) {
+        try {
+            TemplateReader templateReader = new TemplateReader(templatePath);
+            templateReader.generate(model);
+            return templateReader.finish();
+        } catch (Exception e) {
+            throw new BadGatewayException(String.format("Can not generate template. --- %s", UUID.randomUUID().toString()), e);
+        }
+    }
+
 }
