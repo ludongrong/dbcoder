@@ -24,19 +24,19 @@ public class ${className}Bo extends ${className}Do {
 
 <#if RefParents?exists>
     <#list RefParents as reference>
-	@ApiModelProperty(value = "${reference.ParentTable.Name}", name = "${reference.ParentTable.CodeUpper}")
+	@ApiModelProperty(value = "${reference.ParentTable.Name}", name = "${reference.ParentTable.CodeCamelFirstLower}")
 	@Getter
 	@Setter
-	private ${reference.ParentTable.CodeUpper} ${reference.ParentTable.CodeCamelFirstLower};
+	private ${reference.ParentTable.CodeCamelFirstUpper}Bo ${reference.ParentTable.CodeCamelFirstLower};
 
     </#list>
 </#if>
 <#if RefChildren?exists>
     <#list RefChildren as reference>
-	@ApiModelProperty(value = "${reference.ChildTable.Name}", name = "${reference.ChildTable.CodeUpper}")
+	@ApiModelProperty(value = "${reference.ChildTable.Name}", name = "${reference.ChildTable.CodeCamelFirstLower}List")
 	@Getter
 	@Setter
-	private List<${reference.ChildTable.CodeUpper}> ${reference.ChildTable.CodeCamelFirstLower}List;
+	private List<${reference.ChildTable.CodeCamelFirstUpper}Bo> ${reference.ChildTable.CodeCamelFirstLower}List;
 
     </#list>
 </#if>	

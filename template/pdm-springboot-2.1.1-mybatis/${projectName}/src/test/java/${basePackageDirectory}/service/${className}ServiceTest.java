@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.Async;
  * @author <a href="mailto:736779458@qq.com">736779458@qq.com</a>
  * @since ${currentDate?string("yyyy-MM-dd")}
  */
- @SpringBootTest(classes = { Application.class })
+@SpringBootTest(classes = { Application.class })
 public interface ${className}ServiceTest {
     
     @Autowired
