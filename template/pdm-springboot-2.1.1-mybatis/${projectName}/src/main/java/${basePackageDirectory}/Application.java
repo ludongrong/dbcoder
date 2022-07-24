@@ -3,12 +3,12 @@ package ${basePackage}.${projectName};
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
+
 <#--
 @EnableScheduling
 @EnableTransactionManagement
 @PropertySources(@PropertySource(value = "file:config/application.properties", ignoreResourceNotFound = true, encoding = "UTF-8"))
 -->
-
 @SpringBootApplication
 @EnableScheduling
 public class Application {

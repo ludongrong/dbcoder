@@ -1,9 +1,0 @@
-<!-- ${classNameVariable} -->
-<bean id="${projectName}${className}Dao" class="${basePackage}.dao.jdbc.${className}DaoImpl"
-	parent="nameParamDaoSupport"
-/>
-<bean id="${projectName}${className}Svc" class="${basePackage}.svc.impl.${className}SvcImpl" 
-	p:${classNameVariable}Dao-ref="${projectName}${className}Dao"
-/>
-
-<@generateConstructor className/>

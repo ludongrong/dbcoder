@@ -4,5 +4,9 @@
 </#macro>
 
 
+<#-- 将value变成jsp el表达式,主要由于FreeMarker生成表达式不方便 -->
+<#macro jspEl value>${r"${"}${value}}</#macro>
+
+
 <#-- postman 请求参数 -->
 <#macro generatePostmanParam columns>"{<#list columns as column><#if column.JavaType == "java.sql.Date" || column.JavaType == "java.sql.Timestamp">\"${column.CodeCamelFirstUpper}\": \"2022-04-13 15:20:11\"<#elseif column.JavaType == "java.sql.Time">\"${column.CodeCamelFirstUpper}\": \"15:20:11\"<#else>\"${column.CodeCamelFirstUpper}\": \"\"</#if><#if column_has_next>, </#if></#list>}",</#macro>

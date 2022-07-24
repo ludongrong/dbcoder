@@ -61,41 +61,41 @@ public class ${className}Controller extends BaseController {
 <#-- 内部跳转 --- 路径
     public static final String PAGE_LIST = "/account/${CodeKebabCaseLower}/listpage";
     public static final String PAGE_LIST_DATA = "/account/${CodeKebabCaseLower}/listpage/data"
-	public static final String PAGE_ADD = "/account/${CodeKebabCaseLower}/addpage";
-	public static final String PAGE_ADD_DATA = "/account/${CodeKebabCaseLower}/addpage/data"
+    public static final String PAGE_ADD = "/account/${CodeKebabCaseLower}/addpage";
+    public static final String PAGE_ADD_DATA = "/account/${CodeKebabCaseLower}/addpage/data"
     public static final String PAGE_ADD_SUBMIT = "/account/${CodeKebabCaseLower}/addpage/submit"
     public static final String PAGE_EDIT = "/account/${CodeKebabCaseLower}/editpage";
     public static final String PAGE_EDIT_DATA = "/account/${CodeKebabCaseLower}/editpage/data";
     public static final String PAGE_EDIT_UPDATE = "/account/${CodeKebabCaseLower}/editpage/update";
 -->
 <#-- 内部跳转 --- 接口
-	@RequestMapping(value = "list")
-	public String list(Model model) {
-		model.addAttribute("pageName", "tea.account.${classNameVariable}.list");
-		model.addAttribute("readUrl", PAGE_LIST_DATA);
-		model.addAttribute("rootAddr", "http://127.0.0.1:8080/tea/");
-		return this.PAGE_LIST;
-	}
+    @RequestMapping(value = "list")
+    public String list(Model model) {
+        model.addAttribute("pageName", "tea.account.${classNameVariable}.list");
+        model.addAttribute("readUrl", PAGE_LIST_DATA);
+        model.addAttribute("rootAddr", "http://127.0.0.1:8080/tea/");
+        return this.PAGE_LIST;
+    }
 
-	@RequestMapping(value = "add")
-	public String add(Model model) {
-		model.addAttribute("pageName", "tea.account.${classNameVariable}.add");
-		model.addAttribute("readUrl", PAGE_ADD_DATA);
-		model.addAttribute("submitUrl", PAGE_ADD_SUBMIT);
-		model.addAttribute("rootAddr", "http://127.0.0.1:8080/tea/");
-		return this.PAGE_ADD;
-	}
+    @RequestMapping(value = "add")
+    public String add(Model model) {
+        model.addAttribute("pageName", "tea.account.${classNameVariable}.add");
+        model.addAttribute("readUrl", PAGE_ADD_DATA);
+        model.addAttribute("submitUrl", PAGE_ADD_SUBMIT);
+        model.addAttribute("rootAddr", "http://127.0.0.1:8080/tea/");
+        return this.PAGE_ADD;
+    }
 
-	@RequestMapping(value = "edit")
-	public String edit(Model model) {
-		model.addAttribute("pageName", "tea.account.${classNameVariable}.edit");
-		model.addAttribute("readUrl", PAGE_EDIT_DATA);
-		model.addAttribute("submitUrl", PAGE_EDIT_UPDATE);
-		model.addAttribute("rootAddr", "http://127.0.0.1:8080/tea/");
-		return this.PAGE_ADD;
-	}
+    @RequestMapping(value = "edit")
+    public String edit(Model model) {
+        model.addAttribute("pageName", "tea.account.${classNameVariable}.edit");
+        model.addAttribute("readUrl", PAGE_EDIT_DATA);
+        model.addAttribute("submitUrl", PAGE_EDIT_UPDATE);
+        model.addAttribute("rootAddr", "http://127.0.0.1:8080/tea/");
+        return this.PAGE_ADD;
+    }
 -->
-	
+    
     /**
      * ${Name} 创建
      * 
@@ -104,10 +104,13 @@ public class ${className}Controller extends BaseController {
      */
     @ApiOperation(value = "${Name} 创建", notes = "其他")
     @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public RestResult<${className}Vo> save(@RequestBody ${className}Vo ${classNameVariable}Vo) {
         RestResult<${className}Vo> result = new RestResult<${className}Vo>();
+        ${className}Bo ${classNameVariable}Bo=${className}Mapper.INSTANCE.vo2bo(${classNameVariable}Vo);
         try {
             ${classNameVariable}Service.save(${classNameVariable});
+            ${className}Mapper.INSTANCE.bo2vo(${classNameVariable}Bo);
             result.setMessage("新增 “${Name}” 成功");
             result.setSuccess(true);
         } catch (Exception e) {
@@ -180,7 +183,7 @@ public class ${className}Controller extends BaseController {
     }
     </#if>
     
-	/**
+    /**
      * ${Name} 查询 - 分页
      * 
      * @param jsonStr {@code {}} 入参
@@ -230,14 +233,14 @@ public class ${className}Controller extends BaseController {
 
         return ${classNameVariable}Service.list${className}(${classNameVariable});
     }
-	
-	/**
+    
+    /**
      * ${Name} 导出
      * 
      * @param jsonStr {@code {}} 入参
      * @return java.util.List<${basePackage}.${projectName}.entity.${className}Entity>
      */
-	@ApiOperation(value = "${Name} 导出列表", notes = "其他")
+    @ApiOperation(value = "${Name} 导出列表", notes = "其他")
     @PostMapping(value = "/export", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public BaseResult<Download, DownloadHeader> listForExport(@RequestBody String jsonStr) {
 
@@ -252,18 +255,290 @@ public class ${className}Controller extends BaseController {
             return handleException(e);
         }
     }
-	
-	/**
+    
+    /**
      * ${Name} 获取参数 -> 查询分页、查询列表、导出列表
      * 
      * @param jsonStr {@code {}} 入参
      * @return java.util.List<${basePackage}.${projectName}.entity.${className}Entity>
      */
-	private Map<String, Object> queryParam(String jsonStr) {
+    private Map<String, Object> queryParam(String jsonStr) {
         return getJsonValues(jsonStr, "PAGE_NUM", "PAGE_SIZE",
-			<#list Columns as column>
-				"${column.CodeUpper}"<#if column_has_next>, </#if>
-			</#list>);
+            <#list Columns as column>
+                "${column.CodeUpper}"<#if column_has_next>, </#if>
+            </#list>);
+    }
+    
+    /**
+     * 新增
+     * 
+     * <p>
+     * 创建单个资源.
+     * 
+     * <pre>
+     * URI 样例
+     * 
+     * POST /animals  //新增动物
+     * POST /zoos/1/employees //为id为1的动物园雇佣员工
+     * </pre>
+     * 
+     * <pre>
+     * response 的 body 直接就是数据，不要做多余的包装。
+     * </pre>
+     * 
+     * @param ${classNameVariable}Vo {@code ${className}Vo}
+     * @return {@code Object}
+     */
+    @ApiOperation(value = "create", notes = "create")
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Object create(@RequestBody ${className}Vo ${classNameVariable}Vo) {
+
+        ${className}Bo ${classNameVariable}Bo=${className}Mapper.INSTANCE.vo2bo(${classNameVariable}Vo);
+        boolean createResult = ${classNameVariable}Service.create(${classNameVariable}Bo);
+        if(createResult==false) {
+            throw new BadGatewayException("未创建成功");
+        }
+        return ${className}Mapper.INSTANCE.bo2vo(${classNameVariable}Bo);
+    }
+    
+    /**
+     * 新增.
+     * 
+     * <p>
+     * 夹带文件流.
+     * 
+     * <pre>
+     * {@code 
+     * 
+     * &#64;ApiOperation(value = "create", notes = "create")
+     * &#64;RequestMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+     * &#64;ResponseBody
+     * public ${className}Dto create(@RequestParam("files") MultipartFile[] files) {
+     *
+     *    List<String> idList = new ArrayList<String>();
+     *
+     *    for (MultipartFile file : files) {
+     *        idList.add(upload(file).getId());
+     *    }
+     *
+     *    return new ${className}Dto(idList);
+     * }
+     * 
+     * }
+     * </pre>
+     *
+     * @param ${classNameVariable}Vo {@code ${className}Vo}
+     * @param file     {@code MultipartFile}
+     * @return {@code ${className}Dto}
+     */
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ${className}Dto create(${className}Vo ${classNameVariable}Vo, @RequestParam(value = "file") MultipartFile file) {
+
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("file must have a non-nulls!");
+        }
+
+        if (file.getSize() > ApplicationConfiguration._UPLOAD_MAX_SIZE) {
+            throw new IllegalStateException("The file size exceeds max upload size("
+                    + ApplicationConfiguration._UPLOAD_MAX_SIZE / 1024 / 1024 + "M)!");
+        }
+
+        String fileType = FileUtil.extName(file.getOriginalFilename());
+        if (fileType.equalsIgnoreCase(ApplicationConfiguration._FILE_TYPE_PDM) == false) {
+            throw new IllegalStateException("The current file upload type is not support!");
+        }
+
+        return new ${className}Dto(UUID.randomUUID().toString());
+    }
+
+    /**
+     * 删除
+     * 
+     * <p>
+     * 删除资源.
+     * 
+     * <pre>
+     * DELETE /zoos/1/employees/2
+     * DELETE /zoos/1/employees/2;4;5
+     * DELETE /zoos/1/animals  //删除id为1的动物园内的所有动物
+     * </pre>
+     * 
+<#list primaryColumns as column>
+     * @param ${column.javaNameVariable} {@code ${column.javaType}}}
+</#list>
+     */
+    @ApiOperation(value = "delete", notes = "delete")
+    @RequestMapping(value = "<#list primaryColumns as column>/{${column.javaNameVariable}}</#list>", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public void delete(<#list primaryColumns as column>@PathVariable(name = "${column.javaNameVariable}") ${column.javaType} ${column.javaNameVariable}<#if column_has_next>, </#if></#list>) {
+        
+        ${classNameVariable}Service.delete(<#list primaryColumns as column>${column.javaNameVariable}<#if column_has_next>, </#if></#list>);
+    }
+
+    /**
+     * 更新
+     * 
+     * <p>
+     * 更新单个资源.
+     * 
+     * <pre>
+     * URI 样例
+     * 
+     * PUT /animals/1
+     * PUT /zoos/1
+     * </pre>
+     * 
+<#list primaryColumns as column>
+     * @param ${column.javaNameVariable} {@code ${column.javaType}}}
+</#list>
+     */
+    @ApiOperation(value = "edit", notes = "edit")
+    @RequestMapping(value = "<#list primaryColumns as column>/{${column.javaNameVariable}}</#list>", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public void edit(<#list primaryColumns as column>@PathVariable(name = "${column.javaNameVariable}") ${column.javaType} ${column.javaNameVariable}<#if column_has_next>, </#if></#list>, @RequestBody ${className}Vo ${classNameVariable}Vo) {
+
+        ${className}Bo ${classNameVariable}Bo = ${className}Mapper.INSTANCE.vo2bo(${classNameVariable}Vo);
+        ${classNameVariable}Service.update(${classNameVariable}Bo, <#list primaryColumns as column>${column.javaNameVariable}<#if column_has_next>, </#if></#list>);
+    }
+
+    /**
+     * 查询
+     * 
+     * <p>
+     * 查询单个资源.
+     * 
+     * <pre>
+     * GET /zoos 
+     * GET /zoos/1 
+     * GET /zoos/1/employees
+     * </pre>
+     * 
+     * <pre>
+     *  分页返回内容
+     * { 
+     *     "data":[{},{},{}...]
+     * }
+     * </pre>
+     * 
+<#list primaryColumns as column>
+     * @param ${column.javaNameVariable} {@code ${column.javaType}}}
+</#list>
+     * @return {@code Object}
+     */
+    @ApiOperation(value = "get", notes = "get")
+    @RequestMapping(value = "<#list primaryColumns as column>/{${column.javaNameVariable}}</#list>", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Object get(<#list primaryColumns as column>@PathVariable(name = "${column.javaNameVariable}") ${column.javaType} ${column.javaNameVariable}<#if column_has_next>, </#if></#list>) {
+
+        return ${classNameVariable}Service.get(<#list primaryColumns as column>${column.javaNameVariable}<#if column_has_next>, </#if></#list>);
+    }
+    
+    /**
+     * 查询
+     * 
+     * <p>
+     * 查询复杂资源.
+     * 
+     * <pre>
+     * URI 样例
+     * 
+     * GET /zoos 
+     * GET /zoos/1 
+     * GET /zoos/1/employees
+     * </pre>
+     * 
+     * <pre>
+     * 查询标签化
+     * 
+     * GET /trades?status=closed&sort=created,desc 可以写成 GET /trades/recently-closed
+     * </pre>
+     * 
+     * <pre>
+     * 查询参数
+     * 过滤条件 ?type=1&age=16
+     * 排序  ?sort=age,desc
+     * 投影  ?whitelist=id,name,email     
+     * 分页  ?limit=10&offset=3
+     * </pre>
+     * 
+     * <pre>
+     *  分页返回内容
+     * { 
+     *     "paging":{"limit":10,"offset":0,"total":729},
+     *     "data":[{},{},{}...]
+     * }
+     * </pre>
+     * 
+     * @param param {@code Map<String, Object>}
+     * @return {@code ${className}Dto}
+     */
+    @ApiOperation(value = "get", notes = "get")
+    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ${className}Dto get(@RequestParam Map<String, Object> param) {
+
+        Integer[] pageParam = Optional.ofNullable(MapUtil.getInt(param, "offset")).filter(t -> {
+            return t >= 0;
+        }).map(t -> {
+            return new Integer[] { t, Optional.ofNullable(MapUtil.getInt(param, "limit")).orElse(10) };
+        }).orElse(null);
+
+        if (pageParam == null) {
+            pageParam = Optional.ofNullable(MapUtil.getInt(param, "limit")).filter(t -> {
+                return t > 0;
+            }).map(t -> {
+                return new Integer[] { Optional.ofNullable(MapUtil.getInt(param, "offset")).orElse(0), t };
+            }).orElse(null);
+        }
+
+        if (pageParam == null) {
+            return new ${className}Dto(${className}Mapper.INSTANCE.bo2vo(${classNameVariable}Service.list(param)));
+        } else {
+            ${className}Dto dto = new ${className}Dto(
+                    ${className}Mapper.INSTANCE.bo2vo(${classNameVariable}Service.list(pageParam[0], pageParam[1], param)));
+            dto.setOffset(pageParam[0]).setLimit(pageParam[1]).setTotal(${classNameVariable}Service.count(param));
+            return dto;
+        }
+    }
+
+    /**
+     * 下载
+     * 
+     * <p>
+     * 下载查询结果.
+     * 
+<#list primaryColumns as column>
+     * @param ${column.javaNameVariable} {@code ${column.javaType}}}
+</#list>
+     */
+    @ApiOperation(value = "xlsx", notes = "xlsx")
+    @RequestMapping(value = "/xlsx", method = RequestMethod.GET, produces = "application/x-msdownload")
+    public void get(HttpServletResponse response, @RequestParam Map<String, Object> param) {
+
+        ${className}Dto dto = get(param);
+
+        ByteArrayOutputStream byteOutbuf = new ByteArrayOutputStream();
+
+        ExcelWriter writer = ExcelUtil.getWriter();
+        for (${className}Vo ${classNameVariable}Vo : dto.getData()) {
+            writer.write(CollUtil.newArrayList(<#list columns as column>${classNameVariable}Vo.get${column.javaName}())<#if column_has_next>, </#if></#list>);
+        }
+        writer.flush(byteOutbuf);
+        writer.close();
+
+        ByteArrayInputStream byteInBuf = new ByteArrayInputStream(byteOutbuf.toByteArray());
+
+        response.setContentType("application/x-msdownload");
+        response.addHeader("Content-Disposition", "attachment; filename=\"" + "${classNameVariable?lower_case}-" + DateUtil.formatDate(new Date()) + ".xlsx\"");
+        response.setHeader("Content-Length", Integer.toString(byteInBuf.available()));
+
+        try (OutputStream oStream = response.getOutputStream()) {
+            IoUtil.copy(byteInBuf, oStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

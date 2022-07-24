@@ -17,12 +17,6 @@
         http://www.springframework.org/schema/aop 
         http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 		">
-	
-	<!-- 
-	<#assign proName = projectName>
-	<#assign className = table.className>
-	<#assign classNameLower = className?uncap_first> 
-	 -->
 	 		
    	<!-- ${className} -->
    	<bean id="${proName}.${classNameLower}BaseDao"  class="base.oracle.${className}BaseDaoImpl"
@@ -45,6 +39,40 @@
 	<!-- ${className} -->
 	<bean id="${proName}.${classNameLower}Sql"  class="oracle.impl.${className}SqlImpl"
    	/>
+
+	<bean id="${proName}.${classNameLower}Dao" class="${basepackage}.service.dao.jdbc.${className}DaoImpl"
+		  parent="mt.baseDao"
+	/>
+
+	<bean id="${proName}.${classNameLower}Svc" class="${basepackage}.service.${className}SvcImpl"
+		  p:${classNameLower}Dao-ref="${proName}.${classNameLower}Dao"
+	/>
+
+	<bean id="${proName}.${classNameLower}Quartz" class="${basepackage}.quartz.${className}Quartz"
+		  singleton="true" init-method="init">
+		<property name="${classNameLower}Svc">
+			<ref bean="${proName}.${classNameLower}Svc" />
+		</property>
+	</bean>
+
+	<bean id="${proName}.${classNameLower}Task"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="${proName}.${classNameLower}Quartz" />
+		</property>
+		<property name="targetMethod">
+			<value>execute</value>
+		</property>
+	</bean>
+
+	<bean id="${proName}.${classNameLower}DoTime" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="${proName}.${classNameLower}Task" />
+		</property>
+		<property name="cronExpression">
+			<value>${r'${'}${proName}.${classNameLower}_cron${r'}'}</value>
+		</property>
+	</bean>
 	
 </beans>
 
