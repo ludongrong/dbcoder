@@ -1,7 +1,6 @@
 package io.github.ludongrong.dbcoder.powerdesigner.xml.common.handler;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.StrUtil;
 import io.github.ludongrong.dbcoder.powerdesigner.xml.common.PDProject;
 import io.github.ludongrong.dbcoder.util.DomUtil;
 import io.github.ludongrong.dbcoder.util.StringUtil;
@@ -120,7 +119,7 @@ public class PDElementHandler implements ElementHandler {
         String code = MapUtils.getString(lastModel, codeNodeKey, "");
 
         /*下划线*/
-        String codeUnderLine = StrUtil.toUnderlineCase(code);
+        String codeUnderLine = StringUtil.toUnderscoreName(code);
         lastModel.put(PDProject.CODE_UNDERLINE_UPPER, codeUnderLine.toUpperCase());
         lastModel.put(PDProject.CODE_UNDERLINE_LOWER, codeUnderLine.toLowerCase());
         /*驼峰*/
@@ -128,7 +127,7 @@ public class PDElementHandler implements ElementHandler {
         lastModel.put(PDProject.CODE_CAMEL_FIRST_UPPER, codeClassName);
         lastModel.put(PDProject.CODE_CAMEL_FIRST_LOWER, StringUtil.uncapitalize(codeClassName));
         /*全大写或小写*/;
-        String codeUpper = codeClassName.toUpperCase();
+        String codeUpper = codeUnderLine.toUpperCase();
         lastModel.put(PDProject.CODE_UPPER, codeUpper);
         lastModel.put(PDProject.CODE_LOWER, codeUpper.toLowerCase());
         /*脊柱*/

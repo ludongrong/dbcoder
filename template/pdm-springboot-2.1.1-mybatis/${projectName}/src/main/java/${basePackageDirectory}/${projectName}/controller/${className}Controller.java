@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
+
 <#--
 “数据对象”可统称为资源，“业务领域”就是业务相近的“资源”的集合。
 
@@ -21,8 +22,8 @@ import java.util.Map;
   1、可以是具体的数据对象：商品、订单...
   2、可以是抽象的对象概念：租户、用户...
 “业务领域”与“业务领域”之间的依赖，可理解为是对“资源”操作(读、写、通知)的依赖。
-所以，API作为“业务领域”间沟通的手段，其应该以面向资源角度进行命名。
-例如，修改-订单-商品：updateOrderItem。
+  所以，API作为“业务领域”间沟通的手段，其应该以面向资源角度进行命名。
+  例如，修改-订单-商品：updateOrderItem。
 
 命名术语
 1） 商品 -> item
@@ -34,7 +35,6 @@ import java.util.Map;
 7） 删除 -> remove
 8） 搜索 -> query
 -->
-
 /**
  * ${Name} 接口控制层
  *
@@ -52,13 +52,18 @@ import java.util.Map;
 <#-- 下划线： -->
 <#-- @RequestMapping("/apiv1/${projectName}/${CodeUnderlineLower}") -->
 <#-- 短横线： -->
-@RequestMapping("/apiv1/${projectName}/${CodeKebabCaseLower}")
+@RequestMapping("/${projectName}/${CodeKebabCaseLower}")
 public class ${className}Controller extends BaseController {
 
     @Resource("${classNameVariable}Service")
     private I${className}Service ${classNameVariable}Service;
 
-<#-- 内部跳转 --- 路径
+<#--
+
+    // -----------------------
+    // 内部跳转 --- 路径
+    // -----------------------
+
     public static final String PAGE_LIST = "/account/${CodeKebabCaseLower}/listpage";
     public static final String PAGE_LIST_DATA = "/account/${CodeKebabCaseLower}/listpage/data"
     public static final String PAGE_ADD = "/account/${CodeKebabCaseLower}/addpage";
@@ -67,8 +72,11 @@ public class ${className}Controller extends BaseController {
     public static final String PAGE_EDIT = "/account/${CodeKebabCaseLower}/editpage";
     public static final String PAGE_EDIT_DATA = "/account/${CodeKebabCaseLower}/editpage/data";
     public static final String PAGE_EDIT_UPDATE = "/account/${CodeKebabCaseLower}/editpage/update";
--->
-<#-- 内部跳转 --- 接口
+
+    // -----------------------
+    // 内部跳转 --- 接口
+    // -----------------------
+
     @RequestMapping(value = "list")
     public String list(Model model) {
         model.addAttribute("pageName", "tea.account.${classNameVariable}.list");
@@ -95,82 +103,180 @@ public class ${className}Controller extends BaseController {
         return this.PAGE_ADD;
     }
 -->
-    
+
+<#--
+1、方式1：直接返回业务对象，错误通过HTTPCODE标记
+  => 内置
+    => ConversionNotSupportException -> 500(Internal Server Error)
+    => HttpMediaTypeNotAcceptableException -> 406(Not Acceptable)
+    => HttpMediaTypeNotSupportedException -> 415(Unsupported Media Type)
+    => HttpMessageNotWritableException -> 500(Internal Server Error)
+    => HttpRequestMethodNotSupportedException -> 405(Method Not Allowed)
+    => MissingServletRequestParamerException -> 400(Bad Request)
+    => NoSuchRequestHandlingMethodException -> 404(Not found)
+    => TypeMismatchException -> 400(Bad Request)
+  => 直接设置
+    => response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+2、方式2：HttpCode = 200，消息体中包含错误信息 {"code": "password error"}
+  => 采用方式2，可以解决调用方不知道错误在哪里，很懵逼的痛点
+-->
     /**
-     * ${Name} 创建
+     * 新增资源 - 单个.
      * 
-     * @param ${classNameVariable} {@code {}} 入参
-     * @return ${basePackage}.${projectName}.entity.${className}
+     * <pre>
+     * URI 样例
+     * 
+     * POST /animals  // 新增动物
+     * POST /zoos/1/employees // 为id为1的动物园雇佣员工
+     * </pre>
+     * 
+     * @param ${classNameVariable}Vo {@code ${className}Vo}
+     * @return {@code ${className}Dto}
      */
-    @ApiOperation(value = "${Name} 创建", notes = "其他")
-    @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "新增", notes = "单对象的保存接口。")
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public RestResult<${className}Vo> save(@RequestBody ${className}Vo ${classNameVariable}Vo) {
-        RestResult<${className}Vo> result = new RestResult<${className}Vo>();
-        ${className}Bo ${classNameVariable}Bo=${className}Mapper.INSTANCE.vo2bo(${classNameVariable}Vo);
-        try {
-            ${classNameVariable}Service.save(${classNameVariable});
-            ${className}Mapper.INSTANCE.bo2vo(${classNameVariable}Bo);
-            result.setMessage("新增 “${Name}” 成功");
-            result.setSuccess(true);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            result.setMessage("新增 “${Name}” 失败 ---> " + e.getMessage());
-            result.setSuccess(false);
+    public ${className}Dto save(@RequestBody ${className}Vo ${classNameVariable}Vo) {
+
+        ${className}Bo ${classNameVariable}Bo = ${className}Mapper.INSTANCE.toBo(${classNameVariable}Vo);
+        boolean success = ${classNameVariable}Service.save(${classNameVariable}Bo);
+        if(!success) {
+            return BaseDto.of(TestDto.class).fail();
         }
-        return result;
+        
+        ${className}Dto ${classNameVariable}Dto = BaseDto.of(${className}Dto.class).success();
+        ${classNameVariable}Dto.set${className}Vo(${className}Mapper.INSTANCE.toVo(${classNameVariable}Bo));
+        return ${classNameVariable}Dto;
     }
     
     /**
-     * ${Name} 删除
-     * 
-     * @param ${classNameVariable} {@code {}} 入参
-     * @return ${basePackage}.${projectName}.entity.${className}
+     * 新增资源 - 多个.
+     *
+     * ${classNameVariable}VoList {@link java.util.List<${className}Vo>}
+     * @return {@link ${className}Dto}
      */
-    @ApiOperation(value = "${Name} 删除", notes = "其他")
+    @ApiOperation(value = "新增", notes = "多对象的保存接口。")
+    @PostMapping(value = "/save/batch", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ${className}Dto save(@RequestBody List<${className}Vo> ${classNameVariable}VoList) {
+
+        List<${className}Bo> ${classNameVariable}BoList = ${className}Mapper.INSTANCE.toBo(${classNameVariable}VoList);
+
+        boolean success = ${classNameVariable}Service.saveBatch(${classNameVariable}BoList);
+        if (!success) {
+            return BaseDto.of(${className}Dto.class).fail();
+        }
+
+        ${className}Dto ${classNameVariable}Dto = BaseDto.of(${className}Dto.class).success();
+        ${classNameVariable}Dto.set${className}VoList(${className}Mapper.INSTANCE.toVo(${classNameVariable}BoList));
+        return ${classNameVariable}Dto;
+    }
+    
+    /**
+     * 删除资源 - 单个.
+     * 
+     * <pre>
+     * DELETE /zoos/1/employees/2
+     * DELETE /zoos/1/employees/2;4;5
+     * DELETE /zoos/1/animals  //删除id为1的动物园内的所有动物
+     * </pre>
+     * 
+     */
+    @ApiOperation(value = "删除", notes = "单对象的删除接口。")
+    @RequestMapping(value = "<#list Columns?filter(x -> x.PrimaryKey == "1") as column>/<#noparse>{</#noparse>${column.CodeCamelFirstLower}<#noparse>}</#noparse></#list>", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public TestDto remove(<#list Columns?filter(x -> x.PrimaryKey == "1") as column>@PathVariable(name = "${column.CodeCamelFirstLower}") ${column.JavaType} ${column.CodeCamelFirstLower}<#sep>, </#sep></#list>) {
+        ${className}Bo ${classNameVariable}Bo = new ${className}Bo();
+        ${classNameVariable}Bo.setId(id);
+        return removeBatchByPrimary(Arrays.asList(${classNameVariable}Bo));
+    }
+    
+    /**
+     * 删除资源 - 单个.
+     *
+     * @param ${classNameVariable}Vo {@link ${className}Vo}
+     * @return {@link ${className}Dto}
+     */
+    @ApiOperation(value = "删除", notes = "单对象的删除接口。")
     @PostMapping(value = "/remove", produces = MediaType.APPLICATION_JSON_VALUE)
-    public RestResult<${className}Vo> remove(@RequestBody ${className}Vo ${classNameVariable}Vo) {
-        RestResult<${className}Vo> result = new RestResult<${className}Vo>();
-        try {
-            ${classNameVariable}Service.remove(${classNameVariable});
-            result.setMessage("删除 “${Name}” 成功");
-            result.setSuccess(true);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            result.setMessage("删除 “${Name}” 失败 ---> " + e.getMessage());
-            result.setSuccess(false);
-        }
-        return result;
+    public ${className}Dto remove(@RequestBody ${className}Vo ${classNameVariable}Vo) {
+        ${className}Bo ${classNameVariable}Bo = ${className}Mapper.INSTANCE.toBo(${classNameVariable}Vo);
+        return removeBatchByPrimary(Arrays.asList(${classNameVariable}Bo));
+    }
+
+    /**
+     * 删除资源 - 多个.
+     *
+     * @param ${classNameVariable}Vo {@link ${className}Vo}
+     * @return {@link ${className}Dto}
+     */
+    @ApiOperation(value = "删除", notes = "多对象的删除接口。")
+    @PostMapping(value = "/remove/batch", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ${className}Dto remove(@RequestBody List<${className}Vo> ${classNameVariable}VoList) {
+        List<${className}Bo> ${classNameVariable}BoList = ${className}Mapper.INSTANCE.toBo(${classNameVariable}VoList);
+        return removeBatchByPrimary(${classNameVariable}BoList);
+    }
+
+    private ${className}Dto removeBatchByPrimary(List<${className}Bo> ${classNameVariable}BoList) {
+        boolean success = ${classNameVariable}Service.removeBatchByPrimary(${classNameVariable}BoList);
+        return BaseDto.of(${className}Dto.class).result(success);
     }
     
     /**
-     * ${Name} 更新
-     * 
-     * @param ${classNameVariable} {@code {}} 入参
-     * @return ${basePackage}.${projectName}.entity.${className}
+     * 更新资源 - 单个.
+     *
+     * <pre>
+     * URI 样例
+     *
+     * PUT /animals/1
+     * PUT /zoos/1
+     * </pre>
+     *
      */
-    @ApiOperation(value = "${Name} 更新", notes = "其他")
-    @PostMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
-    public RestResult<${className}Vo> update(@RequestBody ${className}Vo ${classNameVariable}Vo) {
-        RestResult<${className}Vo> result = new RestResult<${className}Vo>();
-        try {
-            ${classNameVariable}Service.update(${classNameVariable});
-            result.setMessage("更新 “${Name}” 成功");
-            result.setSuccess(true);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            result.setMessage("更新 “${Name}” 失败 ---> " + e.getMessage());
-            result.setSuccess(false);
-        }
-        return result;
+    @ApiOperation(value = "更新", notes = "单对象的更新接口。")
+    @RequestMapping(value = "<#list Columns?filter(x -> x.PrimaryKey == "1") as column>/<#noparse>{</#noparse>${column.CodeCamelFirstLower}<#noparse>}</#noparse></#list>", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public void update(<#list Columns?filter(x -> x.PrimaryKey == "1") as column>@PathVariable(name = "${column.CodeCamelFirstLower}") ${column.JavaType} ${column.CodeCamelFirstLower}<#sep>, </#sep></#list>, @RequestBody ${className}Vo ${classNameVariable}Vo) {
+        ${className}Bo ${classNameVariable}Bo = ${className}Mapper.INSTANCE.toBo(${classNameVariable}Vo);
+    <#list Columns?filter(x -> x.PrimaryKey == "1") as column>
+        ${classNameVariable}Bo.set${column.CodeCamelFirstUpper}(${column.CodeCamelFirstLower});
+    </#list>
+        ${classNameVariable}Service.update(${classNameVariable}Bo, <#list Columns?filter(x -> x.PrimaryKey == "1") as column>${column.CodeCamelFirstLower}<#sep>, </#sep></#list>);
     }
     
-    <#if HasPrimaryKey == '1'>
+    /**
+     * 更新
+     *
+     * @param ${classNameVariable}Vo {@code {}} 入参
+     * @return io.github.ludongrong.test.entity.Test
+     */
+    @ApiOperation(value = "Test 更新", notes = "其他")
+    @PostMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ${className}Dto update(@RequestBody ${className}Vo ${classNameVariable}Vo) {
+        ${className}Bo ${classNameVariable}Bo = ${className}Mapper.INSTANCE.toBo(${classNameVariable}Vo);
+        boolean success = ${classNameVariable}Service.updateById(${classNameVariable}Bo);
+        return BaseDto.of(${className}Dto.class).result(success);
+    }
+
+    /**
+     * 更新
+     *
+     * @param ${classNameVariable}VoList {@code {}} 入参
+     * @return io.github.ludongrong.test.entity.Test
+     */
+    @ApiOperation(value = "Test 更新", notes = "其他")
+    @PostMapping(value = "/update/batch", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ${className}Dto update(@RequestBody List<${className}Vo> ${classNameVariable}VoList) {
+        List<${className}Bo> ${classNameVariable}BoList = ${className}Mapper.INSTANCE.toBo(${classNameVariable}VoList);
+        boolean success = ${classNameVariable}Service.updateBatchById(${classNameVariable}BoList);
+        return BaseDto.of(${className}Dto.class).result(success);
+    }
+
+<#if HasPrimaryKey == '1'>
     @Override
-    public RestResult<${className}Vo> getByPrimary(<#list Columns as column><#if column.PrimaryKey == "1">${column.JavaType} ${column.CodeCamelFirstLower}</#if><#if column_has_next>, </#if></#list>) {
+    public RestResult<${className}Vo> getByPrimary(<#list Columns?filter(x -> x.PrimaryKey == "1") as column>${column.JavaType} ${column.CodeCamelFirstLower}<#sep>, </#sep></#list>) {
         RestResult<${className}Vo> result = new RestResult<>();
         try {
-            ${className}Entity entity = ${classNameVariable}Service.getByPrimary(<#list Columns as column><#if column.PrimaryKey == "1">${column.JavaType} ${column.CodeCamelFirstLower}</#if><#if column_has_next>, </#if></#list>);
+            ${className}Entity entity = ${classNameVariable}Service.getByPrimary(<#list Columns?filter(x -> x.PrimaryKey == "1") as column>${column.JavaType} ${column.CodeCamelFirstLower}<#sep>, </#sep></#list>);
             result.setData(entity);
             result.setMessage("获取 “${Name}” 成功");
             result.setSuccess(true);
@@ -181,7 +287,7 @@ public class ${className}Controller extends BaseController {
         }
         return result;
     }
-    </#if>
+</#if>
     
     /**
      * ${Name} 查询 - 分页
@@ -222,38 +328,34 @@ public class ${className}Controller extends BaseController {
     }
     
     /**
-     * ${Name} 查询
-     * 
-     * @param ${classNameVariable} {@code {}} 入参
-     * @return java.util.List<${basePackage}.${projectName}.entity.${className}>
+     * 查询
+     *
+     * @param ${classNameVariable}Vo {@code {${className}Vo}}
+     * @return java.util.List<io.github.ludongrong.test.entity.TestEntity>
      */
-    @ApiOperation(value = "${Name} 查询列表", notes = "其他")
-    @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
-    public RestResult<VuePage<${className}>> list(@RequestBody ${className} ${classNameVariable}) {
+    @ApiOperation(value = "Test 查询列表", notes = "其他")
+    @PostMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public List<${className}Vo> list(@RequestBody ${className}Vo ${classNameVariable}Vo) {
 
-        return ${classNameVariable}Service.list${className}(${classNameVariable});
+        Map paramMap = objectMapper.convertValue(${classNameVariable}Vo, Map.class);
+        List<${className}Bo> ${classNameVariable}BoList = ${classNameVariable}Service.list(paramMap);
+        return ${className}Mapper.INSTANCE.toVo(${classNameVariable}BoList);
     }
     
     /**
-     * ${Name} 导出
-     * 
-     * @param jsonStr {@code {}} 入参
-     * @return java.util.List<${basePackage}.${projectName}.entity.${className}Entity>
+     * 导出 - 异步
+     *
+     * @param ${classNameVariable}Vo {@code {${className}Vo}} 入参
+     * @return java.util.List<io.github.ludongrong.test.entity.TestEntity>
      */
-    @ApiOperation(value = "${Name} 导出列表", notes = "其他")
-    @PostMapping(value = "/export", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public BaseResult<Download, DownloadHeader> listForExport(@RequestBody String jsonStr) {
+    @ApiOperation(value = "Test 导出列表", notes = "其他")
+    @PostMapping(value = "/list/export", produces = MediaType.APPLICATION_JSON_VALUE)
+    public DownloadBo listForExport(@RequestBody ${className}Vo ${classNameVariable}Vo) {
 
-        //设置文件名
-        String sheetName = "${Name}";
-
-        try {
-            Map<String, Object> paramMap = queryParam(jsonStr);
-            String fileName = ${classNameVariable}Service.listForExport(sheetName, paramMap);
-            return successJson(new Download(fileName), DownloadHeader.getInstance());
-        } catch (Exception e) {
-            return handleException(e);
-        }
+        String sheetName = "Test";
+        Map paramMap = objectMapper.convertValue(${classNameVariable}Vo, Map.class);
+        String fileName = ${classNameVariable}Service.listForExport(sheetName, paramMap);
+        return new DownloadBo(fileName);
     }
     
     /**
@@ -267,39 +369,6 @@ public class ${className}Controller extends BaseController {
             <#list Columns as column>
                 "${column.CodeUpper}"<#if column_has_next>, </#if>
             </#list>);
-    }
-    
-    /**
-     * 新增
-     * 
-     * <p>
-     * 创建单个资源.
-     * 
-     * <pre>
-     * URI 样例
-     * 
-     * POST /animals  //新增动物
-     * POST /zoos/1/employees //为id为1的动物园雇佣员工
-     * </pre>
-     * 
-     * <pre>
-     * response 的 body 直接就是数据，不要做多余的包装。
-     * </pre>
-     * 
-     * @param ${classNameVariable}Vo {@code ${className}Vo}
-     * @return {@code Object}
-     */
-    @ApiOperation(value = "create", notes = "create")
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Object create(@RequestBody ${className}Vo ${classNameVariable}Vo) {
-
-        ${className}Bo ${classNameVariable}Bo=${className}Mapper.INSTANCE.vo2bo(${classNameVariable}Vo);
-        boolean createResult = ${classNameVariable}Service.create(${classNameVariable}Bo);
-        if(createResult==false) {
-            throw new BadGatewayException("未创建成功");
-        }
-        return ${className}Mapper.INSTANCE.bo2vo(${classNameVariable}Bo);
     }
     
     /**
@@ -354,56 +423,6 @@ public class ${className}Controller extends BaseController {
     }
 
     /**
-     * 删除
-     * 
-     * <p>
-     * 删除资源.
-     * 
-     * <pre>
-     * DELETE /zoos/1/employees/2
-     * DELETE /zoos/1/employees/2;4;5
-     * DELETE /zoos/1/animals  //删除id为1的动物园内的所有动物
-     * </pre>
-     * 
-<#list primaryColumns as column>
-     * @param ${column.javaNameVariable} {@code ${column.javaType}}}
-</#list>
-     */
-    @ApiOperation(value = "delete", notes = "delete")
-    @RequestMapping(value = "<#list primaryColumns as column>/{${column.javaNameVariable}}</#list>", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public void delete(<#list primaryColumns as column>@PathVariable(name = "${column.javaNameVariable}") ${column.javaType} ${column.javaNameVariable}<#if column_has_next>, </#if></#list>) {
-        
-        ${classNameVariable}Service.delete(<#list primaryColumns as column>${column.javaNameVariable}<#if column_has_next>, </#if></#list>);
-    }
-
-    /**
-     * 更新
-     * 
-     * <p>
-     * 更新单个资源.
-     * 
-     * <pre>
-     * URI 样例
-     * 
-     * PUT /animals/1
-     * PUT /zoos/1
-     * </pre>
-     * 
-<#list primaryColumns as column>
-     * @param ${column.javaNameVariable} {@code ${column.javaType}}}
-</#list>
-     */
-    @ApiOperation(value = "edit", notes = "edit")
-    @RequestMapping(value = "<#list primaryColumns as column>/{${column.javaNameVariable}}</#list>", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public void edit(<#list primaryColumns as column>@PathVariable(name = "${column.javaNameVariable}") ${column.javaType} ${column.javaNameVariable}<#if column_has_next>, </#if></#list>, @RequestBody ${className}Vo ${classNameVariable}Vo) {
-
-        ${className}Bo ${classNameVariable}Bo = ${className}Mapper.INSTANCE.vo2bo(${classNameVariable}Vo);
-        ${classNameVariable}Service.update(${classNameVariable}Bo, <#list primaryColumns as column>${column.javaNameVariable}<#if column_has_next>, </#if></#list>);
-    }
-
-    /**
      * 查询
      * 
      * <p>
@@ -422,19 +441,16 @@ public class ${className}Controller extends BaseController {
      * }
      * </pre>
      * 
-<#list primaryColumns as column>
-     * @param ${column.javaNameVariable} {@code ${column.javaType}}}
-</#list>
      * @return {@code Object}
      */
     @ApiOperation(value = "get", notes = "get")
-    @RequestMapping(value = "<#list primaryColumns as column>/{${column.javaNameVariable}}</#list>", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "<#list Columns?filter(x -> x.PrimaryKey == "1") as column>/<#noparse>{</#noparse>${column.CodeCamelFirstLower}<#noparse>}</#noparse></#list>", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Object get(<#list primaryColumns as column>@PathVariable(name = "${column.javaNameVariable}") ${column.javaType} ${column.javaNameVariable}<#if column_has_next>, </#if></#list>) {
+    public Object get(<#list Columns?filter(x -> x.PrimaryKey == "1") as column>@PathVariable(name = "${column.CodeCamelFirstLower}") ${column.JavaType} ${column.CodeCamelFirstLower}<#sep>, </#sep></#list>) {
 
-        return ${classNameVariable}Service.get(<#list primaryColumns as column>${column.javaNameVariable}<#if column_has_next>, </#if></#list>);
+        return ${classNameVariable}Service.get(<#list Columns?filter(x -> x.PrimaryKey == "1") as column>${column.CodeCamelFirstLower}<#sep>, </#sep></#list>);
     }
-    
+
     /**
      * 查询
      * 
@@ -508,10 +524,6 @@ public class ${className}Controller extends BaseController {
      * 
      * <p>
      * 下载查询结果.
-     * 
-<#list primaryColumns as column>
-     * @param ${column.javaNameVariable} {@code ${column.javaType}}}
-</#list>
      */
     @ApiOperation(value = "xlsx", notes = "xlsx")
     @RequestMapping(value = "/xlsx", method = RequestMethod.GET, produces = "application/x-msdownload")
@@ -523,7 +535,7 @@ public class ${className}Controller extends BaseController {
 
         ExcelWriter writer = ExcelUtil.getWriter();
         for (${className}Vo ${classNameVariable}Vo : dto.getData()) {
-            writer.write(CollUtil.newArrayList(<#list columns as column>${classNameVariable}Vo.get${column.javaName}())<#if column_has_next>, </#if></#list>);
+            writer.write(CollUtil.newArrayList(<#list Columns as column>${classNameVariable}Vo.get${column.CodeCamelFirstUpper}())<#sep>, </#sep></#list>);
         }
         writer.flush(byteOutbuf);
         writer.close();
@@ -540,5 +552,4 @@ public class ${className}Controller extends BaseController {
             e.printStackTrace();
         }
     }
-
 }

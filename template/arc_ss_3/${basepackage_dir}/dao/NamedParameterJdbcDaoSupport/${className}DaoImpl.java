@@ -62,8 +62,7 @@ public class ${className}DaoImpl extends NamedParameterJdbcDaoSupport implements
 				+ "(<#list table.columns as column>${column.sqlName}<#if column_has_next>, </#if></#list>) "
 				+ "VALUES                                "
 				+ "(<#list table.columns as column>:${column.columnNameLower}<#if column_has_next>, </#if></#list>)";
-		if(logger.isDebugEnabled())
-		{
+		if(logger.isDebugEnabled()) {
 			logger.debug(SQL);
 		}
 		return getNamedParameterJdbcTemplate().update(SQL, new BeanPropertySqlParameterSource(${classNameLower}));
