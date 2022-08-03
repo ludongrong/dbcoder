@@ -29,8 +29,8 @@ select – 查询声明的映射
 
     <resultMap id="${className}ResultMap" type="${basePackage}.${projectName}.entity.${className}Bo">
     <#list Columns as column>
-		<result column="${column.Code}" jdbcType="${column.JdbcType}" property="${column.CodeCamelFirstLower}" javaType="${column.JavaType}"/>
-	</#list>
+        <result column="${column.Code}" jdbcType="${column.JdbcType}" property="${column.CodeCamelFirstLower}" javaType="${column.JavaType}"/>
+    </#list>
     </resultMap>
     
     <sql id="default_select_column_sql">
@@ -123,37 +123,94 @@ select – 查询声明的映射
         </where>
     </sql>
     
+<!--// =================================
+    // 插入
+    // =================================-->
+    
+    <!--全部字段-->
+<!--    <insert id="insert" parameterType="map">-->
+<!--        INSERT INTO ${Code} (-->
+<!--        <#list Columns as column>-->
+<!--            ${column.Code}<#sep>, </#sep>-->
+<!--        </#list>-->
+<!--        )-->
+<!--        VALUES (-->
+<!--    <#list Columns as column>-->
+<!--        <#if column.JavaType == "java.sql.Date" || column.JavaType == "java.sql.Timestamp">-->
+<!--            <#noparse>#{</#noparse>${column.CodeUpper}, jdbcType=${column.JdbcType}<#noparse>}</#noparse><#sep>, </#sep>-->
+<!--        <#elseif column.JavaType == "java.sql.Time">-->
+<!--            <#noparse>#{</#noparse>${column.CodeUpper}, jdbcType=${column.JdbcType}<#noparse>}</#noparse><#sep>, </#sep>-->
+<!--        <#else>-->
+<!--            <#noparse>#{</#noparse>${column.CodeUpper}<#noparse>}</#noparse><#sep>, </#sep>-->
+<!--        </#if>-->
+<!--    </#list>-->
+<!--        )-->
+<!--    </insert>-->
+
     <insert id="insert" parameterType="map">
         INSERT INTO ${Code} (
-        <#list Columns as column>
-            ${column.Code}<#sep>, </#sep>
-        </#list>
+        <foreach collection="map" index="key" item="val" open="" separator="," close="">
+            <#noparse>${key}</#noparse>
+        </foreach>
         )
         VALUES (
-    <#list Columns as column>
-        <#if column.JavaType == "java.sql.Date" || column.JavaType == "java.sql.Timestamp">
-            <#noparse>#{</#noparse>${column.CodeUpper}, jdbcType=${column.JdbcType}<#noparse>}</#noparse><#sep>, </#sep>
-        <#elseif column.JavaType == "java.sql.Time">
-            <#noparse>#{</#noparse>${column.CodeUpper}, jdbcType=${column.JdbcType}<#noparse>}</#noparse><#sep>, </#sep>
-        <#else>
-            <#noparse>#{</#noparse>${column.CodeUpper}<#noparse>}</#noparse><#sep>, </#sep>
-        </#if>
-    </#list>
+        <foreach collection="map" index="key" item="val" open="" separator="," close="">
+            <#noparse>#{val}</#noparse>
+        </foreach>
         )
     </insert>
-    
+
+    <insert id="insertDynamic" parameterType="map">
+        INSERT INTO <#noparse>${table_name}</#noparse> (
+        <foreach collection="map" index="key" item="val" open="" separator="," close="">
+            <#noparse>${key}</#noparse>
+        </foreach>
+        )
+        VALUES (
+        <foreach collection="map" index="key" item="val" open="" separator="," close="">
+            <#noparse>#{val}</#noparse>
+        </foreach>
+        )
+    </insert>
+
+<!--// =================================
+    // 删除
+    // =================================-->
+
+    <!--oracle-->
+<!--    <delete id="delete" parameterType="map">-->
+<!--        DELETE FROM ${Code} M-->
+<!--        <include refid="default_where_sql">-->
+<!--            <property name="alias" value="M"/>-->
+<!--        </include>-->
+<!--    </delete>-->
+
+    <!--mysql-->
     <delete id="delete" parameterType="map">
-        DELETE FROM ${Code} M
+        DELETE M FROM TEST AS M
         <include refid="default_where_sql">
             <property name="alias" value="M"/>
         </include>
     </delete>
     
+<!--// =================================
+    // 更新
+    // =================================-->
+    
+    <!--更新的条件语句在 DAO 层添加 UP 前缀-->
+    <sql id="update_condition_sql">
+    <#list Columns as column>
+        <if test='UP_${column.CodeUpper} != null'>
+            AND <#noparse>${alias}</#noparse>.${column.Code} = <#noparse>#{</#noparse>UP_${column.CodeUpper}<#noparse>}</#noparse>
+        </if>
+    </#list>
+    </sql>
+    
     <#-- https://mybatis.org/mybatis-3/sqlmap-xml.html -->
     <#-- Parameters -->
-    <#-- #{height,javaType=double,jdbcType=NUMERIC,numericScale=2} -->
+    <#-- #{height, javaType=double, jdbcType=NUMERIC, numericScale=2} -->
     <update id="update" parameterType="map">
-        UPDATE ${Code} 
+        UPDATE ${Code} M
         <trim prefix="SET" suffixOverrides=",">
     <#list Columns as column>
         <#if column.JavaType == "java.sql.Date" || column.JavaType == "java.sql.Timestamp">
@@ -171,10 +228,14 @@ select – 查询声明的映射
         </#if>
     </#list>
         </trim>
-        <include refid="default_where_sql">
+        <include refid="update_condition_sql">
             <property name="alias" value="M"/>
         </include>
     </update>
+
+<!--// =================================
+    // 查询
+    // =================================-->
     
     <select id="count" parameterType="map" resultMap="long">
         SELECT COUNT(0) FROM ${Code} M
@@ -213,7 +274,7 @@ select – 查询声明的映射
         <include refid="default_select_column_sql">
             <property name="alias" value="M"/>
         </include>
-   		FROM ${Code} M
+           FROM ${Code} M
         <include refid="sql_where_primary">
             <property name="alias" value="M"/>
         </include>
@@ -245,7 +306,7 @@ select – 查询声明的映射
     <#list RefParents as reference>
     <resultMap id="select_ref_${reference.ParentTable.className}_${reference_index}_result" type="${basePackage}.${projectName}.entity.${className}">
         <#list Columns as column>
-		<result column="T2_${column.Code}" jdbcType="${column.JdbcType}" property="${column.CodeCamelFirstLower}"/>
+        <result column="T2_${column.Code}" jdbcType="${column.JdbcType}" property="${column.CodeCamelFirstLower}"/>
         </#list>
         <association property="${reference.ParentTable.classNameVariable}" javaType="${basePackage}.${projectName}.entity.${reference.ParentTable.className}">
             <#list reference.ParentTable.Columns as column>
